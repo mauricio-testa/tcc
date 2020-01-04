@@ -8,7 +8,9 @@ use Illuminate\Http\Request;
 class MotoristaController extends Controller
 {
     public function index() {
-        $motoristas = Motorista::paginate(5);
+        // @todo alterar para pegar id_unidade do usuário logado
+        // @todo criar uma constante para paginação default
+        $motoristas = Motorista::where('id_unidade', '=', 1)->paginate(5);
         return view('motorista\index', ['motoristas' => $motoristas]);
     }
 
