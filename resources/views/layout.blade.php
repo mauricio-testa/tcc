@@ -7,6 +7,7 @@
     <a href="{{ url('/cadastros/motoristas') }}">Motoristas</a>
     <a href="{{ url('/cadastros/veiculos') }}">Veículos</a>
     <a href="{{ url('/cadastros/pacientes') }}">Pacientes</a>
+    <a href="{{ url('/viagens') }}">Viagens</a>
     </header>
 
     @yield('content')

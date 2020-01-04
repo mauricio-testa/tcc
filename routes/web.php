@@ -22,3 +22,5 @@ Route::group(['prefix' => 'cadastros'], function () {
     Route::get('/pacientes',    'PacienteController@index');
 
 });
+
+Route::get('/viagens',    'ViagemController@index');
