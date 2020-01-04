@@ -3,6 +3,10 @@
     <title>um arquivo</title>
 </head>
 <body>
+    <header>
+    <a href="{{ url('/cadastros/motoristas') }}">Motoristas</a>
+    <a href="{{ url('/cadastros/veiculos') }}">Veículos</a>
+    </header>
 
     @yield('content')
 

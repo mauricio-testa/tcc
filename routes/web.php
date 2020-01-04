@@ -15,5 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('tarefas', 'TarefasController@index');
-Route::get('tarefas/json', 'TarefasController@toJson');
+Route::group(['prefix' => 'cadastros'], function () {
+    
+    Route::get('/motoristas',   'MotoristaController@index');
+    Route::get('/veiculos',     'VeiculoController@index');
+
+});
