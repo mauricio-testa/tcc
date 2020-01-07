@@ -10,7 +10,7 @@ class PacienteController extends Controller
         // @todo alterar para pegar id_unidade do usuário logado
         // @todo criar uma constante para paginação default
 
-        $pacientes = Paciente::where('id_unidade', '=', 1)->paginate(5);
+        $pacientes = Paciente::where('id_unidade', '=', 1)->paginate(config('constants.default_pagination_size'));
         return view('paciente\index', ['pacientes' => $pacientes]);
     }
 }
