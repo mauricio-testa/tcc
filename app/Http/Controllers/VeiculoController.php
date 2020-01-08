@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Veiculo;
+use Illuminate\Support\Facades\Auth;
 
 class VeiculoController extends Controller
 {
     public function index() {
-        // @todo alterar para pegar id_unidade do usuário logado
-        // @todo criar uma constante para paginação default
+        
+        $veiculos = Veiculo::where('id_unidade', '=', Auth::user()->id_unidade)
+            ->paginate(config('constants.default_pagination_size'));
 
-        $veiculos = Veiculo::where('id_unidade', '=', 1)->paginate(5);
         return view('veiculo\index', ['veiculos' => $veiculos]);
     }
 }
