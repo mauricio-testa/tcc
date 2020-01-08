@@ -11,16 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'auth'], function() {
+
+    Route::get('/',         'IndexController@index')->name('index');
+    Route::get('/viagens',  'ViagemController@index');
+
+    Route::group(['prefix' => 'cadastros'], function () {
+        Route::get('/motoristas',   'MotoristaController@index');
+        Route::get('/veiculos',     'VeiculoController@index');
+        Route::get('/pacientes',    'PacienteController@index');
+    });
+
 });
 
-Route::group(['prefix' => 'cadastros'], function () {
-    
-    Route::get('/motoristas',   'MotoristaController@index');
-    Route::get('/veiculos',     'VeiculoController@index');
-    Route::get('/pacientes',    'PacienteController@index');
-
-});
-
-Route::get('/viagens',    'ViagemController@index');
+Auth::routes();
