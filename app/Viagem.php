@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Viagem extends Model
 {
-    public static function getViagemList() {
+    public static function getViagemList($id_unidade) {
         return self::select('viagems.*', 
                 'mu.nome        as municipio_nome', 
                 'mo.nome        as motorista_nome', 
@@ -19,7 +19,7 @@ class Viagem extends Model
             ->leftJoin('motoristas as mo'   , 'viagems.id_motorista',   '=', 'mo.id')
             ->leftJoin('veiculos as ve'     , 'viagems.id_veiculo',     '=', 've.id')
             
-            ->where('viagems.id_unidade'    , '=', 1)
+            ->where('viagems.id_unidade'    , '=', $id_unidade)
             ->paginate(config('constants.default_pagination_size'));
     }
 }
