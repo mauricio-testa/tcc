@@ -10,9 +10,10 @@
         <thead>
             <tr>
             <th>#</th>
-            <th>Descricao</th>
-            <th>Placa</th>
-            <th>Lotação</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Inserido em</th>
+            <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -23,6 +24,9 @@
                 <td>{{$m->nome}}</td>
                 <td>{{$m->telefone}}</td>
                 <td>{{$m->created_at}}</td>
+                <td>
+                    <a class="btn btn-danger btn-sm" href="{{route('motorista.delete', $m->id)}}">Delete</a>
+                </td>
             </tr>
         @endforeach
 
