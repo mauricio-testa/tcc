@@ -18,6 +18,10 @@ class CreateMunicipiosTable extends Migration
             $table->string('nome', 240)->nullable(false);
             $table->char('uf', 2)->nullable(false);
             $table->primary('codigo');
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
     }
 

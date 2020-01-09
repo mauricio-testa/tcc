@@ -21,11 +21,15 @@ class CreateUsersTable extends Migration
             $table->string('user')->default('');
             $table->tinyInteger('status')->default(1)->nullable(true);
             $table->string('profile_photo')->nullable(true);
-            $table->integer('id_unidade')->nullable(false)->default(0);
+            $table->unsignedInteger('id_unidade')->nullable(false)->default(0);
             $table->rememberToken();
             $table->timestamps();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
     }
 

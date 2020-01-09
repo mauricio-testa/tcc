@@ -19,7 +19,11 @@ class CreateUnidadesTable extends Migration
             $table->string('descricao', 240);
             $table->timestamps();
 
-            $table->foreign('id_municipio')->references('id')->on('municipios');
+            $table->foreign('id_municipio')->references('codigo')->on('municipios');
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
     }
 

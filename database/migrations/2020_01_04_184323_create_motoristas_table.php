@@ -17,10 +17,14 @@ class CreateMotoristasTable extends Migration
             $table->increments('id');
             $table->string('nome', 240)->nullable(false);
             $table->string('telefone', 15);
-            $table->integer('id_unidade')->nullable(false);
+            $table->unsignedInteger('id_unidade')->nullable(false);
             $table->timestamps();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
 
     }

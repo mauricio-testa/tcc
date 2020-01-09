@@ -13,11 +13,11 @@ class CreateViagemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('viagems', function (Blueprint $table) {
+        Schema::create('viagens', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_unidade')->nullable(false);
-            $table->integer('id_veiculo');
-            $table->integer('id_motorista');
+            $table->unsignedInteger('id_unidade')->nullable(false);
+            $table->unsignedInteger('id_veiculo');
+            $table->unsignedInteger('id_motorista');
             $table->integer('cod_destino')->nullable(false);
             $table->date('data_viagem')->nullable(false);
             $table->time('hora_saida');
@@ -28,6 +28,10 @@ class CreateViagemsTable extends Migration
             $table->foreign('cod_destino')->references('codigo')->on('municipios');
             $table->foreign('id_motorista')->references('id')->on('motoristas');
             $table->foreign('id_veiculo')->references('id')->on('veiculos');
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
 
     }

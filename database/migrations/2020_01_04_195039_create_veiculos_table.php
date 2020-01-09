@@ -15,7 +15,7 @@ class CreateVeiculosTable extends Migration
     {
         Schema::create('veiculos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_unidade')->nullable(false);
+            $table->unsignedInteger('id_unidade')->nullable(false);
             $table->string('descricao', 240)->nullable(false);
             $table->string('placa', 10)->nullable(false);
             $table->integer('lotacao')->nullable(false);
@@ -25,6 +25,10 @@ class CreateVeiculosTable extends Migration
             $table->timestamps();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
     }
 

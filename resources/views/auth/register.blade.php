@@ -62,6 +62,14 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="id_unidade" class="col-md-4 control-label">Unidade</label>
+
+                            <div class="col-md-6">
+                                <input id="id_unidade" type="number" class="form-control" name="id_unidade" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
                                     Register

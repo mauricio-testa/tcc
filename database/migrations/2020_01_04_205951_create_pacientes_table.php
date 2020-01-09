@@ -19,12 +19,16 @@ class CreatePacientesTable extends Migration
             $table->string('nome', 240)->nullable(false);
             $table->string('telefone', 15);
             $table->string('endereco', 240);
-            $table->integer('id_unidade');
-            $table->integer('codigo_municipio');
+            $table->unsignedInteger('id_unidade');
+            $table->integer('codigo_municipio')->nullable(false);
             $table->timestamps();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
             $table->foreign('codigo_municipio')->references('codigo')->on('municipios');
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_general_ci';
         });
     }
 
