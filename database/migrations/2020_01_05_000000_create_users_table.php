@@ -18,12 +18,13 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('password');
-            $table->string('user')->default('');
-            $table->tinyInteger('status')->default(1)->nullable(true);
-            $table->string('profile_photo')->nullable(true);
-            $table->unsignedInteger('id_unidade')->nullable(false)->default(0);
+            $table->tinyInteger('status')->default(1)->nullable();
+            $table->string('profile_photo')->nullable();
+            $table->unsignedInteger('id_unidade')->nullable(false);
             $table->rememberToken();
-            $table->timestamps();
+
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
 

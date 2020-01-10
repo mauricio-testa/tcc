@@ -16,9 +16,10 @@ class CreateMotoristasTable extends Migration
         Schema::create('motoristas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome', 240)->nullable(false);
-            $table->string('telefone', 15);
+            $table->string('telefone', 15)->nullable();
             $table->unsignedInteger('id_unidade')->nullable(false);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
 

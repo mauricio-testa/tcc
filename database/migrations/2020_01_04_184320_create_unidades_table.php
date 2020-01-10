@@ -16,8 +16,9 @@ class CreateUnidadesTable extends Migration
         Schema::create('unidades', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_municipio')->nullable(false);
-            $table->string('descricao', 240);
-            $table->timestamps();
+            $table->string('descricao', 240)->nullable(false);
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('id_municipio')->references('codigo')->on('municipios');
 

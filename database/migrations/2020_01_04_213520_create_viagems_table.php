@@ -15,14 +15,15 @@ class CreateViagemsTable extends Migration
     {
         Schema::create('viagens', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_unidade')->nullable(false);
+            $table->unsignedInteger('id_unidade');
             $table->unsignedInteger('id_veiculo');
             $table->unsignedInteger('id_motorista');
-            $table->integer('cod_destino')->nullable(false);
+            $table->integer('cod_destino');
             $table->date('data_viagem')->nullable(false);
             $table->time('hora_saida');
-            $table->string('observacao', 240);
-            $table->timestamps();
+            $table->string('observacao', 240)->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
             $table->foreign('cod_destino')->references('codigo')->on('municipios');
