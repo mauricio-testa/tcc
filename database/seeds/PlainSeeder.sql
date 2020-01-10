@@ -1,10 +1,6 @@
-php artisan migrate:fresh
-
 use laravel;
 
 SET FOREIGN_KEY_CHECKS=0;
-
-insert into municipios values (4040, 'Liberato Salzano', 'RS');
 
 insert into unidades (id, id_municipio, descricao) values (1, 4040, 'Unidade Teste');
 
