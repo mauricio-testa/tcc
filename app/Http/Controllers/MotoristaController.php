@@ -31,7 +31,7 @@ class MotoristaController extends Controller
             $message    = 'Erro ao deletar motorista: '.$th->getMessage();
         }
 
-        return redirect()->route('motorista.index')->with($status, $message);
+        return redirect()->back()->with($status, $message);
 
     }
 
