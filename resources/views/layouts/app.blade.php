@@ -15,6 +15,9 @@
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    
 </head>
 <body>
     <div id="app">
@@ -79,21 +82,26 @@
             </div>
         </nav>
 
-        @if (Session::has('success'))
-            <div class="alert alert-success">
-            <p>{{Session::get('success') }}</p>
-            </div>
-        @endif
-        @if (Session::has('error'))
-            <div class="alert alert-danger">
-            <p>{{ Session::get('error') }}</p>
-            </div>
-        @endif
-
         @yield('content')
     </div>
 
+    
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <div>
+        @if (Session::has('success'))
+            <script type="text/javascript">
+                toastr.success("{{Session::get('success') }}")
+            </script>
+        @endif
+        @if (Session::has('error'))
+            <script type="text/javascript">
+                toastr.error("{{Session::get('error') }}")
+            </script>
+        @endif
+    </div>
 </body>
 </html>
