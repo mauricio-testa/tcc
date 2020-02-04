@@ -6,4 +6,8 @@
 @import "variables";
 
 // Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+@import "~vuetify/dist/vuetify.min.css";
+
+@import "~@mdi/font/css/materialdesignicons.min.css";
