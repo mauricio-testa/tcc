@@ -10,7 +10,18 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import Vuetify from 'vuetify';
+import VuetifyToast from 'vuetify-toast-snackbar'
+
 Vue.use(Vuetify);
+Vue.use(VuetifyToast, {
+	x: 'right', // default
+	y: 'bottom', // default
+	color: 'info',
+    iconColor: 'transparent' ,
+	queueable: false, // default
+	showClose: true,
+	closeIcon: 'mdi-close', // default
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
