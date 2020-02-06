@@ -4,7 +4,21 @@
       v-model="drawer"
       :clipped="$vuetify.breakpoint.lgAndUp"
       app
+      dark
+      src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
     >
+      <v-list-item two-line>
+          <v-list-item-avatar>
+            <img src="https://randomuser.me/api/portraits/women/81.jpg">
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title>Jane Smith</v-list-item-title>
+            <v-list-item-subtitle>Logged In</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+
+      <v-divider></v-divider>
       <v-list dense>
         <template v-for="item in menus">
 
@@ -64,9 +78,20 @@
                 {{ item.text }}
               </v-list-item-title>
             </v-list-item-content>
-          </v-list-item>
-
+          </v-list-item>          
         </template>
+
+        <v-list-item @click="logout">
+          <v-list-item-action>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>
+              Logout
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
       </v-list>
     </v-navigation-drawer>
 
@@ -83,7 +108,7 @@
         style="width: 300px"
         class="ml-0 pl-4"
       >
-        <span class="hidden-sm-and-down">Google Contacts</span>
+        <span class="hidden-sm-and-down">SIMTRAP</span>
       </v-toolbar-title>
       <v-text-field
         flat
@@ -127,46 +152,16 @@
     data: () => ({
       dialog: false,
       drawer: null,
-      /*
-      items: [
-        { icon: 'mdi-contacts', text: 'Contacts' },
-        { icon: 'mdi-history', text: 'Frequently contacted' },
-        { icon: 'mdi-content-copy', text: 'Duplicates' },
-        {
-          icon: 'mdi-chevron-up',
-          'icon-alt': 'mdi-chevron-down',
-          text: 'Labels',
-          model: true,
-          children: [
-            { icon: 'mdi-plus', text: 'Create label' },
-          ],
-        },
-        {
-          icon: 'mdi-chevron-up',
-          'icon-alt': 'mdi-chevron-down',
-          text: 'More',
-          model: false,
-          children: [
-            { text: 'Import' },
-            { text: 'Export' },
-            { text: 'Print' },
-            { text: 'Undo changes' },
-            { text: 'Other contacts' },
-          ],
-        },
-        { icon: 'mdi-settings', text: 'Settings' },
-        { icon: 'mdi-message', text: 'Send feedback' },
-        { icon: 'mdi-help-circle', text: 'Help' },
-        { icon: 'mdi-cellphone-link', text: 'App downloads' },
-        { icon: 'mdi-keyboard', text: 'Go to the old version' },
-      ],
-      */
     }),
 
     methods: {
-      open: (function(url){
+      open: function(url){
         window.location = url
-      })
+      },
+      logout: function() {
+        event.preventDefault();
+        document.getElementById('logout-form').submit();
+      }
     }
 
   }

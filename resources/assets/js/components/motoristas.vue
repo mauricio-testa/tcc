@@ -2,28 +2,28 @@
   <div>
     <v-content>
       <v-container fluid>
+        <v-card class="ml-2 mt-2">
+          <v-data-table
+            :headers="headers"
+            :items="motoristas"
+            :loading="loading"
+          >
+            <!-- table toolbar -->
+            <template v-slot:top>
+              <v-toolbar flat color="white">
+                <v-toolbar-title>Motoristas</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" dark class="mb-2" @click="addNew">Novo Motorista</v-btn>
+              </v-toolbar>
+            </template>
 
-        <v-data-table
-          :headers="headers"
-          :items="motoristas"
-        >
-          <!-- table toolbar -->
-          <template v-slot:top>
-            <v-toolbar flat color="white">
-              <v-toolbar-title>Motoristas</v-toolbar-title>
-              <v-divider class="mx-4" inset vertical></v-divider>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" dark class="mb-2" @click="addNew">New Item</v-btn>
-            </v-toolbar>
-          </template>
-
-          <!-- table actions -->
-          <template v-slot:item.action="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon small @click="deleteItem(item, false)">mdi-delete</v-icon>
-          </template>
-        </v-data-table>
-
+            <!-- table actions -->
+            <template v-slot:item.action="{ item }">
+              <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+              <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
+            </template>
+          </v-data-table>
+        </v-card>
       </v-container>
     </v-content>
 
@@ -34,8 +34,8 @@
         <v-card-text>Tem certeza que deseja deletar o motorista {{ selectedItem.nome }} ?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialogDelete = false">Não</v-btn>
-          <v-btn color="blue darken-1" text @click="deleteItem(selectedIndex, true)">Sim</v-btn>
+          <v-btn color="blue darken-1" text @click="dialogDelete = false">Cancelar</v-btn>
+          <v-btn color="red darken-1" text @click="deleteItem(selectedIndex, true)">Excluir</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -59,8 +59,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialogEdit = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+          <v-btn color="red darken-1" text @click="dialogEdit = false">Cancelar</v-btn>
+          <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -79,6 +79,7 @@
       // state of dialogs
       dialogDelete: false,
       dialogEdit: false,
+      loading: true,
 
       // table column names
       headers: [
@@ -102,7 +103,7 @@
     }),
 
     mounted() {
-    	this.getMotoristas();
+      this.getMotoristas();
     },
 
     methods: {
@@ -113,16 +114,17 @@
 
       getMotoristas() {
         let vm = this;
+        vm.loading = true;
         axios
           .get(this.api)
           .then(function(response) {
             vm.motoristas = response.data;
           })
           .catch(function(error) {
-            console.log(error);
+            vm.$toast.error('Erro ao buscar motoristas')
           })
           .finally(function() {
-            
+            vm.loading = false;
           });
       },
 
@@ -150,12 +152,12 @@
             .put(this.api+'/'+this.selectedItem.id, vm.selectedItem)
             .then(function(response){
                 if(response.data.error) {
-                  console.log(response.data.error)
+                  vm.$toast.error('Erro ao editar motorista: '+response.data.error)
                 }
                 else {
                   Object.assign(vm.motoristas[vm.selectedIndex], vm.selectedItem)
                   vm.dialogEdit = false;
-                  console.log('sucesso!');
+                  vm.$toast.success('Motorista salvo com sucesso!')
                 }
             })
         // NOVO
@@ -167,12 +169,12 @@
             })
             .then(function(response){
                 if(response.data.error) {
-                  console.log(response.data.error)
+                  vm.$toast.error('Erro ao cadastrar motorista: '+response.data.error)
                 }
                 else {
                   vm.getMotoristas();
                   vm.dialogEdit = false;
-                  console.log('sucesso!');
+                  vm.$toast.success('Motorista cadastrado com sucesso!')
                 }
             })
         }
@@ -210,10 +212,10 @@
           .delete(this.api+'/'+this.selectedItem.id)
           .then(function(response){
             if(response.data.error) {
-              console.log(response.data.error)
+              vm.$toast.error('Erro ao deletar motorista: '+response.data.error)
             }
             else {
-              console.log('sucesso!');
+              vm.$toast.success('Motorista deletado com sucesso!')
               vm.motoristas.splice(vm.selectedIndex, 1)
             }
           })
