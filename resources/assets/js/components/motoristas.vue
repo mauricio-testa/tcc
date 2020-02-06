@@ -2,76 +2,43 @@
   <div>
     <v-content>
       <v-container fluid>
-      	  <v-simple-table fixed-header height="80vh">
-      	    <template v-slot:default>
-      	      <thead>
-      	        <tr>
-      	          <th class="text-left">#</th>
-      	          <th class="text-left">Name</th>
-      	          <th class="text-left">Telefone</th>
-      	          <th class="text-left">Createdat</th>
-      	          <th></th>
-      	        </tr>
-      	      </thead>
-      	      <tbody>
-      	        <tr v-for="(motorista, i) in motoristas" :key="i">
-      	          <td>{{ motorista.id }}</td>
-      	          <td>{{ motorista.nome }}</td>
-      	          <td>{{ motorista.telefone }}</td>
-      	          <td>{{ motorista.created_at }}</td>
-      	          <td>
-      	          	<v-btn class="ma-2" text icon color="blue darken-1" @click.stop="beginEdit(motorista)">
-				        <v-icon>mdi-pencil</v-icon>
-				    </v-btn>
-      	          	<v-btn class="ma-2" text icon color="red darken-1" @click.stop="beginDelete(motorista, i, false)">
-				        <v-icon>mdi-delete</v-icon>
-				    </v-btn>
-      	        </td>
-      	        </tr>
-      	      </tbody>
-      	    </template>
-      	  </v-simple-table>
+
+        <v-data-table
+          :headers="headers"
+          :items="motoristas"
+        >
+          <!-- table toolbar -->
+          <template v-slot:top>
+            <v-toolbar flat color="white">
+              <v-toolbar-title>Motoristas</v-toolbar-title>
+              <v-divider class="mx-4" inset vertical></v-divider>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" dark class="mb-2" @click="addNew">New Item</v-btn>
+            </v-toolbar>
+          </template>
+
+          <!-- table actions -->
+          <template v-slot:item.action="{ item }">
+            <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon small @click="deleteItem(item, false)">mdi-delete</v-icon>
+          </template>
+        </v-data-table>
+
       </v-container>
     </v-content>
 
-
-
-    <v-snackbar v-model="snackbar" :color="'success'"> Motorista deletado com sucesso!</v-snackbar>
-
-
-
-
-
+    <!-- dialog delete -->
     <v-dialog v-model="dialogDelete" max-width="290">
       <v-card>
         <v-card-title class="headline">Confirmar exclusão?</v-card-title>
-        <v-card-text>
-          Tem certeza que deseja deletar o motorista {{ deleteSelected.nome }} ?
-        </v-card-text>
+        <v-card-text>Tem certeza que deseja deletar o motorista {{ selectedItem.nome }} ?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialog = false"
-          >
-            Não
-          </v-btn>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="beginDelete(deleteSelected, deleteIndexSelected, true)"
-          >
-            Sim
-          </v-btn>
+          <v-btn color="blue darken-1" text @click="dialogDelete = false">Não</v-btn>
+          <v-btn color="blue darken-1" text @click="deleteItem(selectedIndex, true)">Sim</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-
-
-
-
 
     <v-dialog v-model="dialogEdit" max-width="500px">
       <v-card>
@@ -82,10 +49,10 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="12" md="6">
-                <v-text-field v-model="editSelected.nome" label="Nome" required></v-text-field>
+                <v-text-field v-model="selectedItem.nome" label="Nome" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="12" md="6">
-                <v-text-field v-model="editSelected.telefone" label="Telefone" hint="Digite seu telefone"></v-text-field>
+                <v-text-field v-model="selectedItem.telefone" label="Telefone" hint="Digite seu telefone"></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -93,56 +60,167 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialogEdit = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="dialogEdit = false">Save</v-btn>
+          <v-btn color="blue darken-1" text @click="save">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
 
   </div>
 </template>
 
 <script>
+
   export default {
-  	props: {
-      data: Array,
-    },
+    props: ['api'],
     data: () => ({
-    	motoristas: [],
+      // main data
+      motoristas: [],
 
-      	deleteSelected: [],
-      	editSelected: [],
-      	deleteIndexSelected: null,
+      // state of dialogs
+      dialogDelete: false,
+      dialogEdit: false,
 
-      	dialogDelete: false,
-      	dialogEdit: false,
-      	snackbar: false,
+      // table column names
+      headers: [
+          { text: '#', value: 'id'},
+          { text: 'Nome', value: 'nome' },
+          { text: 'Telefone', value: 'telefone' },
+          { text: 'Data Criação', value: 'created_at' },
+          { text: 'Ações', value: 'action' },
+        ],
       
+      // CRUD variables
+      selectedIndex: null,
+      selectedItem: {
+        nome: null,
+        telefone: null,
+      },
+      defaultItem: {
+        nome: null,
+        telefone: null,
+      },
     }),
+
     mounted() {
-    	console.log(this.data)
-    	this.motoristas = this.data
+    	this.getMotoristas();
     },
+
     methods: {
-    	beginDelete(motorista, index, confirm) {
-    		
-    		if (!confirm) {
-    			this.deleteSelected = motorista
-    			this.deleteIndexSelected = index
+
+      /*
+       * Faz o fetch da lista de motoristas a partir da API
+       */
+
+      getMotoristas() {
+        let vm = this;
+        axios
+          .get(this.api)
+          .then(function(response) {
+            vm.motoristas = response.data;
+          })
+          .catch(function(error) {
+            console.log(error);
+          })
+          .finally(function() {
+            
+          });
+      },
+
+      /*
+       * Abre o modal de edição a partir da coluna "Ações da tabela"
+       * @param item obj
+       */
+
+      editItem (item) {
+        this.selectedIndex = this.motoristas.indexOf(item)
+        this.selectedItem = Object.assign({}, item)
+        this.dialogEdit = true
+      },
+
+      /*
+       * Salvar item editado ou novo
+       * Se tiver index é edição, senão é novo registro
+       */
+
+      save () {
+        let vm = this;
+        // EDIÇÃO
+        if (this.selectedIndex > -1) {
+          axios
+            .put(this.api+'/'+this.selectedItem.id, vm.selectedItem)
+            .then(function(response){
+                if(response.data.error) {
+                  console.log(response.data.error)
+                }
+                else {
+                  Object.assign(vm.motoristas[vm.selectedIndex], vm.selectedItem)
+                  vm.dialogEdit = false;
+                  console.log('sucesso!');
+                }
+            })
+        // NOVO
+        } else {
+          axios
+            .post(this.api, {
+              'nome'      : vm.selectedItem.nome,
+              'telefone'  : vm.selectedItem.telefone
+            })
+            .then(function(response){
+                if(response.data.error) {
+                  console.log(response.data.error)
+                }
+                else {
+                  vm.getMotoristas();
+                  vm.dialogEdit = false;
+                  console.log('sucesso!');
+                }
+            })
+        }
+      },
+
+      /*
+       * Abre modal e assinala index nulo e valores padrão para inserir novo registro
+       */
+
+      addNew () {
+        this.dialogEdit = true
+        this.selectedItem = Object.assign({}, this.defaultItem)
+        this.selectedIndex = -1
+      },
+
+      /*
+       * Exclui um registro
+       * @param item Obj
+       * @param confirm bool
+       * Ao clicar nas ações da tabela o parametro confirm vem false e abre o dialog de confirmação
+       * Para ficar true é necessário confirmar no dialog que abre posteriormente
+       */
+
+      deleteItem (item, confirm) {
+        
+        if (!confirm) {
+          this.selectedItem = item;
+          this.selectedIndex = this.motoristas.indexOf(item);
     			this.dialogDelete = true
     			return;
-    		}
+        }
 
-    		Vue.delete(this.motoristas, this.deleteIndexSelected)
-    		this.dialogDelete = false;
-
-    		this.snackbar = true;
-    	},
-
-    	beginEdit(motorista) {
-    		this.dialogEdit = true
-    		this.editSelected = motorista
-    	}
+        let vm = this;
+        axios
+          .delete(this.api+'/'+this.selectedItem.id)
+          .then(function(response){
+            if(response.data.error) {
+              console.log(response.data.error)
+            }
+            else {
+              console.log('sucesso!');
+              vm.motoristas.splice(vm.selectedIndex, 1)
+            }
+          })
+          .finally(function() {
+              vm.dialogDelete = false;
+          });
+      },
     }
   }
 </script>

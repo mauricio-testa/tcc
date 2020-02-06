@@ -3,6 +3,6 @@
 @section('content')
 
 
-<motoristas></motoristas>
+<motoristas api="{{ url('/api/motoristas') }}"></motoristas>
 
 @endsection

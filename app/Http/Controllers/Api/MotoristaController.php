@@ -16,8 +16,15 @@ class MotoristaController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
-        Motorista::create($request->all());
+        try {
+            $motorista = $request->all();
+            $motorista['id_unidade'] = '1';
+            Motorista::create($motorista);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => $th->getMessage()
+            ]);
+        }
     }
 
     public function update(Request $request, $id)
