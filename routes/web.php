@@ -21,6 +21,10 @@ Route::middleware(['auth'])->group(function () {
         Route::view('/motoristas', 'motorista');
     });
 
+    Route::prefix('api')->group(function () {
+        Route::resource('motoristas', 'Api\MotoristaController');
+    });
+
 });
 
 Auth::routes();
