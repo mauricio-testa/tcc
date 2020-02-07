@@ -2,6 +2,6 @@
 
 @section('content')
 
-<example></example>
+<dashboard></dashboard>
 
 @endsection

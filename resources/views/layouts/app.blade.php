@@ -34,11 +34,10 @@
                 ['heading' => 'Administração'],
                 ['text' => 'Novo usuário', 'url' => route('register'), 'icon' => 'mdi-account-plus'],
             ];
-
         ?>
 
         <v-app>
-            <navigation :menus="{{ htmlspecialchars(json_encode($data))}}"></navigation>  
+            <navigation :menus="{{ htmlspecialchars(json_encode($data))}}" :user="{{ htmlspecialchars(json_encode(['nome' => Auth::user()->name]))}}"></navigation>  
             @yield('content')
         </v-app>
 
