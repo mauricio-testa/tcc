@@ -14,13 +14,10 @@ import VuetifyToast from 'vuetify-toast-snackbar'
 
 Vue.use(Vuetify);
 Vue.use(VuetifyToast, {
-	x: 'right', // default
-	y: 'bottom', // default
 	color: 'info',
     iconColor: 'transparent' ,
-	queueable: false, // default
 	showClose: true,
-	closeIcon: 'mdi-close', // default
+	closeIcon: 'mdi-close',
 })
 
 /**
@@ -28,10 +25,13 @@ Vue.use(VuetifyToast, {
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-Vue.component('navigation', require('./components/global/navigation.vue'));
-Vue.component('motoristas', require('./components/motoristas.vue'));
-Vue.component('example', require('./components/Example.vue'));
-Vue.component('tarefas', require('./components/Tarefas.vue'));
+
+//global
+Vue.component('navigation', require('./components/global/Navigation.vue'));
+
+// views
+Vue.component('motoristas', require('./components/Motoristas.vue'));
+Vue.component('dashboard', require('./components/Dashboard.vue'));
 
 const app = new Vue({
     el: '#app',

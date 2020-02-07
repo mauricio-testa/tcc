@@ -13,8 +13,8 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title>Jane Smith</v-list-item-title>
-            <v-list-item-subtitle>Logged In</v-list-item-subtitle>
+            <v-list-item-title>{{ user.nome }}</v-list-item-title>
+            <v-list-item-subtitle>Logado</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
 
@@ -148,6 +148,7 @@
     props: {
       source: String,
       menus: Array,
+      user: Object
     },
     data: () => ({
       dialog: false,

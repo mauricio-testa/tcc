@@ -2,7 +2,9 @@
   <div>
     <v-content>
       <v-container fluid>
-        <v-card class="ml-2 mt-2">
+        <v-card class="ml-2 mt-2 px-2">
+
+          <!-- table  -->
           <v-data-table
             :headers="headers"
             :items="motoristas"
@@ -23,6 +25,7 @@
               <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
             </template>
           </v-data-table>
+
         </v-card>
       </v-container>
     </v-content>
@@ -40,46 +43,53 @@
       </v-card>
     </v-dialog>
 
+    <!-- dialog edit / new -->
     <v-dialog v-model="dialogEdit" max-width="500px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Motorista</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="12" md="6">
-                <v-text-field v-model="selectedItem.nome" label="Nome" required></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="12" md="6">
-                <v-text-field v-model="selectedItem.telefone" label="Telefone" hint="Digite seu telefone"></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="red darken-1" text @click="dialogEdit = false">Cancelar</v-btn>
-          <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
-        </v-card-actions>
-      </v-card>
+      <v-form v-model="formValid" ref="formEdit">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Motorista</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12" sm="12" md="6">
+                  <v-text-field v-model="selectedItem.nome" label="Nome" required :rules="[v => !!v || 'Nome é obrigatório']"></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="12" md="6">
+                  <v-text-field v-mask="'(##) #####-####'" v-model="selectedItem.telefone" :rules="[v => (v ? (v.length > 14) : !v) || 'Telefone deve ter 11 números']" label="Telefone"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red darken-1" text @click="dialogEdit = false">Cancelar</v-btn>
+            <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-form>
     </v-dialog>
 
   </div>
 </template>
 
 <script>
+  import {TheMask} from 'vue-the-mask'
 
   export default {
     props: ['api'],
+    components: {TheMask},
+
     data: () => ({
       // main data
       motoristas: [],
 
-      // state of dialogs
+      // state of elements
       dialogDelete: false,
       dialogEdit: false,
       loading: true,
+      formValid: true,
 
       // table column names
       headers: [
@@ -145,6 +155,7 @@
        */
 
       save () {
+        if (!this.$refs.formEdit.validate()) return;
         let vm = this;
         // EDIÇÃO
         if (this.selectedIndex > -1) {
