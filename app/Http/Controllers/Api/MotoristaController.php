@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Motorista;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
+use App\Http\Controllers\Helpers\ErrorInterpreter;
 
 
 class MotoristaController extends Controller
@@ -25,7 +26,7 @@ class MotoristaController extends Controller
             Motorista::create($motorista);
         } catch (\Throwable $th) {
             return response()->json([
-                'error' => $th->getMessage()
+                'error' => ErrorInterpreter::getMessage($th)
             ]);
         }
     }
@@ -38,7 +39,7 @@ class MotoristaController extends Controller
             $motorista->update($request->all());
         } catch (\Throwable $th) {
             return response()->json([
-                'error' => $th->getMessage()
+                'error' => ErrorInterpreter::getMessage($th)
             ]);
         }
     }
@@ -50,7 +51,7 @@ class MotoristaController extends Controller
             $motorista->delete();
         } catch (\Throwable $th) {
             return response()->json([
-                'error' => $th->getMessage()
+                'error' => ErrorInterpreter::getMessage($th, [1451 => 'Você não pode deletar este motorista pois existem viagens cadastradas para ele'])
             ]);
         }
     }
