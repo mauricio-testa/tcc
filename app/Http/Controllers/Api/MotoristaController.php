@@ -51,7 +51,7 @@ class MotoristaController extends Controller
             $motorista->delete();
         } catch (\Throwable $th) {
             return response()->json([
-                'error' => ErrorInterpreter::getMessage($th, [1451 => 'Você não pode deletar este motorista pois existem viagens cadastradas para ele'])
+                'error' => ErrorInterpreter::getMessage($th, ['23000' => ['1451' => 'Você não pode deletar este motorista pois existem viagens cadastradas para ele']])
             ]);
         }
     }

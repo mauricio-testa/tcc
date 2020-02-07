@@ -11,22 +11,27 @@ class ErrorInterpreter extends Controller
     {
         $errorInfo  = $exception->getPrevious()->errorInfo;
         $message    = $exception->getMessage();
-        $errorList  = [
-            1451 => 'Você não pode deletar este registro pois outros cadastros depedem dele',
-            1452 => 'Erro de chave estrangeira ao inserir ou atualizar'
-
+        $errorList  = [ // SQLSTATE [ERROR CODE]
+            '23000' => [
+                '1451' => 'Você não pode deletar este registro pois outros cadastros depedem dele',
+                '1452' => 'Erro de chave estrangeira ao inserir ou atualizar'
+            ]
         ];
         
-        if (!empty($errorInfo[1]) && $errorInfo[0] == 23000) {
-            $errorCode = $errorInfo[1];
+        if (!empty($errorInfo[1])) {
+            $errorCode  = $errorInfo[1];
+            $sqlState   = $errorInfo[0];
 
             // tenta buscar a mensagem de erro no parametro enviado pelo método
-            if (array_key_exists($errorCode, $customMessages)) 
-            return $customMessages[$errorCode];
+            if (array_key_exists($sqlState, $customMessages)) {
+                if (array_key_exists($errorCode, $customMessages[$sqlState])) {
+                    return $customMessages[$sqlState][$errorCode];
+                }
+            }
             
             // se não encontrar, busca nas mensagens de erro deste método
-            if (array_key_exists($errorCode, $errorList)) 
-            return $errorList[$errorCode];
+            if (array_key_exists($errorCode, $errorList[$sqlState])) 
+            return $errorList[$sqlState][$errorCode];
             
         }
 
