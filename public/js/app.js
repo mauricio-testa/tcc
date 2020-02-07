@@ -87256,9 +87256,9 @@ var render = function() {
               _vm._v(" "),
               _c("v-card-text", [
                 _vm._v(
-                  "Tem certeza que deseja deletar o motorista " +
+                  'Tem certeza que deseja deletar o motorista "' +
                     _vm._s(_vm.selectedItem.nome) +
-                    " ?"
+                    '"?'
                 )
               ]),
               _vm._v(" "),
