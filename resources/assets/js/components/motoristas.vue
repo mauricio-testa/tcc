@@ -4,20 +4,38 @@
       <v-container fluid>
         <v-card class="ml-2 mt-2 px-2">
 
+          <!-- table header -->
+          <v-card-title>
+            <v-row>
+              <v-col cols="12" md="8">
+                Motoristas
+                <v-btn class="ml-4" fab dark small color="primary" @click="addNew">
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-form @submit.prevent="getItems(false)">
+                  <v-text-field 
+                    v-model="search" 
+                    label="Pesquisar"
+                    :prepend-icon="'mdi-magnify'"
+                    clearable
+                    @click:clear="resetSearch()"
+                    >
+                  </v-text-field>
+                </v-form>
+              </v-col>
+            </v-row>                        
+          </v-card-title>
+
           <!-- table  -->
           <v-data-table
             :headers="headers"
             :items="motoristas"
             :loading="loading"
+            hide-default-footer
           >
-            <!-- table toolbar -->
-            <template v-slot:top>
-              <v-toolbar flat color="white">
-                <v-toolbar-title>Motoristas</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" dark class="mb-2" @click="addNew">Novo Motorista</v-btn>
-              </v-toolbar>
-            </template>
+
 
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
@@ -25,6 +43,15 @@
               <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
             </template>
           </v-data-table>
+
+          <div class="text-center py-3">
+            <v-pagination
+              v-model="pagination.current"
+              :length="pagination.total"
+              @input="onPageChange"
+              circle
+            ></v-pagination>
+          </div>
 
         </v-card>
       </v-container>
@@ -99,6 +126,12 @@
           { text: 'Data Criação', value: 'created_at' },
           { text: 'Ações', value: 'action' },
         ],
+
+      // server side pagination
+      pagination: {
+        current: 1,
+        total: 0
+      },
       
       // CRUD variables
       selectedIndex: null,
@@ -110,10 +143,11 @@
         nome: null,
         telefone: null,
       },
+      search: '',
     }),
 
     mounted() {
-      this.getMotoristas();
+      this.getItems(false);
     },
 
     methods: {
@@ -122,13 +156,26 @@
        * Faz o fetch da lista de motoristas a partir da API
        */
 
-      getMotoristas() {
+      getItems(goToLastPage = false) {
         let vm = this;
         vm.loading = true;
+
+        // adicionado fica por último
+        let page = vm.pagination.current
+        if (goToLastPage)
+        page = vm.motoristas.length == 10 ? vm.pagination.total + 1 : vm.pagination.total;
+
+        //search
+        let urlFetch = this.api+'?page=' + page;
+        if(vm.search != '')
+        urlFetch += '&search='+vm.search
+
         axios
-          .get(this.api)
+          .get(urlFetch)
           .then(function(response) {
-            vm.motoristas = response.data;
+            vm.motoristas = response.data.data;
+            vm.pagination.current = response.data.current_page;
+            vm.pagination.total = response.data.last_page;
           })
           .catch(function(error) {
             vm.$toast.error('Erro ao buscar motoristas')
@@ -139,24 +186,16 @@
       },
 
       /*
-       * Abre o modal de edição a partir da coluna "Ações da tabela"
-       * @param item obj
-       */
-
-      editItem (item) {
-        this.selectedIndex = this.motoristas.indexOf(item)
-        this.selectedItem = Object.assign({}, item)
-        this.dialogEdit = true
-      },
-
-      /*
        * Salvar item editado ou novo
        * Se tiver index é edição, senão é novo registro
        */
 
       save () {
+        
         if (!this.$refs.formEdit.validate()) return;
+        
         let vm = this;
+        
         // EDIÇÃO
         if (this.selectedIndex > -1) {
           axios
@@ -171,6 +210,7 @@
                   vm.$toast.success('Motorista salvo com sucesso!')
                 }
             })
+
         // NOVO
         } else {
           axios
@@ -183,22 +223,12 @@
                   vm.$toast.error('Erro ao cadastrar motorista: '+response.data.error)
                 }
                 else {
-                  vm.getMotoristas();
+                  vm.getItems(true);
                   vm.dialogEdit = false;
                   vm.$toast.success('Motorista cadastrado com sucesso!')
                 }
             })
         }
-      },
-
-      /*
-       * Abre modal e assinala index nulo e valores padrão para inserir novo registro
-       */
-
-      addNew () {
-        this.dialogEdit = true
-        this.selectedItem = Object.assign({}, this.defaultItem)
-        this.selectedIndex = -1
       },
 
       /*
@@ -228,11 +258,43 @@
             else {
               vm.$toast.success('Motorista deletado com sucesso!')
               vm.motoristas.splice(vm.selectedIndex, 1)
+              //se for último da paginação e tiver mais paginações, dá reload
+              console.log(vm.pagination)
+              console.log(vm.motoristas)
+              if (vm.pagination.current > 1 && vm.motoristas.length == 0){
+                vm.pagination.current--;
+                vm.getItems()
+              }
             }
           })
           .finally(function() {
               vm.dialogDelete = false;
           });
+      },
+
+      // Abre modal e assinala index nulo e valores padrão para inserir novo registro
+      addNew () {
+        this.selectedItem = Object.assign({}, this.defaultItem)
+        this.selectedIndex = -1
+        this.dialogEdit = true
+      },
+
+      // Limpa a pesquisa
+      resetSearch() {
+        this.search = '';
+        this.getItems();
+      },
+
+      // A cada clique na paginação, recarrega a lista 
+      onPageChange() {
+        this.getItems(false);
+      },
+
+      // Abre o modal de edição a partir da coluna "Ações da tabela"
+      editItem (item) {
+        this.selectedIndex = this.motoristas.indexOf(item)
+        this.selectedItem = Object.assign({}, item)
+        this.dialogEdit = true
       },
     }
   }

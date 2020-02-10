@@ -13,10 +13,23 @@ use App\Http\Controllers\Helpers\ErrorInterpreter;
 class MotoristaController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return Motorista::where('id_unidade', Auth::user()->id_unidade)->get();
+        try {
+            $query = Motorista::where('id_unidade', '=', Auth::user()->id_unidade);
+
+            if(!empty($request->input('search')))
+            $query->where('nome', 'like', '%'.$request->input('search').'%');
+
+            return $query->paginate(config('constants.default_pagination_size'));
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => ErrorInterpreter::getMessage($th)
+            ]);
+        }        
     }
+
 
     public function store(Request $request)
     {
