@@ -1,12 +1,8 @@
 <template>
   <div>
-    <v-content>
-      <v-container fluid>
-        <v-alert type="success">
-          I'm a success alert.
-        </v-alert>
-      </v-container>
-    </v-content>
+    <v-alert type="success">
+      I'm a success alert.
+    </v-alert>
   </div>
 </template>
 
