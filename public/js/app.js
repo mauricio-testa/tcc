@@ -86994,7 +86994,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // server side pagination
       pagination: {
         current: 1,
-        total: 0
+        total: 0,
+        totalItems: 0,
+        perPage: 0
       },
 
       // CRUD variables
@@ -87007,39 +87009,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         nome: null,
         telefone: null
       },
-      search: ''
+      searchWord: null
     };
   },
 
   mounted: function mounted() {
-    this.getItems(false);
+    this.getItems();
   },
 
 
   methods: {
-
-    /*
-     * Faz o fetch da lista de motoristas a partir da API
-     */
-
     getItems: function getItems() {
-      var goToLastPage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
       var vm = this;
-      vm.loading = true;
-
-      // adicionado fica por último
       var page = vm.pagination.current;
-      if (goToLastPage) page = vm.motoristas.length == 10 ? vm.pagination.total + 1 : vm.pagination.total;
-
-      //search
       var urlFetch = this.api + '?page=' + page;
-      if (vm.search != '') urlFetch += '&search=' + vm.search;
 
+      if (vm.searchWord != null && vm.searchWord != '') urlFetch += '&search=' + vm.searchWord;
+
+      vm.loading = true;
       axios.get(urlFetch).then(function (response) {
         vm.motoristas = response.data.data;
         vm.pagination.current = response.data.current_page;
         vm.pagination.total = response.data.last_page;
+        vm.pagination.totalItems = response.data.total;
+        vm.pagination.perPage = response.data.per_page;
       }).catch(function (error) {
         vm.$toast.error('Erro ao buscar motoristas');
       }).finally(function () {
@@ -87054,12 +87048,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
      */
 
     save: function save() {
-
       if (!this.$refs.formEdit.validate()) return;
-
       var vm = this;
 
-      // EDIÇÃO
       if (this.selectedIndex > -1) {
         axios.put(this.api + '/' + this.selectedItem.id, vm.selectedItem).then(function (response) {
           if (response.data.error) {
@@ -87070,8 +87061,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             vm.$toast.success('Motorista salvo com sucesso!');
           }
         });
-
-        // NOVO
       } else {
         axios.post(this.api, {
           'nome': vm.selectedItem.nome,
@@ -87080,7 +87069,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           if (response.data.error) {
             vm.$toast.error('Erro ao cadastrar motorista: ' + response.data.error);
           } else {
-            vm.getItems(true);
+            // item adicionado vai sempre por último
+            vm.pagination.current = parseInt(vm.pagination.totalItems / vm.pagination.perPage) + 1;
+            vm.getItems();
             vm.dialogEdit = false;
             vm.$toast.success('Motorista cadastrado com sucesso!');
           }
@@ -87113,9 +87104,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         } else {
           vm.$toast.success('Motorista deletado com sucesso!');
           vm.motoristas.splice(vm.selectedIndex, 1);
+          vm.pagination.totalItems--;
           //se for último da paginação e tiver mais paginações, dá reload
-          console.log(vm.pagination);
-          console.log(vm.motoristas);
           if (vm.pagination.current > 1 && vm.motoristas.length == 0) {
             vm.pagination.current--;
             vm.getItems();
@@ -87130,21 +87120,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // Abre modal e assinala index nulo e valores padrão para inserir novo registro
     addNew: function addNew() {
       this.selectedItem = Object.assign({}, this.defaultItem);
+      this.resetEditValidation();
       this.selectedIndex = -1;
       this.dialogEdit = true;
-    },
-
-
-    // Limpa a pesquisa
-    resetSearch: function resetSearch() {
-      this.search = '';
-      this.getItems();
-    },
-
-
-    // A cada clique na paginação, recarrega a lista 
-    onPageChange: function onPageChange() {
-      this.getItems(false);
     },
 
 
@@ -87152,7 +87130,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     editItem: function editItem(item) {
       this.selectedIndex = this.motoristas.indexOf(item);
       this.selectedItem = Object.assign({}, item);
+      this.resetEditValidation();
       this.dialogEdit = true;
+    },
+
+
+    // $ref do formulario nao está disponivel na criação do componente
+    resetEditValidation: function resetEditValidation() {
+      if (typeof this.$refs.formEdit != "undefined") this.$refs.formEdit.resetValidation();
+    },
+
+
+    // Inicia uma pesquisa
+    search: function search() {
+      this.pagination.current = 1;
+      this.getItems();
+    },
+
+
+    // Limpa a pesquisa
+    resetSearch: function resetSearch() {
+      this.pagination.current = 1;
+      this.searchWord = null;
+      this.getItems();
+    },
+
+
+    // A cada clique na paginação, recarrega a lista 
+    onPageChange: function onPageChange() {
+      this.getItems();
     }
   }
 });
@@ -87231,7 +87237,7 @@ var render = function() {
                                   on: {
                                     submit: function($event) {
                                       $event.preventDefault()
-                                      return _vm.getItems(false)
+                                      return _vm.search()
                                     }
                                   }
                                 },
@@ -87248,11 +87254,11 @@ var render = function() {
                                       }
                                     },
                                     model: {
-                                      value: _vm.search,
+                                      value: _vm.searchWord,
                                       callback: function($$v) {
-                                        _vm.search = $$v
+                                        _vm.searchWord = $$v
                                       },
-                                      expression: "search"
+                                      expression: "searchWord"
                                     }
                                   })
                                 ],

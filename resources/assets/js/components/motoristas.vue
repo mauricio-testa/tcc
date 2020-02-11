@@ -14,9 +14,9 @@
                 </v-btn>
               </v-col>
               <v-col cols="12" md="4">
-                <v-form @submit.prevent="getItems()">
+                <v-form @submit.prevent="search()">
                   <v-text-field 
-                    v-model="search" 
+                    v-model="searchWord" 
                     label="Pesquisar"
                     :prepend-icon="'mdi-magnify'"
                     clearable
@@ -130,7 +130,9 @@
       // server side pagination
       pagination: {
         current: 1,
-        total: 0
+        total: 0,
+        totalItems: 0,
+        perPage: 0,
       },
       
       // CRUD variables
@@ -143,7 +145,7 @@
         nome: null,
         telefone: null,
       },
-      search: null,
+      searchWord: null,
     }),
 
     mounted() {
@@ -152,23 +154,24 @@
 
     methods: {
 
-      /*
-       * Faz o fetch da lista de motoristas a partir da API
-       */
-
       getItems() {
 
         let vm        = this;
-        vm.loading    = true;
         let page      = vm.pagination.current
         let urlFetch  = this.api+'?page='+page;
 
+        if(vm.searchWord != null && vm.searchWord != '') urlFetch+= '&search='+vm.searchWord;
+
+        vm.loading = true;
         axios
           .get(urlFetch)
           .then(function(response) {
-            vm.motoristas = response.data.data;
-            vm.pagination.current = response.data.current_page;
-            vm.pagination.total = response.data.last_page;
+            vm.motoristas             = response.data.data;
+            vm.pagination.current     = response.data.current_page;
+            vm.pagination.total       = response.data.last_page;
+            vm.pagination.totalItems  = response.data.total;
+            vm.pagination.perPage     = response.data.per_page;
+            
           })
           .catch(function(error) {
             vm.$toast.error('Erro ao buscar motoristas')
@@ -185,7 +188,6 @@
 
       save () {
         if (!this.$refs.formEdit.validate()) return;
-        
         let vm = this;
         
         if (this.selectedIndex > -1) {
@@ -213,6 +215,8 @@
                   vm.$toast.error('Erro ao cadastrar motorista: '+response.data.error)
                 }
                 else {
+                  // item adicionado vai sempre por último
+                  vm.pagination.current = parseInt(vm.pagination.totalItems / vm.pagination.perPage) + 1;
                   vm.getItems();
                   vm.dialogEdit = false;
                   vm.$toast.success('Motorista cadastrado com sucesso!')
@@ -248,6 +252,7 @@
             else {
               vm.$toast.success('Motorista deletado com sucesso!')
               vm.motoristas.splice(vm.selectedIndex, 1)
+              vm.pagination.totalItems--;
               //se for último da paginação e tiver mais paginações, dá reload
               if (vm.pagination.current > 1 && vm.motoristas.length == 0){
                 vm.pagination.current--;
@@ -277,18 +282,25 @@
       },
 
       // $ref do formulario nao está disponivel na criação do componente
-      resetEditValidation() {
+      resetEditValidation () {
         if(typeof this.$refs.formEdit != "undefined") this.$refs.formEdit.resetValidation();
       },
 
+      // Inicia uma pesquisa
+      search () {
+        this.pagination.current = 1;
+        this.getItems();
+      },
+
       // Limpa a pesquisa
-      resetSearch() {
-        this.search = null;
+      resetSearch () {
+        this.pagination.current = 1;
+        this.searchWord = null;
         this.getItems();
       },
 
       // A cada clique na paginação, recarrega a lista 
-      onPageChange() {
+      onPageChange () {
         this.getItems();
       },
     }
