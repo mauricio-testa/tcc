@@ -1,60 +1,55 @@
 <template>
   <div>
-    <v-content>
-      <v-container fluid>
-        <v-card class="ma-md-2 px-2 ma-xs-0" >
+    
+    <v-card class="ma-md-2 px-2 ma-xs-0" >
+      <!-- table header -->
+      <v-card-title>
+        <v-row>
+          <v-col cols="12" md="8">
+            Motoristas
+            <v-btn class="ml-4" fab dark small color="primary" @click="addNew">
+              <v-icon dark>mdi-plus</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-form @submit.prevent="search()">
+              <v-text-field 
+                v-model="searchWord" 
+                :prepend-icon="'mdi-magnify'"
+                @click:clear="resetSearch()"
+                :hint="'Digite sua busca e tecle Enter!'"
+                label="Pesquisar"
+                clearable
+                >
+              </v-text-field>
+            </v-form>
+          </v-col>
+        </v-row>                        
+      </v-card-title>
 
-          <!-- table header -->
-          <v-card-title>
-            <v-row>
-              <v-col cols="12" md="8">
-                Motoristas
-                <v-btn class="ml-4" fab dark small color="primary" @click="addNew">
-                  <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
-              </v-col>
-              <v-col cols="12" md="4">
-                <v-form @submit.prevent="search()">
-                  <v-text-field 
-                    v-model="searchWord" 
-                    :prepend-icon="'mdi-magnify'"
-                    @click:clear="resetSearch()"
-                    :hint="'Digite sua busca e tecle Enter!'"
-                    label="Pesquisar"
-                    clearable
-                    >
-                  </v-text-field>
-                </v-form>
-              </v-col>
-            </v-row>                        
-          </v-card-title>
+      <!-- table  -->
+      <v-data-table
+        :headers="headers"
+        :items="motoristas"
+        :loading="loading"
+        hide-default-footer
+      >
+        <!-- table actions -->
+        <template v-slot:item.action="{ item }">
+          <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+          <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
+        </template>
+      </v-data-table>
 
-          <!-- table  -->
-          <v-data-table
-            :headers="headers"
-            :items="motoristas"
-            :loading="loading"
-            hide-default-footer
-          >
-            <!-- table actions -->
-            <template v-slot:item.action="{ item }">
-              <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-              <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
-            </template>
-          </v-data-table>
-
-          <div class="text-center py-3">
-            <v-pagination
-              v-model="pagination.current"
-              :length="pagination.total"
-              @input="onPageChange"
-              circle
-            ></v-pagination>
-          </div>
-
-        </v-card>
-      </v-container>
-    </v-content>
+      <div class="text-center py-3">
+        <v-pagination
+          v-model="pagination.current"
+          :length="pagination.total"
+          @input="onPageChange"
+          circle
+        ></v-pagination>
+      </div>
+    </v-card>
 
     <!-- dialog delete -->
     <v-dialog v-model="dialogDelete" max-width="290">

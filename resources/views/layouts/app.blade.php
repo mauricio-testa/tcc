@@ -15,8 +15,6 @@
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     
 </head>
 <body>
@@ -25,7 +23,7 @@
         <?php 
             $data = [
                 ['text' => 'Dashboard', 'url' => url('/'), 'icon' => 'mdi-monitor-dashboard'],
-                ['text' => 'Viagens', 'url' => url('/viagens'), 'icon' => 'mdi-ambulance'],
+                ['text' => 'Viagens', 'url' => url('/'), 'icon' => 'mdi-ambulance'],
                 ['text' => 'Relatórios', 'url' => url('/'), 'icon' => 'mdi-file-chart'],
                 ['heading' => 'Cadastros'],
                 ['text' => 'Motoristas', 'url' => url('/cadastros/motoristas'), 'icon' => 'mdi-account-tie'],
@@ -37,8 +35,12 @@
         ?>
 
         <v-app>
-            <navigation :menus="{{ htmlspecialchars(json_encode($data))}}" :user="{{ htmlspecialchars(json_encode(['nome' => Auth::user()->name]))}}"></navigation>  
-            @yield('content')
+            <navigation :menus="{{ htmlspecialchars(json_encode($data))}}" :user="{{ htmlspecialchars(json_encode(['nome' => Auth::user()->name]))}}"></navigation>
+            <v-content>
+                <v-container fluid>
+                    @yield('content')
+                </v-container>
+            </v-content>
         </v-app>
 
         <!-- logout -->
@@ -48,10 +50,7 @@
         
     </div>
 
-    
-
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 </body>
 </html>
