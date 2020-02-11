@@ -20,5 +20,4 @@ Homestead.json
 .rocketeer/
 
 #Laravel Builded Mix files
-/public/css/app.css
-/public/js/app.js
+public/js/app.js

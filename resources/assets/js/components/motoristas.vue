@@ -2,7 +2,7 @@
   <div>
     <v-content>
       <v-container fluid>
-        <v-card class="ml-2 mt-2 px-2">
+        <v-card class="ma-md-2 px-2 ma-xs-0" >
 
           <!-- table header -->
           <v-card-title>
@@ -17,10 +17,11 @@
                 <v-form @submit.prevent="search()">
                   <v-text-field 
                     v-model="searchWord" 
-                    label="Pesquisar"
                     :prepend-icon="'mdi-magnify'"
-                    clearable
                     @click:clear="resetSearch()"
+                    :hint="'Digite sua busca e tecle Enter!'"
+                    label="Pesquisar"
+                    clearable
                     >
                   </v-text-field>
                 </v-form>
@@ -35,8 +36,6 @@
             :loading="loading"
             hide-default-footer
           >
-
-
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
               <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -81,10 +80,20 @@
             <v-container>
               <v-row>
                 <v-col cols="12" sm="12" md="6">
-                  <v-text-field v-model="selectedItem.nome" label="Nome" required :rules="[v => !!v || 'Nome é obrigatório']"></v-text-field>
+                  <v-text-field 
+                    v-model="selectedItem.nome" 
+                    label="Nome" 
+                    required 
+                    :rules="[v => !!v || 'Nome é obrigatório']"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12" md="6">
-                  <v-text-field v-mask="'(##) #####-####'" v-model="selectedItem.telefone" :rules="[v => (v ? (v.length > 14) : !v) || 'Telefone deve ter 11 números']" label="Telefone"></v-text-field>
+                  <v-text-field 
+                    v-mask="'(##) #####-####'" 
+                    v-model="selectedItem.telefone" 
+                    :rules="[v => (v ? (v.length > 14) : !v) || 'Telefone deve ter 11 números']" 
+                    label="Telefone"
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -120,11 +129,11 @@
 
       // table column names
       headers: [
-          { text: '#', value: 'id'},
-          { text: 'Nome', value: 'nome' },
-          { text: 'Telefone', value: 'telefone' },
-          { text: 'Data Criação', value: 'created_at' },
-          { text: 'Ações', value: 'action' },
+          { text: '#', value: 'id', sortable: false},
+          { text: 'Nome', value: 'nome', sortable: false},
+          { text: 'Telefone', value: 'telefone', sortable: false},
+          { text: 'Data Criação', value: 'created_at', sortable: false},
+          { text: 'Ações', value: 'action', sortable: false},
         ],
 
       // server side pagination
@@ -149,20 +158,23 @@
     }),
 
     mounted() {
+
       this.getItems();
+
     },
 
     methods: {
 
-      getItems() {
+      getItems: function() {
 
         let vm        = this;
-        let page      = vm.pagination.current
+        let page      = vm.pagination.current;
         let urlFetch  = this.api+'?page='+page;
 
         if(vm.searchWord != null && vm.searchWord != '') urlFetch+= '&search='+vm.searchWord;
 
         vm.loading = true;
+
         axios
           .get(urlFetch)
           .then(function(response) {
@@ -186,7 +198,8 @@
        * Se tiver index é edição, senão é novo registro
        */
 
-      save () {
+      save: function () {
+
         if (!this.$refs.formEdit.validate()) return;
         let vm = this;
         
@@ -233,7 +246,7 @@
        * Para ficar true é necessário confirmar no dialog que abre posteriormente
        */
 
-      deleteItem (item, confirm) {
+      deleteItem: function (item, confirm) {
         
         if (!confirm) {
           this.selectedItem = item;
@@ -266,7 +279,7 @@
       },
 
       // Abre modal e assinala index nulo e valores padrão para inserir novo registro
-      addNew () {
+      addNew: function () {
         this.selectedItem = Object.assign({}, this.defaultItem);
         this.resetEditValidation();
         this.selectedIndex = -1;
@@ -274,7 +287,7 @@
       },
 
       // Abre o modal de edição a partir da coluna "Ações da tabela"
-      editItem (item) {
+      editItem: function (item) {
         this.selectedIndex = this.motoristas.indexOf(item);
         this.selectedItem = Object.assign({}, item);
         this.resetEditValidation();
@@ -282,25 +295,25 @@
       },
 
       // $ref do formulario nao está disponivel na criação do componente
-      resetEditValidation () {
+      resetEditValidation: function () {
         if(typeof this.$refs.formEdit != "undefined") this.$refs.formEdit.resetValidation();
       },
 
       // Inicia uma pesquisa
-      search () {
+      search: function () {
         this.pagination.current = 1;
         this.getItems();
       },
 
       // Limpa a pesquisa
-      resetSearch () {
+      resetSearch: function () {
         this.pagination.current = 1;
         this.searchWord = null;
         this.getItems();
       },
 
       // A cada clique na paginação, recarrega a lista 
-      onPageChange () {
+      onPageChange: function () {
         this.getItems();
       },
     }
