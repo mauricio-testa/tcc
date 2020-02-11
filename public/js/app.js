@@ -86970,6 +86970,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -86989,7 +86993,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       formValid: true,
 
       // table column names
-      headers: [{ text: '#', value: 'id' }, { text: 'Nome', value: 'nome' }, { text: 'Telefone', value: 'telefone' }, { text: 'Data Criação', value: 'created_at' }, { text: 'Ações', value: 'action' }],
+      headers: [{ text: '#', value: 'id', sortable: false }, { text: 'Nome', value: 'nome', sortable: false }, { text: 'Telefone', value: 'telefone', sortable: false }, { text: 'Data Criação', value: 'created_at', sortable: false }, { text: 'Ações', value: 'action', sortable: false }],
 
       // server side pagination
       pagination: {
@@ -87014,11 +87018,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   mounted: function mounted() {
+
     this.getItems();
   },
 
 
   methods: {
+
     getItems: function getItems() {
 
       var vm = this;
@@ -87028,6 +87034,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (vm.searchWord != null && vm.searchWord != '') urlFetch += '&search=' + vm.searchWord;
 
       vm.loading = true;
+
       axios.get(urlFetch).then(function (response) {
         vm.motoristas = response.data.data;
         vm.pagination.current = response.data.current_page;
@@ -87041,13 +87048,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
 
-
     /*
      * Salvar item editado ou novo
      * Se tiver index é edição, senão é novo registro
      */
 
     save: function save() {
+
       if (!this.$refs.formEdit.validate()) return;
       var vm = this;
 
@@ -87078,7 +87085,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         });
       }
     },
-
 
     /*
      * Exclui um registro
@@ -87116,7 +87122,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
 
-
     // Abre modal e assinala index nulo e valores padrão para inserir novo registro
     addNew: function addNew() {
       this.selectedItem = Object.assign({}, this.defaultItem);
@@ -87124,7 +87129,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.selectedIndex = -1;
       this.dialogEdit = true;
     },
-
 
     // Abre o modal de edição a partir da coluna "Ações da tabela"
     editItem: function editItem(item) {
@@ -87134,12 +87138,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.dialogEdit = true;
     },
 
-
     // $ref do formulario nao está disponivel na criação do componente
     resetEditValidation: function resetEditValidation() {
       if (typeof this.$refs.formEdit != "undefined") this.$refs.formEdit.resetValidation();
     },
-
 
     // Inicia uma pesquisa
     search: function search() {
@@ -87147,14 +87149,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.getItems();
     },
 
-
     // Limpa a pesquisa
     resetSearch: function resetSearch() {
       this.pagination.current = 1;
       this.searchWord = null;
       this.getItems();
     },
-
 
     // A cada clique na paginação, recarrega a lista 
     onPageChange: function onPageChange() {
@@ -87181,92 +87181,36 @@ var render = function() {
     "div",
     [
       _c(
-        "v-content",
+        "v-card",
+        { staticClass: "ma-md-2 px-2 ma-xs-0" },
         [
           _c(
-            "v-container",
-            { attrs: { fluid: "" } },
+            "v-card-title",
             [
               _c(
-                "v-card",
-                { staticClass: "ml-2 mt-2 px-2" },
+                "v-row",
                 [
                   _c(
-                    "v-card-title",
+                    "v-col",
+                    { attrs: { cols: "12", md: "8" } },
                     [
+                      _vm._v("\n          Motoristas\n          "),
                       _c(
-                        "v-row",
+                        "v-btn",
+                        {
+                          staticClass: "ml-4",
+                          attrs: {
+                            fab: "",
+                            dark: "",
+                            small: "",
+                            color: "primary"
+                          },
+                          on: { click: _vm.addNew }
+                        },
                         [
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "8" } },
-                            [
-                              _vm._v(
-                                "\n              Motoristas\n              "
-                              ),
-                              _c(
-                                "v-btn",
-                                {
-                                  staticClass: "ml-4",
-                                  attrs: {
-                                    fab: "",
-                                    dark: "",
-                                    small: "",
-                                    color: "primary"
-                                  },
-                                  on: { click: _vm.addNew }
-                                },
-                                [
-                                  _c("v-icon", { attrs: { dark: "" } }, [
-                                    _vm._v("mdi-plus")
-                                  ])
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12", md: "4" } },
-                            [
-                              _c(
-                                "v-form",
-                                {
-                                  on: {
-                                    submit: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.search()
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Pesquisar",
-                                      "prepend-icon": "mdi-magnify",
-                                      clearable: ""
-                                    },
-                                    on: {
-                                      "click:clear": function($event) {
-                                        return _vm.resetSearch()
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.searchWord,
-                                      callback: function($$v) {
-                                        _vm.searchWord = $$v
-                                      },
-                                      expression: "searchWord"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
+                          _c("v-icon", { attrs: { dark: "" } }, [
+                            _vm._v("mdi-plus")
+                          ])
                         ],
                         1
                       )
@@ -87274,70 +87218,112 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("v-data-table", {
-                    attrs: {
-                      headers: _vm.headers,
-                      items: _vm.motoristas,
-                      loading: _vm.loading,
-                      "hide-default-footer": ""
-                    },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "item.action",
-                        fn: function(ref) {
-                          var item = ref.item
-                          return [
-                            _c(
-                              "v-icon",
-                              {
-                                staticClass: "mr-2",
-                                on: {
-                                  click: function($event) {
-                                    return _vm.editItem(item)
-                                  }
-                                }
-                              },
-                              [_vm._v("mdi-pencil")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-icon",
-                              {
-                                on: {
-                                  click: function($event) {
-                                    return _vm.deleteItem(item, false)
-                                  }
-                                }
-                              },
-                              [_vm._v("mdi-delete")]
-                            )
-                          ]
-                        }
-                      }
-                    ])
-                  }),
-                  _vm._v(" "),
                   _c(
-                    "div",
-                    { staticClass: "text-center py-3" },
+                    "v-col",
+                    { attrs: { cols: "12", md: "4" } },
                     [
-                      _c("v-pagination", {
-                        attrs: { length: _vm.pagination.total, circle: "" },
-                        on: { input: _vm.onPageChange },
-                        model: {
-                          value: _vm.pagination.current,
-                          callback: function($$v) {
-                            _vm.$set(_vm.pagination, "current", $$v)
-                          },
-                          expression: "pagination.current"
-                        }
-                      })
+                      _c(
+                        "v-form",
+                        {
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                              return _vm.search()
+                            }
+                          }
+                        },
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              "prepend-icon": "mdi-magnify",
+                              hint: "Digite sua busca e tecle Enter!",
+                              label: "Pesquisar",
+                              clearable: ""
+                            },
+                            on: {
+                              "click:clear": function($event) {
+                                return _vm.resetSearch()
+                              }
+                            },
+                            model: {
+                              value: _vm.searchWord,
+                              callback: function($$v) {
+                                _vm.searchWord = $$v
+                              },
+                              expression: "searchWord"
+                            }
+                          })
+                        ],
+                        1
+                      )
                     ],
                     1
                   )
                 ],
                 1
               )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-data-table", {
+            attrs: {
+              headers: _vm.headers,
+              items: _vm.motoristas,
+              loading: _vm.loading,
+              "hide-default-footer": ""
+            },
+            scopedSlots: _vm._u([
+              {
+                key: "item.action",
+                fn: function(ref) {
+                  var item = ref.item
+                  return [
+                    _c(
+                      "v-icon",
+                      {
+                        staticClass: "mr-2",
+                        on: {
+                          click: function($event) {
+                            return _vm.editItem(item)
+                          }
+                        }
+                      },
+                      [_vm._v("mdi-pencil")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteItem(item, false)
+                          }
+                        }
+                      },
+                      [_vm._v("mdi-delete")]
+                    )
+                  ]
+                }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "text-center py-3" },
+            [
+              _c("v-pagination", {
+                attrs: { length: _vm.pagination.total, circle: "" },
+                on: { input: _vm.onPageChange },
+                model: {
+                  value: _vm.pagination.current,
+                  callback: function($$v) {
+                    _vm.$set(_vm.pagination, "current", $$v)
+                  },
+                  expression: "pagination.current"
+                }
+              })
             ],
             1
           )
@@ -87645,10 +87631,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -87667,22 +87649,9 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-content",
-        [
-          _c(
-            "v-container",
-            { attrs: { fluid: "" } },
-            [
-              _c("v-alert", { attrs: { type: "success" } }, [
-                _vm._v("\n        I'm a success alert.\n      ")
-              ])
-            ],
-            1
-          )
-        ],
-        1
-      )
+      _c("v-alert", { attrs: { type: "success" } }, [
+        _vm._v("\n    I'm a success alert.\n  ")
+      ])
     ],
     1
   )
