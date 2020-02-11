@@ -14,7 +14,7 @@
                 </v-btn>
               </v-col>
               <v-col cols="12" md="4">
-                <v-form @submit.prevent="getItems(false)">
+                <v-form @submit.prevent="getItems()">
                   <v-text-field 
                     v-model="search" 
                     label="Pesquisar"
@@ -143,11 +143,11 @@
         nome: null,
         telefone: null,
       },
-      search: '',
+      search: null,
     }),
 
     mounted() {
-      this.getItems(false);
+      this.getItems();
     },
 
     methods: {
@@ -156,19 +156,12 @@
        * Faz o fetch da lista de motoristas a partir da API
        */
 
-      getItems(goToLastPage = false) {
-        let vm = this;
-        vm.loading = true;
+      getItems() {
 
-        // adicionado fica por último
-        let page = vm.pagination.current
-        if (goToLastPage)
-        page = vm.motoristas.length == 10 ? vm.pagination.total + 1 : vm.pagination.total;
-
-        //search
-        let urlFetch = this.api+'?page=' + page;
-        if(vm.search != '')
-        urlFetch += '&search='+vm.search
+        let vm        = this;
+        vm.loading    = true;
+        let page      = vm.pagination.current
+        let urlFetch  = this.api+'?page='+page;
 
         axios
           .get(urlFetch)
@@ -191,12 +184,10 @@
        */
 
       save () {
-        
         if (!this.$refs.formEdit.validate()) return;
         
         let vm = this;
         
-        // EDIÇÃO
         if (this.selectedIndex > -1) {
           axios
             .put(this.api+'/'+this.selectedItem.id, vm.selectedItem)
@@ -211,7 +202,6 @@
                 }
             })
 
-        // NOVO
         } else {
           axios
             .post(this.api, {
@@ -223,7 +213,7 @@
                   vm.$toast.error('Erro ao cadastrar motorista: '+response.data.error)
                 }
                 else {
-                  vm.getItems(true);
+                  vm.getItems();
                   vm.dialogEdit = false;
                   vm.$toast.success('Motorista cadastrado com sucesso!')
                 }
@@ -259,8 +249,6 @@
               vm.$toast.success('Motorista deletado com sucesso!')
               vm.motoristas.splice(vm.selectedIndex, 1)
               //se for último da paginação e tiver mais paginações, dá reload
-              console.log(vm.pagination)
-              console.log(vm.motoristas)
               if (vm.pagination.current > 1 && vm.motoristas.length == 0){
                 vm.pagination.current--;
                 vm.getItems()
@@ -274,27 +262,34 @@
 
       // Abre modal e assinala index nulo e valores padrão para inserir novo registro
       addNew () {
-        this.selectedItem = Object.assign({}, this.defaultItem)
-        this.selectedIndex = -1
-        this.dialogEdit = true
+        this.selectedItem = Object.assign({}, this.defaultItem);
+        this.resetEditValidation();
+        this.selectedIndex = -1;
+        this.dialogEdit = true;
+      },
+
+      // Abre o modal de edição a partir da coluna "Ações da tabela"
+      editItem (item) {
+        this.selectedIndex = this.motoristas.indexOf(item);
+        this.selectedItem = Object.assign({}, item);
+        this.resetEditValidation();
+        this.dialogEdit = true;
+      },
+
+      // $ref do formulario nao está disponivel na criação do componente
+      resetEditValidation() {
+        if(typeof this.$refs.formEdit != "undefined") this.$refs.formEdit.resetValidation();
       },
 
       // Limpa a pesquisa
       resetSearch() {
-        this.search = '';
+        this.search = null;
         this.getItems();
       },
 
       // A cada clique na paginação, recarrega a lista 
       onPageChange() {
-        this.getItems(false);
-      },
-
-      // Abre o modal de edição a partir da coluna "Ações da tabela"
-      editItem (item) {
-        this.selectedIndex = this.motoristas.indexOf(item)
-        this.selectedItem = Object.assign({}, item)
-        this.dialogEdit = true
+        this.getItems();
       },
     }
   }
