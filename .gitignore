@@ -21,3 +21,4 @@ Homestead.json
 
 #Laravel Builded Mix files
 public/js/app.js
+/public/js/app.js
