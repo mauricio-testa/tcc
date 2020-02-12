@@ -1291,7 +1291,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_1_vuetify_toast_snackbar___default.a, {
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-//global
+// global
 Vue.component('navigation', __webpack_require__(42));
 
 // views
@@ -86455,6 +86455,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -86497,9 +86498,9 @@ var render = function() {
         {
           attrs: {
             clipped: _vm.$vuetify.breakpoint.lgAndUp,
+            color: "primary",
             app: "",
-            dark: "",
-            src: "https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
+            dark: ""
           },
           model: {
             value: _vm.drawer,

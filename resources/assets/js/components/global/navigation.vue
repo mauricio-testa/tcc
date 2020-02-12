@@ -3,10 +3,11 @@
     <v-navigation-drawer
       v-model="drawer"
       :clipped="$vuetify.breakpoint.lgAndUp"
+      color="primary"
       app
       dark
-      src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
     >
+    <!-- src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg" -->
       <v-list-item two-line>
           <v-list-item-avatar>
             <img src="https://randomuser.me/api/portraits/women/81.jpg">

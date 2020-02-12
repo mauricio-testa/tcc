@@ -26,7 +26,7 @@ Vue.use(VuetifyToast, {
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-//global
+// global
 Vue.component('navigation', require('./components/global/Navigation.vue'));
 
 // views
