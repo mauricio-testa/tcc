@@ -32,6 +32,9 @@
             :items="veiculos"
             :loading="loading"
             hide-default-footer
+            disable-sort
+            no-data-text="Nenhum dado encontrado"
+            loading-text="Buscando dados..."
         >
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
@@ -73,49 +76,49 @@
                     <v-card-text>
                         <v-container>
 
-                        <v-row>
-                            <v-col cols="12" sm="12" md="5">
-                            <v-text-field 
-                                v-model="selectedItem.descricao"
-                                :rules="[v => !!v || 'Descrição é obrigatório!']"
-                                label="Descrição" 
-                            ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="3">
-                            <v-text-field
-                                v-model="selectedItem.placa"
-                                :rules="[v => (!!v && v.length == 7) || 'Deve ter 7 caracteres!']" 
-                                label="Placa" 
-                            ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="4">
-                            <v-select
-                                :items="tipos"
-                                v-model="selectedItem.tipo"
-                                label="Tipo"
-                            ></v-select>
-                            </v-col>
-                        </v-row>
+                            <v-row>
+                                <v-col cols="12" sm="12" md="4">
+                                <v-text-field 
+                                    v-model="selectedItem.descricao"
+                                    :rules="[v => !!v || 'Descrição é obrigatório!']"
+                                    label="Descrição" 
+                                ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="4">
+                                <v-text-field
+                                    v-model="selectedItem.placa"
+                                    :rules="placaRules" 
+                                    label="Placa" 
+                                ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="4">
+                                <v-select
+                                    :items="tipos"
+                                    v-model="selectedItem.tipo"
+                                    label="Tipo"
+                                ></v-select>
+                                </v-col>
+                            </v-row>
 
-                        <v-row>
-                            <v-col cols="12" sm="12" md="3">
-                                <v-text-field label="Lotação" v-model="selectedItem.lotacao" :rules="[v => v > 0 || 'Deve ser maior que 0!']"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="4">
-                                <v-text-field label="Ano/Modelo" v-model="selectedItem.ano_modelo"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="5">
-                                <v-text-field label="Marca/Modelo" v-model="selectedItem.marca_modelo"></v-text-field>
-                            </v-col>
-                        </v-row>
+                            <v-row>
+                                <v-col cols="12" sm="12" md="3">
+                                    <v-text-field label="Lotação" v-model="selectedItem.lotacao" :rules="[v => v > 0 || 'Deve ser maior que 0!']"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="4">
+                                    <v-text-field label="Ano/Modelo" v-model="selectedItem.ano_modelo" hint="Exemplo: 2013/2014"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="5">
+                                    <v-text-field label="Marca/Modelo" v-model="selectedItem.marca_modelo" hint="Exemplo: Fiat/Ducato MT TCA AMB"></v-text-field>
+                                </v-col>
+                            </v-row>
 
-                    </v-container>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="red darken-1" text @click="dialogEdit = false">Cancelar</v-btn>
-                    <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
-                </v-card-actions>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="red darken-1" text @click="dialogEdit = false">Cancelar</v-btn>
+                        <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-form>
         </v-dialog>
@@ -129,7 +132,7 @@
         props: ['api'],
 
         data: () => ({
-            
+
             // main data
             veiculos: [],
 
@@ -141,15 +144,15 @@
 
             // table column names
             headers: [
-                { text: '#', value: 'id', sortable: false},
-                { text: 'Descrição', value: 'descricao', sortable: false},
-                { text: 'Placa', value: 'placa', sortable: false},
-                { text: 'Lotação', value: 'lotacao', sortable: false},
-                { text: 'Tipo', value: 'tipo', sortable: false},
-                { text: 'Ano/Modelo', value: 'ano_modelo', sortable: false},
-                { text: 'Marca/Modelo', value: 'marca_modelo', sortable: false},
-                { text: 'Ações', value: 'action', sortable: false},
-                ],
+                { text: '#', value: 'id'},
+                { text: 'Descrição', value: 'descricao'},
+                { text: 'Placa', value: 'placa'},
+                { text: 'Lotação', value: 'lotacao'},
+                { text: 'Tipo', value: 'tipo'},
+                { text: 'Ano/Modelo', value: 'ano_modelo'},
+                { text: 'Marca/Modelo', value: 'marca_modelo'},
+                { text: 'Ações', value: 'action'},
+            ],
 
             // server side pagination
             pagination: {
@@ -177,11 +180,17 @@
                 ano_modelo: null,
                 marca_modelo: null
             },
-            tipos: [
-                    { text: 'Próprio', value: 'PROPRIO'},
-                    { text: 'Terceirizado', value: 'TERCEIRIZADO'}
-                ],
             searchWord: null,
+
+            // form variables
+            tipos: [
+                { text: 'Próprio', value: 'PROPRIO'},
+                { text: 'Terceirizado', value: 'TERCEIRIZADO'}
+            ],
+            placaRules: [
+                v => (!!v && v.length == 7) || 'Deve ter 7 caracteres!',
+                v => /^[A-Za-z0-9]+$/.test(v) || 'Somente letras e números!',
+            ],
         }),
 
         mounted() {

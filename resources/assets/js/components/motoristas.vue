@@ -32,6 +32,9 @@
             :items="motoristas"
             :loading="loading"
             hide-default-footer
+            disable-sort
+            no-data-text="Nenhum dado encontrado"
+            loading-text="Buscando dados..."
         >
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
@@ -126,11 +129,11 @@
 
             // table column names
             headers: [
-                { text: '#', value: 'id', sortable: false},
-                { text: 'Nome', value: 'nome', sortable: false},
-                { text: 'Telefone', value: 'telefone', sortable: false},
-                { text: 'Data Criação', value: 'created_at', sortable: false},
-                { text: 'Ações', value: 'action', sortable: false},
+                { text: '#', value: 'id'},
+                { text: 'Nome', value: 'nome'},
+                { text: 'Telefone', value: 'telefone'},
+                { text: 'Data Criação', value: 'created_at'},
+                { text: 'Ações', value: 'action'},
                 ],
 
             // server side pagination
