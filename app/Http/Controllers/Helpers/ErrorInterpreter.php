@@ -14,7 +14,8 @@ class ErrorInterpreter extends Controller
         $errorList  = [ // SQLSTATE [ERROR CODE]
             '23000' => [
                 '1451' => 'Você não pode deletar este registro pois outros cadastros depedem dele',
-                '1452' => 'Erro de chave estrangeira ao inserir ou atualizar'
+                '1452' => 'Erro de chave estrangeira ao inserir ou atualizar',
+                '1062' => 'Registro duplicado!'
             ]
         ];
         

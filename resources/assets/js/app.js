@@ -17,7 +17,8 @@ Vue.use(VuetifyToast, {
 	color: 'info',
     iconColor: 'transparent' ,
 	showClose: true,
-	closeIcon: 'mdi-close',
+    closeIcon: 'mdi-close',
+    timeout: 5000,
 })
 
 /**

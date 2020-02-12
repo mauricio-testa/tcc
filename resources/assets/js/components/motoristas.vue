@@ -33,7 +33,7 @@
             :loading="loading"
             hide-default-footer
             disable-sort
-            no-data-text="Nenhum dado encontrado"
+            no-data-text="Nenhum dado encontrado."
             loading-text="Buscando dados..."
         >
             <!-- table actions -->
@@ -208,7 +208,7 @@
                     .put(this.api+'/'+this.selectedItem.id, vm.selectedItem)
                     .then(function(response){
                         if(response.data.error) {
-                        vm.$toast.error('Erro ao editar motorista: '+response.data.error)
+                        vm.$toast.error('Erro ao editar: '+response.data.error)
                         }
                         else {
                         Object.assign(vm.motoristas[vm.selectedIndex], vm.selectedItem)
@@ -225,7 +225,7 @@
                     })
                     .then(function(response){
                         if(response.data.error) {
-                        vm.$toast.error('Erro ao cadastrar motorista: '+response.data.error)
+                        vm.$toast.error('Erro ao cadastrar: '+response.data.error)
                         }
                         else {
                         // item adicionado vai sempre por último
@@ -260,7 +260,7 @@
                     .delete(this.api+'/'+this.selectedItem.id)
                     .then(function(response){
                         if(response.data.error) {
-                            vm.$toast.error('Erro ao deletar motorista: '+response.data.error)
+                            vm.$toast.error('Erro ao deletar: '+response.data.error)
                         }
                         else {
                             vm.$toast.success('Motorista deletado com sucesso!')

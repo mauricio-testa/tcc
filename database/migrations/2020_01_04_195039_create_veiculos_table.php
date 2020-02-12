@@ -17,7 +17,7 @@ class CreateVeiculosTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('id_unidade')->nullable(false);
             $table->string('descricao', 240)->nullable(false);
-            $table->string('placa', 10)->nullable(false);
+            $table->string('placa', 10)->nullable(false)->unique();
             $table->integer('lotacao')->nullable(false);
             $table->enum('tipo', ['PROPRIO', 'TERCEIRIZADO'])->default('PROPRIO');
             $table->string('ano_modelo', 9)->nullable();

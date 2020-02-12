@@ -39,7 +39,7 @@ class VeiculoController extends Controller
             Veiculo::create($veiculo);
         } catch (\Throwable $th) {
             return response()->json([
-                'error' => ErrorInterpreter::getMessage($th)
+                'error' => ErrorInterpreter::getMessage($th, ['23000' => ['1062' => 'Já existe um veículo cadastrado com essa placa!']])
             ]);
         }
     }
@@ -52,7 +52,7 @@ class VeiculoController extends Controller
             $veiculo->update($request->all());
         } catch (\Throwable $th) {
             return response()->json([
-                'error' => ErrorInterpreter::getMessage($th)
+                'error' => ErrorInterpreter::getMessage($th, ['23000' => ['1062' => 'Já existe um veículo cadastrado com essa placa!']])
             ]);
         }
     }
