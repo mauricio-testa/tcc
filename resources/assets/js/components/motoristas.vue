@@ -134,7 +134,7 @@
                 { text: 'Telefone', value: 'telefone'},
                 { text: 'Data Criação', value: 'created_at'},
                 { text: 'Ações', value: 'action'},
-                ],
+            ],
 
             // server side pagination
             pagination: {
@@ -157,40 +157,40 @@
             searchWord: null,
             }),
 
-            mounted() {
+        mounted() {
 
-                this.getItems();
+            this.getItems();
 
-            },
+        },
 
-            methods: {
+        methods: {
 
-            getItems: function() {
+        getItems: function() {
 
-                let vm        = this;
-                let page      = vm.pagination.current;
-                let urlFetch  = this.api+'?page='+page;
+            let vm        = this;
+            let page      = vm.pagination.current;
+            let urlFetch  = this.api+'?page='+page;
 
-                if(vm.searchWord != null && vm.searchWord != '') urlFetch+= '&search='+vm.searchWord;
+            if(vm.searchWord != null && vm.searchWord != '') urlFetch+= '&search='+vm.searchWord;
 
-                vm.loading = true;
+            vm.loading = true;
 
-                axios
-                    .get(urlFetch)
-                    .then(function(response) {
-                        vm.motoristas             = response.data.data;
-                        vm.pagination.current     = response.data.current_page;
-                        vm.pagination.total       = response.data.last_page;
-                        vm.pagination.totalItems  = response.data.total;
-                        vm.pagination.perPage     = response.data.per_page;
-                        
-                    })
-                    .catch(function(error) {
-                        vm.$toast.error('Erro ao buscar motoristas')
-                    })
-                    .finally(function() {
-                        vm.loading = false;
-                    });
+            axios
+                .get(urlFetch)
+                .then(function(response) {
+                    vm.motoristas             = response.data.data;
+                    vm.pagination.current     = response.data.current_page;
+                    vm.pagination.total       = response.data.last_page;
+                    vm.pagination.totalItems  = response.data.total;
+                    vm.pagination.perPage     = response.data.per_page;
+                    
+                })
+                .catch(function(error) {
+                    vm.$toast.error('Erro ao buscar motoristas')
+                })
+                .finally(function() {
+                    vm.loading = false;
+                });
             },
 
             /*
@@ -220,19 +220,19 @@
                 } else {
                 axios
                     .post(this.api, {
-                    'nome'      : vm.selectedItem.nome,
-                    'telefone'  : vm.selectedItem.telefone
+                        'nome'      : vm.selectedItem.nome,
+                        'telefone'  : vm.selectedItem.telefone
                     })
                     .then(function(response){
                         if(response.data.error) {
-                        vm.$toast.error('Erro ao cadastrar: '+response.data.error)
+                            vm.$toast.error('Erro ao cadastrar: '+response.data.error)
                         }
                         else {
-                        // item adicionado vai sempre por último
-                        vm.pagination.current = parseInt(vm.pagination.totalItems / vm.pagination.perPage) + 1;
-                        vm.getItems();
-                        vm.dialogEdit = false;
-                        vm.$toast.success('Motorista cadastrado com sucesso!')
+                            // item adicionado vai sempre por último
+                            vm.pagination.current = parseInt(vm.pagination.totalItems / vm.pagination.perPage) + 1;
+                            vm.getItems();
+                            vm.dialogEdit = false;
+                            vm.$toast.success('Motorista cadastrado com sucesso!')
                         }
                     })
                 }
