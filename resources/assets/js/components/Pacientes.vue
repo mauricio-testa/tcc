@@ -57,7 +57,7 @@
         <v-dialog v-model="dialogDelete" max-width="290">
         <v-card>
             <v-card-title class="headline">Confirmar exclusão?</v-card-title>
-            <v-card-text>Tem certeza que deseja deletar o paciente "{{ selectedItem.nome }}"?</v-card-text>
+            <v-card-text>Deseja mesmo deletar o paciente "{{ selectedItem.nome }}"?</v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialogDelete = false">Cancelar</v-btn>
