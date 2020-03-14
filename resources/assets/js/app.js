@@ -9,15 +9,34 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import Vuetify from 'vuetify';
+import VuetifyToast from 'vuetify-toast-snackbar'
+
+Vue.use(Vuetify);
+Vue.use(VuetifyToast, {
+	color: 'info',
+    iconColor: 'transparent' ,
+	showClose: true,
+    closeIcon: 'mdi-close',
+    timeout: 5000,
+})
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
-Vue.component('tarefas', require('./components/Tarefas.vue'));
+// global
+Vue.component('navigation', require('./components/global/Navigation.vue'));
+
+// views
+Vue.component('motoristas', require('./components/Motoristas.vue'));
+Vue.component('veiculos',   require('./components/Veiculos.vue'));
+Vue.component('dashboard',  require('./components/Dashboard.vue'));
+Vue.component('pacientes',  require('./components/Pacientes.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    vuetify: new Vuetify(),
 });
