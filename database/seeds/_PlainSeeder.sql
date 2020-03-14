@@ -2,10 +2,6 @@ use laravel;
 
 SET FOREIGN_KEY_CHECKS=0;
 
-insert into unidades (id, id_municipio, descricao) values (1, 4040, 'Unidade Teste');
-
-insert into users (id, name, email, password, id_unidade, remember_token) values (1, 'Mauricio', 'mauriciotesta97@gmail.com', md5('abc123'), '1', NULL);
-
 insert into motoristas (nome, id_unidade) values ('Motorista 1', 1);
 insert into motoristas (nome, id_unidade) values ('Motorista 2', 1);
 insert into motoristas (nome, id_unidade) values ('Motorista 3', 1);
