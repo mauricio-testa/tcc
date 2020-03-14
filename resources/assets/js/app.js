@@ -32,8 +32,9 @@ Vue.component('navigation', require('./components/global/Navigation.vue'));
 
 // views
 Vue.component('motoristas', require('./components/Motoristas.vue'));
-Vue.component('veiculos', require('./components/Veiculos.vue'));
-Vue.component('dashboard', require('./components/Dashboard.vue'));
+Vue.component('veiculos',   require('./components/Veiculos.vue'));
+Vue.component('dashboard',  require('./components/Dashboard.vue'));
+Vue.component('pacientes',  require('./components/Pacientes.vue'));
 
 const app = new Vue({
     el: '#app',

@@ -26,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('api')->group(function () {
         Route::resource('motoristas'    , 'Api\MotoristaController');
         Route::resource('veiculos'      , 'Api\VeiculoController');
+        Route::resource('pacientes'     , 'Api\PacienteController');
     });
 
 });
