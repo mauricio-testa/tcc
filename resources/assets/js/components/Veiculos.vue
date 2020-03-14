@@ -238,6 +238,7 @@
 
                 if (!this.$refs.formEdit.validate()) return;
                 let vm = this;
+                vm.selectedItem.placa = vm.selectedItem.placa.toUpperCase();
                 
                 if (this.selectedIndex > -1) {
                 axios
