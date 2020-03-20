@@ -29,10 +29,15 @@ class ErrorInterpreter extends Controller
                     return $customMessages[$sqlState][$errorCode];
                 }
             }
+
+            
             
             // se não encontrar, busca nas mensagens de erro deste método
-            if (array_key_exists($errorCode, $errorList[$sqlState])) 
-            return $errorList[$sqlState][$errorCode];
+            if (array_key_exists($sqlState, $errorList)) {
+                if (array_key_exists($errorCode, $errorList[$sqlState])) {
+                    return $errorList[$sqlState][$errorCode];
+                }
+            }
             
         }
 
