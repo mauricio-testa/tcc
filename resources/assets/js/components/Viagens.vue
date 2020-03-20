@@ -57,7 +57,7 @@ oi<template>
         <v-dialog v-model="dialogDelete" max-width="290">
         <v-card>
             <v-card-title class="headline">Confirmar exclusão?</v-card-title>
-            <v-card-text>Tem certeza que deseja deletar a viagem para {{selectedItem.municipio_nome}} em {{selectedItem.data_viagem}}?</v-card-text>
+            <v-card-text>Tem certeza que deseja deletar a viagem para {{selectedItem.municipio_nome}} em {{selectedItem.data_formated}}?</v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialogDelete = false">Cancelar</v-btn>
@@ -89,9 +89,9 @@ oi<template>
             // table column names
             headers: [
                 { text: '#', value: 'id'},
+                { text: 'Data', value: 'data_formated'},
                 { text: 'Destino', value: 'municipio_nome'},
                 { text: 'Veículo', value: 'veiculo'},
-                { text: 'Data', value: 'data_viagem'},
                 { text: 'Motorista', value: 'motorista_nome'},
                 { text: 'Ações', value: 'action'},
             ],
@@ -156,6 +156,7 @@ oi<template>
             * Se tiver index é edição, senão é novo registro
             */
 
+            /*
             save: function () {
 
                 if (!this.$refs.formEdit.validate()) return;
@@ -195,6 +196,7 @@ oi<template>
                     })
                 }
             },
+            */
 
             /*
             * Exclui um registro

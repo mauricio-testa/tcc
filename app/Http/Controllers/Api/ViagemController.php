@@ -44,6 +44,13 @@ class ViagemController extends Controller
 
     public function destroy($id)
     {
-        //
+        try {
+            $motorista = Viagem::findOrFail($id);
+            $motorista->delete();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => ErrorInterpreter::getMessage($th)
+            ]);
+        }
     }
 }
