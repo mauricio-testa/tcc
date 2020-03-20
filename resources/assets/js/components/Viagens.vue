@@ -1,11 +1,11 @@
-<template>
+oi<template>
     <div>
         <v-card class="ma-md-2 px-2 ma-xs-0">
         <!-- table header -->
         <v-card-title>
             <v-row>
             <v-col cols="12" md="8">
-                Motoristas
+                Viagens
                 <v-btn class="ml-4" fab dark small color="primary" @click="addNew">
                 <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
@@ -29,7 +29,7 @@
         <!-- table  -->
         <v-data-table
             :headers="headers"
-            :items="motoristas"
+            :items="viagens"
             :loading="loading"
             hide-default-footer
             disable-sort
@@ -57,7 +57,7 @@
         <v-dialog v-model="dialogDelete" max-width="290">
         <v-card>
             <v-card-title class="headline">Confirmar exclusão?</v-card-title>
-            <v-card-text>Tem certeza que deseja deletar o motorista "{{ selectedItem.nome }}"?</v-card-text>
+            <v-card-text>Tem certeza que deseja deletar a viagem para {{selectedItem.municipio_nome}} em {{selectedItem.data_viagem}}?</v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialogDelete = false">Cancelar</v-btn>
@@ -66,60 +66,19 @@
         </v-card>
         </v-dialog>
 
-        <!-- dialog edit / new -->
-        <v-dialog v-model="dialogEdit" max-width="500px">
-            <v-form v-model="formValid" ref="formEdit">
-                <v-card>
-                    <v-card-title>
-                        <span class="headline">Motorista</span>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-container>
-                            <v-row>
-                                <v-col cols="12" sm="12" md="6">
-                                <v-text-field 
-                                    v-model="selectedItem.nome" 
-                                    label="Nome" 
-                                    required 
-                                    :rules="[v => !!v || 'Nome é obrigatório']"
-                                ></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="12" md="6">
-                                <v-text-field 
-                                    v-mask="'(##) #####-####'" 
-                                    v-model="selectedItem.telefone" 
-                                    :rules="[v => (v ? (v.length > 14) : !v) || 'Telefone deve ter 11 números']" 
-                                    label="Telefone"
-                                ></v-text-field>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="red darken-1" text @click="dialogEdit = false">Cancelar</v-btn>
-                        <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-form>
-        </v-dialog>
-
     </div>
 </template>
 
 <script>
 
-    import {TheMask} from 'vue-the-mask'
-
     export default {
     
         props: ['api'],
-        components: {TheMask},
 
         data: () => ({
             
             // main data
-            motoristas: [],
+            viagens: [],
 
             // state of elements
             dialogDelete: false,
@@ -130,9 +89,10 @@
             // table column names
             headers: [
                 { text: '#', value: 'id'},
-                { text: 'Nome', value: 'nome'},
-                { text: 'Telefone', value: 'telefone'},
-                { text: 'Data Criação', value: 'created_at'},
+                { text: 'Destino', value: 'municipio_nome'},
+                { text: 'Veículo', value: 'veiculo'},
+                { text: 'Data', value: 'data_viagem'},
+                { text: 'Motorista', value: 'motorista_nome'},
                 { text: 'Ações', value: 'action'},
             ],
 
@@ -147,12 +107,10 @@
             // CRUD variables
             selectedIndex: null,
             selectedItem: {
-                nome: null,
-                telefone: null,
+                id: null,
             },
             defaultItem: {
-                nome: null,
-                telefone: null,
+                id: null,
             },
             searchWord: null,
             }),
@@ -171,14 +129,14 @@
             let page      = vm.pagination.current;
             let urlFetch  = this.api+'?page='+page;
 
-            if(vm.searchWord != null && vm.searchWord != '') urlFetch+= '&search='+vm.searchWord;
+            // if(vm.searchWord != null && vm.searchWord != '') urlFetch+= '&search='+vm.searchWord;
 
             vm.loading = true;
 
             axios
                 .get(urlFetch)
                 .then(function(response) {
-                    vm.motoristas             = response.data.data;
+                    vm.viagens                = response.data.data;
                     vm.pagination.current     = response.data.current_page;
                     vm.pagination.total       = response.data.last_page;
                     vm.pagination.totalItems  = response.data.total;
@@ -186,7 +144,7 @@
                     
                 })
                 .catch(function(error) {
-                    vm.$toast.error('Erro ao buscar motoristas')
+                    vm.$toast.error('Erro ao buscar viagens')
                 })
                 .finally(function() {
                     vm.loading = false;
@@ -211,9 +169,9 @@
                         vm.$toast.error('Erro ao editar: '+response.data.error)
                         }
                         else {
-                        Object.assign(vm.motoristas[vm.selectedIndex], vm.selectedItem)
+                        Object.assign(vm.viagens[vm.selectedIndex], vm.selectedItem)
                         vm.dialogEdit = false;
-                        vm.$toast.success('Motorista salvo com sucesso!')
+                        vm.$toast.success('Viagem salva com sucesso!')
                         }
                     })
 
@@ -232,7 +190,7 @@
                             vm.pagination.current = parseInt(vm.pagination.totalItems / vm.pagination.perPage) + 1;
                             vm.getItems();
                             vm.dialogEdit = false;
-                            vm.$toast.success('Motorista cadastrado com sucesso!')
+                            vm.$toast.success('Viagem cadastrada com sucesso!')
                         }
                     })
                 }
@@ -250,7 +208,7 @@
                 
                 if (!confirm) {
                     this.selectedItem = item;
-                    this.selectedIndex = this.motoristas.indexOf(item);
+                    this.selectedIndex = this.viagens.indexOf(item);
                     this.dialogDelete = true
                     return;
                 }
@@ -263,12 +221,12 @@
                             vm.$toast.error('Erro ao deletar: '+response.data.error)
                         }
                         else {
-                            vm.$toast.success('Motorista deletado com sucesso!')
-                            vm.motoristas.splice(vm.selectedIndex, 1)
+                            vm.$toast.success('Viagem deletada com sucesso!')
+                            vm.viagens.splice(vm.selectedIndex, 1)
                             // utilizado para carregar a paginação correta após adicionar
                             vm.pagination.totalItems--;
                             //se for último da paginação e tiver mais paginações, dá reload
-                            if (vm.motoristas.length == 0 && vm.pagination.current > 1){
+                            if (vm.viagens.length == 0 && vm.pagination.current > 1){
                                 vm.pagination.current--;
                                 vm.getItems()
                             }
@@ -289,7 +247,7 @@
 
             // Abre o modal de edição a partir da coluna "Ações da tabela"
             editItem: function (item) {
-                this.selectedIndex = this.motoristas.indexOf(item);
+                this.selectedIndex = this.viagens.indexOf(item);
                 this.selectedItem = Object.assign({}, item);
                 this.resetEditValidation();
                 this.dialogEdit = true;

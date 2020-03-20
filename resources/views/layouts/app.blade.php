@@ -24,7 +24,7 @@
         <?php 
             $data = [
                 ['text' => 'Dashboard', 'url' => url('/'), 'icon' => 'mdi-monitor-dashboard'],
-                ['text' => 'Viagens', 'url' => url('/'), 'icon' => 'mdi-ambulance'],
+                ['text' => 'Viagens', 'url' => url('/viagens'), 'icon' => 'mdi-ambulance'],
                 ['text' => 'Relatórios', 'url' => url('/'), 'icon' => 'mdi-file-chart'],
                 ['heading' => 'Cadastros'],
                 ['text' => 'Motoristas', 'url' => url('/cadastros/motoristas'), 'icon' => 'mdi-account-tie'],

@@ -15,7 +15,7 @@
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/',         'IndexController@index')->name('index');
-    Route::get('/viagens',  'ViagemController@index');
+    Route::view('/viagens', 'viagem');
 
     Route::group(['prefix' => 'cadastros'], function () {
         Route::view('/motoristas'   , 'motorista');
@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('motoristas'    , 'Api\MotoristaController');
         Route::resource('veiculos'      , 'Api\VeiculoController');
         Route::resource('pacientes'     , 'Api\PacienteController');
+        Route::resource('viagens'       , 'Api\ViagemController');
     });
 
 });

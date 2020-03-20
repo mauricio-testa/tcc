@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Viagem extends Model
 {
@@ -10,11 +11,9 @@ class Viagem extends Model
 
     public static function getViagemList($id_unidade) {
         return self::select('viagens.*', 
-                'mu.nome        as municipio_nome', 
-                'mo.nome        as motorista_nome', 
-                've.descricao   as veiculo_nome', 
-                've.placa       as veiculo_placa',
-                'mu.nome        as municipio_nome'
+                'mu.nome as municipio_nome', 
+                'mo.nome as motorista_nome', 
+                DB::raw("CONCAT(ve.descricao,' (',ve.placa,')') as veiculo")
             )
             ->leftJoin('municipios as mu'   , 'viagens.cod_destino',    '=', 'mu.codigo')
             ->leftJoin('unidades as un'     , 'viagens.id_unidade',     '=', 'un.id')

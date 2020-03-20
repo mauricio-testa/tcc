@@ -36,6 +36,8 @@ Vue.component('veiculos',   require('./components/Veiculos.vue'));
 Vue.component('dashboard',  require('./components/Dashboard.vue'));
 Vue.component('pacientes',  require('./components/Pacientes.vue'));
 
+Vue.component('viagens',    require('./components/Viagens.vue'));
+
 const app = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
