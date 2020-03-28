@@ -57,7 +57,7 @@ oi<template>
         <v-dialog v-model="dialogDelete" max-width="290">
         <v-card>
             <v-card-title class="headline">Confirmar exclusão?</v-card-title>
-            <v-card-text>Tem certeza que deseja deletar a viagem para {{selectedItem.municipio_nome}} em {{selectedItem.data_formated}}?</v-card-text>
+            <v-card-text>Tem certeza que deseja deletar a viagem para {{selectedViagem.municipio_nome}} em {{selectedViagem.data_formated}}?</v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialogDelete = false">Cancelar</v-btn>
@@ -65,6 +65,9 @@ oi<template>
             </v-card-actions>
         </v-card>
         </v-dialog>
+
+        <!-- dialog edit / new -->
+        <viagem-edit :dialogEdit="dialogEdit" :viagem="selectedViagem" v-on:update:dialogEdit="dialogEdit = $event"></viagem-edit>
 
     </div>
 </template>
@@ -106,7 +109,7 @@ oi<template>
             
             // CRUD variables
             selectedIndex: null,
-            selectedItem: {
+            selectedViagem: {
                 id: null,
             },
             defaultItem: {
@@ -164,13 +167,13 @@ oi<template>
                 
                 if (this.selectedIndex > -1) {
                 axios
-                    .put(this.api+'/'+this.selectedItem.id, vm.selectedItem)
+                    .put(this.api+'/'+this.selectedViagem.id, vm.selectedViagem)
                     .then(function(response){
                         if(response.data.error) {
                         vm.$toast.error('Erro ao editar: '+response.data.error)
                         }
                         else {
-                        Object.assign(vm.viagens[vm.selectedIndex], vm.selectedItem)
+                        Object.assign(vm.viagens[vm.selectedIndex], vm.selectedViagem)
                         vm.dialogEdit = false;
                         vm.$toast.success('Viagem salva com sucesso!')
                         }
@@ -179,8 +182,8 @@ oi<template>
                 } else {
                 axios
                     .post(this.api, {
-                        'nome'      : vm.selectedItem.nome,
-                        'telefone'  : vm.selectedItem.telefone
+                        'nome'      : vm.selectedViagem.nome,
+                        'telefone'  : vm.selectedViagem.telefone
                     })
                     .then(function(response){
                         if(response.data.error) {
@@ -209,7 +212,7 @@ oi<template>
             deleteItem: function (item, confirm) {
                 
                 if (!confirm) {
-                    this.selectedItem = item;
+                    this.selectedViagem = item;
                     this.selectedIndex = this.viagens.indexOf(item);
                     this.dialogDelete = true
                     return;
@@ -217,7 +220,7 @@ oi<template>
 
                 let vm = this;
                 axios
-                    .delete(this.api+'/'+this.selectedItem.id)
+                    .delete(this.api+'/'+this.selectedViagem.id)
                     .then(function(response){
                         if(response.data.error) {
                             vm.$toast.error('Erro ao deletar: '+response.data.error)
@@ -241,8 +244,7 @@ oi<template>
 
             // Abre modal e assinala index nulo e valores padrão para inserir novo registro
             addNew: function () {
-                this.selectedItem = Object.assign({}, this.defaultItem);
-                this.resetEditValidation();
+                this.selectedViagem = Object.assign({}, this.defaultItem);
                 this.selectedIndex = -1;
                 this.dialogEdit = true;
             },
@@ -250,14 +252,8 @@ oi<template>
             // Abre o modal de edição a partir da coluna "Ações da tabela"
             editItem: function (item) {
                 this.selectedIndex = this.viagens.indexOf(item);
-                this.selectedItem = Object.assign({}, item);
-                this.resetEditValidation();
+                this.selectedViagem = Object.assign({}, item);
                 this.dialogEdit = true;
-            },
-
-            // $ref do formulario nao está disponivel na criação do componente
-            resetEditValidation: function () {
-                if(typeof this.$refs.formEdit != "undefined") this.$refs.formEdit.resetValidation();
             },
 
             // Inicia uma pesquisa
