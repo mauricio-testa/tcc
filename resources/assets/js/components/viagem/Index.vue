@@ -1,4 +1,4 @@
-oi<template>
+<template>
     <div>
         <v-card class="ma-md-2 px-2 ma-xs-0">
         <!-- table header -->
@@ -39,7 +39,8 @@ oi<template>
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
                 <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
+                <v-icon class="mr-2" color="blue darken-1" text @click="listPassageiros(item)">mdi-view-list</v-icon>
+                <v-icon color="red darken-1" @click="deleteItem(item, false)">mdi-delete</v-icon>
             </template>
         </v-data-table>
 
@@ -68,6 +69,7 @@ oi<template>
 
         <!-- dialog edit / new -->
         <viagem-edit :dialogEdit="dialogEdit" :viagem="selectedViagem" v-on:update:dialogEdit="dialogEdit = $event"></viagem-edit>
+        <viagem-list :dialogList="dialogList" :viagem="selectedViagem" v-on:update:dialogList="dialogList = $event"></viagem-list>
 
     </div>
 </template>
@@ -86,6 +88,7 @@ oi<template>
             // state of elements
             dialogDelete: false,
             dialogEdit: false,
+            dialogList: false,
             loading: true,
             formValid: true,
 
@@ -116,7 +119,7 @@ oi<template>
                 id: null,
             },
             searchWord: null,
-            }),
+        }),
 
         mounted() {
 
@@ -254,6 +257,12 @@ oi<template>
                 this.selectedIndex = this.viagens.indexOf(item);
                 this.selectedViagem = Object.assign({}, item);
                 this.dialogEdit = true;
+            },
+
+            listPassageiros: function(item) {
+                this.selectedIndex = this.viagens.indexOf(item);
+                this.selectedViagem = Object.assign({}, item);
+                this.dialogList = true;
             },
 
             // Inicia uma pesquisa

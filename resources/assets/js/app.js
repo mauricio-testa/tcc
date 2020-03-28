@@ -36,7 +36,9 @@ Vue.component('veiculos',   require('./components/Veiculos.vue'));
 Vue.component('dashboard',  require('./components/Dashboard.vue'));
 Vue.component('pacientes',  require('./components/Pacientes.vue'));
 
-Vue.component('viagens',    require('./components/Viagens.vue'));
+Vue.component('viagens',    require('./components/viagem/Index.vue'));
+Vue.component('viagem-edit',require('./components/viagem/Edit.vue'));
+Vue.component('viagem-list',require('./components/viagem/Lista.vue'));
 
 const app = new Vue({
     el: '#app',
