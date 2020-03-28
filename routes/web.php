@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('veiculos'      , 'Api\VeiculoController');
         Route::resource('pacientes'     , 'Api\PacienteController');
         Route::resource('viagens'       , 'Api\ViagemController');
+        Route::resource('lista'         , 'Api\ListaController');
+        Route::resource('municipios'    , 'Api\MunicipioController');
     });
 
 });
