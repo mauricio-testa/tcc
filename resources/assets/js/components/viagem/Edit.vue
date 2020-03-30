@@ -13,7 +13,7 @@
                                 v-model="viagem.cod_destino"
                                 :items="lookupMunicipios"
                                 :loading="isLoading"
-                                :searchVeiculos-input.sync="searchMunicipios"
+                                :search-input.sync="searchMunicipios"
                                 item-text="nome"
                                 item-value="codigo"
                                 label="Qual o destino da viagem?"
@@ -23,7 +23,7 @@
                                 v-model="viagem.id_veiculo"
                                 :items="lookupVeiculos"
                                 :loading="isLoading"
-                                :searchVeiculos-input.sync="searchVeiculos"
+                                :search-input.sync="searchVeiculos"
                                 item-text="descricao"
                                 item-value="id"
                                 label="Qual veículo será utilizado?"
@@ -33,7 +33,7 @@
                                 v-model="viagem.id_motorista"
                                 :items="lookupMotoristas"
                                 :loading="isLoading"
-                                :searchMotoristas-input.sync="searchMotoristas"
+                                :search-input.sync="searchMotoristas"
                                 item-text="nome"
                                 item-value="id"
                                 label="Quem será o motorista?"
@@ -41,13 +41,18 @@
                             <v-row>
                                 <v-col cols="12" sm="12" md="6">
                                     <v-text-field 
+                                        type="date"
                                         label="Qual a data da viagem?" 
                                         v-model="viagem.data_viagem"
                                         :rules="[v => !!v || 'Data é obrigatório']"
                                     ></v-text-field>
                                 </v-col>
-                                    <v-col cols="12" sm="12" md="6">
-                                    <v-text-field label="Qual o horário de saída?" v-model="viagem.hora_saida"></v-text-field>
+                                <v-col cols="12" sm="12" md="6">
+                                    <v-text-field 
+                                        label="Qual o horário de saída?" 
+                                        v-model="viagem.hora_saida"
+                                        type="time"
+                                    ></v-text-field>
                                 </v-col>
                             </v-row>
                             <v-textarea
@@ -91,7 +96,6 @@
 
             isLoading: false,
 
-            lookupLista: [{id: null, nome: null}],
             lookupVeiculos: [{id: null, descricao: null}],
             lookupMunicipios: [{codigo: null, nome: null}],
             lookupMotoristas: [{id: null, nome: null}],

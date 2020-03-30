@@ -47,11 +47,19 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-text-field 
-                            label="Nome" 
+
+                        <v-autocomplete
                             v-model="selectedPassageiro.id_paciente"
+                            :items="lookupPacientes"
+                            :loading="loadingPacientes"
+                            :search-input.sync="searchPacientes"
+                            item-text="nome"
+                            item-value="id"
+                            label="Selecione um paciente..."
                             :disabled="selectedPassageiroIndex > -1"
-                        ></v-text-field>
+                            :rules="[v => !!v || 'Obrigatório!']"
+                        ></v-autocomplete>
+
                         <v-text-field 
                             label="Local da Consulta" 
                             v-model="selectedPassageiro.consulta_local"
@@ -115,6 +123,7 @@
 
             // main data
             lista: [],
+            lookupPacientes: [],
 
             // table column names
             headers: [
@@ -126,12 +135,15 @@
 
             // state of elements
             loading: false,
+            loadingPacientes: false,
             dialogEditPassageiro: false,
             dialogDeletePassageiro: false,
             precisaAcompanhante: false,
             formPassageiroValid: false,
+            timeoutId: null,
 
             // CRUD variables
+            searchPacientes: null,
             selectedPassageiroIndex: null,
             selectedPassageiro: {
                 id_paciente: null,
@@ -285,8 +297,34 @@
                 this.selectedPassageiro = Object.assign({}, item);
                 this.precisaAcompanhante = item.acompanhante_nome != null && item.acompanhante_nome != '';
                 this.resetPassageiroEditValidation();
+                this.lookupPacientes.push({id: item.id_paciente, nome: item.paciente_nome})
                 this.dialogEditPassageiro = true;
-            },            
+            },
+
+            // faz a busca de pacientes no autocomplete
+            getPacientesLookup: function (val) {
+                let vm = this;
+                axios
+                    .get('http://localhost:8000/api/pacientes?search='+vm.searchPacientes)
+                    .then(function(response) {
+                        vm.lookupPacientes = response.data.data
+                    })
+                    .catch(function(error) {
+                        console.error(error)
+                    })
+                    .finally(() => (vm.loadingPacientes = false))
+            },
+
+            // isso serve pra não fazer request a cada letra digitada, mas sim, após um tempo sem digitar
+            _debounce(){
+                this.loadingPacientes = true;
+                if (this.timeoutId !== null) {
+                    clearTimeout(this.timeoutId);
+                }
+                this.timeoutId = setTimeout( _ => {
+                    this.getPacientesLookup();
+                }, 1400);
+            },
         },
 
         watch: {
@@ -294,6 +332,15 @@
             dialogList: function(val) {
                 if (val) this.initialize();
             },
+
+            // quando busca um paciente no autocomplete, inicia o debounce
+            searchPacientes: function (val) {
+                // se tiver paciente selecionado, está editando. logo está disable e não precisa search
+                if (this.selectedPassageiroIndex > -1) return
+                // pra nao pesquisar quando não tem search string
+                if (this.searchPacientes == null) return
+                this._debounce();
+            }
         },
     }
 </script>

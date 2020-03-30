@@ -38,14 +38,9 @@
         >
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
-                <v-icon class="mr-2" color="blue darken-1" text @click="editItem(item)">mdi-pencil</v-icon>
-                <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                        <v-icon class="mr-2" v-on="on" color="indigo darken-1" text @click="listPassageiros(item)">mdi-view-list</v-icon>
-                    </template>
-                    <span>Lista de Passageiros</span>
-                </v-tooltip>
-                <v-icon color="red darken-1" @click="deleteItem(item, false)">mdi-delete</v-icon>
+                <v-icon @click="editItem(item)" class="mr-2" color="blue darken-1" text>mdi-pencil</v-icon>
+                <v-icon @click="listPassageiros(item)" class="mr-2" >mdi-view-list</v-icon>
+                <v-icon @click="deleteItem(item, false)" color="red darken-1">mdi-delete</v-icon>
             </template>
         </v-data-table>
 
