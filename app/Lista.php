@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\DB;
 class Lista extends Model
 {
     protected $table = 'lista';
+
     protected $fillable = [
-        'id_paciente', 'acompanhante_rg', 'acompanhante_nome', 'consulta_local', 'consulta_medico'
+        'id_paciente','id_viagem', 'acompanhante_rg', 'acompanhante_nome', 'consulta_local', 'consulta_medico', 'consulta_hora'
     ];
 
     public static function getViagemList($id_viagem) {

@@ -16,7 +16,7 @@ class ListaController extends Controller
     public function index(Request $request)
     {
         try {
-            return Lista::getViagemList(2);
+            return Lista::getViagemList($request->viagem);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => ErrorInterpreter::getMessage($th)
@@ -24,16 +24,15 @@ class ListaController extends Controller
         }        
     }
 
-/*
+
     public function store(Request $request)
     {
         try {
-            $veiculo = $request->all();
-            $veiculo['id_unidade'] = Auth::user()->id_unidade;
-            Veiculo::create($veiculo);
+            $passageiro = $request->all();
+            Lista::create($passageiro);
         } catch (\Throwable $th) {
             return response()->json([
-                'error' => ErrorInterpreter::getMessage($th)
+                'error' => ErrorInterpreter::getMessage($th, ['23000' => ['1062' => 'Este passageiro já está nessa lista']])
             ]);
         }
     }
@@ -41,18 +40,26 @@ class ListaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $veiculo = Veiculo::findOrFail($id);
-            $veiculo->updated_at = Carbon::now();
-            $veiculo->update($request->all());
+            $data = $request->all();
+            unset($data['paciente_nome']);
+            $passageiro = Lista::where('id_viagem', $id)->where('id_paciente', $request->id_paciente);
+            $passageiro->updated_at = Carbon::now();
+            $passageiro->update($data);
         } catch (\Throwable $th) {
             return response()->json([
-                'error' => ErrorInterpreter::getMessage($th, ['23000' => ['1062' => 'Já existe um veículo cadastrado com essa placa!']])
+                'error' => ErrorInterpreter::getMessage($th)
             ]);
         }
     }
-*/
-    public function destroy($id)
+
+    public function destroy(Request $request, $id)
     {
-        dd($id);
+        try {
+            Lista::where('id_viagem', $request->viagem)->where('id_paciente', $id)->delete();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => ErrorInterpreter::getMessage($th)
+            ]);
+        }
     }
 }

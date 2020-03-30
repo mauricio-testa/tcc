@@ -38,8 +38,13 @@
         >
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
-                <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                <v-icon class="mr-2" color="blue darken-1" text @click="listPassageiros(item)">mdi-view-list</v-icon>
+                <v-icon class="mr-2" color="blue darken-1" text @click="editItem(item)">mdi-pencil</v-icon>
+                <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                        <v-icon class="mr-2" v-on="on" color="indigo darken-1" text @click="listPassageiros(item)">mdi-view-list</v-icon>
+                    </template>
+                    <span>Lista de Passageiros</span>
+                </v-tooltip>
                 <v-icon color="red darken-1" @click="deleteItem(item, false)">mdi-delete</v-icon>
             </template>
         </v-data-table>
@@ -68,8 +73,8 @@
         </v-dialog>
 
         <!-- dialog edit / new -->
-        <viagem-edit :dialogEdit="dialogEdit" :viagem="selectedViagem" v-on:update:dialogEdit="dialogEdit = $event"></viagem-edit>
-        <viagem-list :dialogList="dialogList" :viagem="selectedViagem" v-on:update:dialogList="dialogList = $event"></viagem-list>
+        <viagem-edit :viagem="selectedViagem" :dialogEdit.sync="dialogEdit"></viagem-edit>
+        <viagem-list :viagem="selectedViagem" :dialogList.sync="dialogList"></viagem-list>
 
     </div>
 </template>
