@@ -30,6 +30,7 @@ class Viagem extends Model
             ->leftJoin('veiculos as ve'     , 'viagens.id_veiculo',     '=', 've.id')
             
             ->where('viagens.id_unidade'    , '=', $id_unidade)
+            ->orderBy('viagens.id', 'desc')
             ->paginate(config('constants.default_pagination_size'));
     }
 }
