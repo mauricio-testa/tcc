@@ -24,6 +24,9 @@
                     loading-text="Buscando dados..."
                     :loading="loading"
                 >
+                    <template v-slot:item.acompanhante_nome="{ item }">
+                        <v-icon color="green" text  v-if="item.acompanhante_nome != null">mdi-check</v-icon>
+                    </template>
                     <!-- table actions -->
                     <template v-slot:item.action="{ item }">
                         <v-icon @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
@@ -130,6 +133,7 @@
                 { text: 'Paciente', value: 'paciente_nome'},
                 { text: 'Local', value: 'consulta_local'},
                 { text: 'Hora', value: 'consulta_hora'},
+                { text: 'Acompanhante', value: 'acompanhante_nome'},
                 { text: 'Ações', value: 'action'},
             ],
 
