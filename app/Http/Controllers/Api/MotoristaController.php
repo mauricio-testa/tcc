@@ -18,8 +18,8 @@ class MotoristaController extends Controller
         try {
             $query = Motorista::where('id_unidade', '=', Auth::user()->id_unidade);
 
-            if(!empty($request->input('search')))
-            $query->where('nome', 'like', '%'.$request->input('search').'%');
+            if(!empty($request->search))
+            $query->where('nome', 'like', '%'.$request->search.'%');
 
             return $query->paginate(config('constants.default_pagination_size'));
 

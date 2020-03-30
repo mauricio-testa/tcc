@@ -17,8 +17,8 @@ class PacienteController extends Controller
         try {
             $query = Paciente::where('id_unidade', '=', Auth::user()->id_unidade);
 
-            if(!empty($request->input('search')))
-            $query->where('nome', 'like', '%'.$request->input('search').'%');
+            if(!empty($request->search))
+            $query->where('nome', 'like', '%'.$request->search.'%');
 
             return $query->paginate(config('constants.default_pagination_size'));
 

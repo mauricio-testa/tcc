@@ -18,8 +18,8 @@ class VeiculoController extends Controller
         try {
             $query = Veiculo::where('id_unidade', '=', Auth::user()->id_unidade);
 
-            if(!empty($request->input('search')))
-            $query->where('descricao', 'like', '%'.$request->input('search').'%');
+            if(!empty($request->search))
+            $query->where('descricao', 'like', '%'.$request->search.'%');
 
             return $query->paginate(config('constants.default_pagination_size'));
 
