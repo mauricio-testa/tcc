@@ -21,6 +21,7 @@ class Viagem extends Model
         return self::select('viagens.*', 
                 'mu.nome as municipio_nome', 
                 'mo.nome as motorista_nome', 
+                've.lotacao',
                 DB::raw("DATE_FORMAT(viagens.data_viagem,'%d/%m/%Y')    as data_formated"),
                 DB::raw("CONCAT(ve.descricao,' (',ve.placa,')')         as veiculo")
             )

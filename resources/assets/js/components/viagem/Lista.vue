@@ -15,6 +15,24 @@
                 </v-row>                        
             </v-card-title>
             <v-card-text>
+                <div class="mb-4">
+                    <v-chip class="ma-2" color="success" outlined>
+                        <v-icon left>mdi-calendar-range</v-icon>
+                        {{viagem.data_formated}}
+                    </v-chip>
+                    <v-chip class="ma-2" color="primary" outlined >
+                        <v-icon left>mdi-car</v-icon>
+                        {{viagem.veiculo}} 
+                    </v-chip>
+                    <v-chip class="ma-2" color="error" dark >
+                        <v-icon left>mdi-alert-circle</v-icon>
+                        Veículo Lotado!
+                    </v-chip>
+                    <v-chip class="ma-2" color="deep-purple accent-4" outlined>
+                        <v-icon left>mdi-map-marker</v-icon>
+                        {{viagem.municipio_nome}}
+                    </v-chip>
+                </div>
                 <v-data-table
                     :headers="headers"
                     :items="lista"
