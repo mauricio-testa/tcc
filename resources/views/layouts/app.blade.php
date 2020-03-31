@@ -31,6 +31,7 @@
                 ['text' => 'Veículos', 'url' => url('/cadastros/veiculos'), 'icon' => 'mdi-car'],
                 ['text' => 'Pacientes', 'url' => url('/cadastros/pacientes'), 'icon' => 'mdi-account-group'],
                 ['heading' => 'Administração'],
+                ['text' => 'Logs', 'url' => url('/'), 'icon' => 'mdi-format-list-bulleted-triangle'],
                 ['text' => 'Unidades', 'url' =>  url('/'), 'icon' => 'mdi-hospital-building'],
                 ['text' => 'Usuários', 'url' => route('register'), 'icon' => 'mdi-account'],
             ];

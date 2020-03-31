@@ -1,6 +1,6 @@
 <template>
 <div>
-     <v-dialog v-model="dialogEdit" persistent max-width="500px">
+     <v-dialog v-model="dialogEdit" max-width="500px" @click:outside="close">
             <v-form v-model="formViagemValid" ref="formEditViagem">
                 <v-card>
                     <v-card-title>
@@ -96,9 +96,9 @@
 
             isLoading: false,
 
-            lookupVeiculos: [{id: null, descricao: null}],
-            lookupMunicipios: [{codigo: null, nome: null}],
-            lookupMotoristas: [{id: null, nome: null}],
+            lookupVeiculos: [],
+            lookupMunicipios: [],
+            lookupMotoristas: [],
 
             searchLista: null,
             searchVeiculos: null,
@@ -133,8 +133,51 @@
 
         methods: { 
 
+            /*
+            * Salvar item editado ou novo
+            * Se tiver index é edição, senão é novo registro
+            */
+
             save: function () {
 
+                if (!this.$refs.formEditViagem.validate()) return;
+                let vm = this;
+                
+                if (this.viagem.id != null) {
+                    axios
+                    .put(this.$parent.api+'/'+this.viagem.id, vm.viagem)
+                    .then(function(response){
+                        if(response.data.error) {
+                            vm.$toast.error('Erro ao editar: '+response.data.error)
+                        }
+                        else {
+                            vm.close()
+                            vm.$emit('callback')
+                            vm.$toast.success('Viagem salva com sucesso!')
+                        }
+                    })
+
+                } else {
+                    axios
+                    .post(this.$parent.api, {
+                        'cod_destino'   : vm.viagem.cod_destino,
+                        'data_viagem'   : vm.viagem.data_viagem,
+                        'hora_saida'    : vm.viagem.hora_saida,
+                        'id_motorista'  : vm.viagem.id_motorista,
+                        'id_veiculo'    : vm.viagem.id_veiculo,
+                        'observacao'    : vm.viagem.observacao
+                    })
+                    .then(function(response){
+                        if(response.data.error) {
+                            vm.$toast.error('Erro ao cadastrar: '+response.data.error)
+                        }
+                        else {
+                            vm.close()
+                            vm.$emit('callback', response.data.id)
+                            vm.$toast.success('Viagem cadastrada com sucesso!')
+                        }
+                    })
+                }
             },
 
             close () {
@@ -166,18 +209,15 @@
             initialize: function () {
                 // fill veiculo field
                 this.lookupVeiculos.id = this.viagem.id_veiculo
-                this.lookupVeiculos.descricao = this.viagem.veiculo
-                this.searchVeiculos = '' 
+                this.searchVeiculos = this.viagem.veiculo
 
                 // fill veiculo field
                 this.lookupMunicipios.codigo = this.viagem.cod_destino
-                this.lookupMunicipios.nome = this.viagem.municipio_nome
-                this.searchMunicipios = ''
+                this.searchMunicipios = this.viagem.municipio_nome
 
                 // fill veiculo field
                 this.lookupMotoristas.id = this.viagem.id_motorista
-                this.lookupMotoristas.nome = this.viagem.motorista_nome
-                this.searchMotoristas = '' // handle watcher
+                this.searchMotoristas = this.viagem.motorista_nome
 
                 this.resetViagemEditValidation();
 

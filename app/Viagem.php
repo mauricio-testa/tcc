@@ -10,7 +10,7 @@ class Viagem extends Model
     protected $table = 'viagens';
 
     protected $fillable = [
-        'id_veiculo', 'id_motorista', 'cod_destino', 'data_viagem', 'hora_saida', 'observacoes'
+        'id_veiculo', 'id_motorista', 'cod_destino', 'data_viagem', 'hora_saida', 'observacoes', 'id_unidade'
     ];
 
     protected $casts = [

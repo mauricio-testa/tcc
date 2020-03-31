@@ -2,7 +2,7 @@
 <div>
 
     <!-- dialog list -->
-    <v-dialog v-model="dialogList" persistent max-width="600px">
+    <v-dialog v-model="dialogList" max-width="700px" @click:outside="close">
         <v-card>
             <v-card-title>
                 <v-row>
@@ -42,7 +42,7 @@
      </v-dialog>
 
     <!-- dialog edit / new paciente -->
-    <v-dialog v-model="dialogEditPassageiro" max-width="500px">
+    <v-dialog v-model="dialogEditPassageiro" max-width="500px" @click:outside="closeDialogPassageiro">
         <v-form v-model="formPassageiroValid" ref="formEditPassageiro">
             <v-card>
                 <v-card-title>
@@ -61,6 +61,8 @@
                             label="Selecione um paciente..."
                             :disabled="selectedPassageiroIndex > -1"
                             :rules="[v => !!v || 'Obrigatório!']"
+                            no-data-text="Digite algo para pesquisar..."
+                            @keypress="search"
                         ></v-autocomplete>
 
                         <v-text-field 
@@ -85,7 +87,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="red darken-1" text @click="dialogEditPassageiro = false">Cancelar</v-btn>
+                    <v-btn color="red darken-1" text @click="closeDialogPassageiro">Cancelar</v-btn>
                     <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
                 </v-card-actions>
             </v-card>
@@ -170,6 +172,13 @@
         }),      
 
         methods: { 
+            
+            search () {
+                // pra não pesquisar se está disable
+                if (this.selectedPassageiroIndex > -1) return
+                if (this.searchPacientes == null) return
+                this._debounce();
+            },
 
             getListaPassageiros () {
 
@@ -274,6 +283,12 @@
                 this.$emit('update:dialogList', false)
             },
 
+            closeDialogPassageiro () {
+                // fica com length == 1 quando edita 
+                if (this.lookupPacientes.length <= 2) this.lookupPacientes = []
+                this.dialogEditPassageiro = false;
+            },
+
             // executado quando abre o modal
             initialize: function () {
                 this.lista = [];
@@ -336,15 +351,6 @@
             dialogList: function(val) {
                 if (val) this.initialize();
             },
-
-            // quando busca um paciente no autocomplete, inicia o debounce
-            searchPacientes: function (val) {
-                // se tiver paciente selecionado, está editando. logo está disable e não precisa search
-                if (this.selectedPassageiroIndex > -1) return
-                // pra nao pesquisar quando não tem search string
-                if (this.searchPacientes == null) return
-                this._debounce();
-            }
         },
     }
 </script>

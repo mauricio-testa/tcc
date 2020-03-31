@@ -38,9 +38,9 @@
         >
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
-                <v-icon @click="editItem(item)" class="mr-2" color="blue darken-1" text>mdi-pencil</v-icon>
+                <v-icon @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
                 <v-icon @click="listPassageiros(item)" class="mr-2" >mdi-view-list</v-icon>
-                <v-icon @click="deleteItem(item, false)" color="red darken-1">mdi-delete</v-icon>
+                <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
             </template>
         </v-data-table>
 
@@ -68,7 +68,7 @@
         </v-dialog>
 
         <!-- dialog edit / new -->
-        <viagem-edit :viagem="selectedViagem" :dialogEdit.sync="dialogEdit"></viagem-edit>
+        <viagem-edit :viagem="selectedViagem" :dialogEdit.sync="dialogEdit" v-on:callback="callback"></viagem-edit>
         <viagem-list :viagem="selectedViagem" :dialogList.sync="dialogList"></viagem-list>
 
     </div>
@@ -117,6 +117,13 @@
             },
             defaultItem: {
                 id: null,
+                cod_destino: null,
+                data_viagem: null,
+                hora_saida: null,
+                id_motorista: null,
+                id_unidade: null,
+                id_veiculo: null,
+                observacao: null
             },
             searchWord: null,
         }),
@@ -129,7 +136,7 @@
 
         methods: { 
 
-        getItems: function() {
+        getItems: async function() {
 
             let vm        = this;
             let page      = vm.pagination.current;
@@ -139,7 +146,7 @@
 
             vm.loading = true;
 
-            axios
+            await axios
                 .get(urlFetch)
                 .then(function(response) {
                     vm.viagens                = response.data.data;
@@ -158,51 +165,23 @@
             },
 
             /*
-            * Salvar item editado ou novo
-            * Se tiver index é edição, senão é novo registro
+             * Callback para inserção ou edição de viagem
+             * Após a edição, da um reload
+             * Após inserção, pega o id da viagem inserida, dá um reload e já entra na edição de passageiros
+             * @param id id da ultima viagem inserida
             */
-
-            /*
-            save: function () {
-
-                if (!this.$refs.formEdit.validate()) return;
-                let vm = this;
-                
-                if (this.selectedIndex > -1) {
-                axios
-                    .put(this.api+'/'+this.selectedViagem.id, vm.selectedViagem)
-                    .then(function(response){
-                        if(response.data.error) {
-                        vm.$toast.error('Erro ao editar: '+response.data.error)
-                        }
-                        else {
-                        Object.assign(vm.viagens[vm.selectedIndex], vm.selectedViagem)
-                        vm.dialogEdit = false;
-                        vm.$toast.success('Viagem salva com sucesso!')
-                        }
-                    })
-
-                } else {
-                axios
-                    .post(this.api, {
-                        'nome'      : vm.selectedViagem.nome,
-                        'telefone'  : vm.selectedViagem.telefone
-                    })
-                    .then(function(response){
-                        if(response.data.error) {
-                            vm.$toast.error('Erro ao cadastrar: '+response.data.error)
-                        }
-                        else {
-                            // item adicionado vai sempre por último
-                            vm.pagination.current = parseInt(vm.pagination.totalItems / vm.pagination.perPage) + 1;
-                            vm.getItems();
-                            vm.dialogEdit = false;
-                            vm.$toast.success('Viagem cadastrada com sucesso!')
-                        }
-                    })
+           
+            callback: async function (id) {
+                await this.getItems();
+                if (!id) return;
+                // se estiver inserindo, após inserir abre a tela de edição de passageiros
+                let inserted = this.viagens.find((viagem) => viagem.id == id);
+                if (typeof inserted === "object") {
+                    this.selectedViagem = inserted;
+                    this.selectedIndex = this.viagens.indexOf(inserted)
+                    this.dialogList = true;
                 }
             },
-            */
 
             /*
             * Exclui um registro
