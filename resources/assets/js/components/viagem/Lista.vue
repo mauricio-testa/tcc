@@ -2,15 +2,27 @@
 <div>
 
     <!-- dialog list -->
-    <v-dialog v-model="dialogList" max-width="700px" @click:outside="close">
+    <v-dialog v-model="dialogList" max-width="720px" @click:outside="close">
         <v-card>
             <v-card-title>
                 <v-row>
                 <v-col cols="12" md="8">
+
                     Lista de Passageiros
-                    <v-btn class="ml-4" fab dark small color="primary" @click="addNewPassageiro">
-                    <v-icon dark>mdi-plus</v-icon>
+
+                    <v-tooltip right v-if="vagasDisponiveis == 0">
+                        <template v-slot:activator="{ on }">
+                            <div v-on="on" style="display: inline-block">
+                                <v-btn class="ml-4" disabled color="primary" fab small ><v-icon>mdi-plus</v-icon></v-btn>
+                            </div>
+                        </template>
+                        <span>Você não pode adicionar novos passageiros a esta viagem <br>porque o número de passageiros é igual a lotação do veículo</span>
+                    </v-tooltip>
+
+                    <v-btn v-else class="ml-4" fab dark small color="primary" @click="addNewPassageiro">
+                        <v-icon dark>mdi-plus</v-icon>
                     </v-btn>
+
                 </v-col>
                 </v-row>                        
             </v-card-title>
@@ -28,11 +40,11 @@
                         <v-icon left>mdi-ambulance</v-icon>
                         {{viagem.veiculo_nome}} 
                     </v-chip>                    
-                    <v-chip v-if="viagem.lotacao > countPassageiros" class="ma-2" color="success" outlined>
+                    <v-chip v-if="vagasDisponiveis > 0" class="ma-2" color="success" outlined>
                         <v-icon left>mdi-account-group</v-icon>
-                        {{viagem.lotacao - countPassageiros}} vagas
+                        {{ vagasDisponiveis }} vagas
                     </v-chip>
-                    <v-chip v-if="viagem.lotacao == countPassageiros" class="ma-2" color="error" dark>
+                    <v-chip v-else class="ma-2" color="error" dark>
                         <v-icon left>mdi-alert-circle</v-icon>
                         Lotado!
                     </v-chip>
@@ -376,8 +388,8 @@
         },
 
         computed: {
-            countPassageiros () {
-                return this.lista.reduce((total, element) => 
+            vagasDisponiveis () {
+                return this.viagem.lotacao - this.lista.reduce((total, element) => 
                     (element.acompanhante_nome != null ? total + 2 : total + 1), 0)
             }
         },
