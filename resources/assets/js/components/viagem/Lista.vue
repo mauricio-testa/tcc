@@ -16,21 +16,28 @@
             </v-card-title>
             <v-card-text>
                 <div class="mb-4">
-                    <v-chip class="ma-2" color="success" outlined>
+                    <v-chip class="ma-2" color="indigo darken-3" outlined>
                         <v-icon left>mdi-calendar-range</v-icon>
                         {{viagem.data_formated}}
-                    </v-chip>
-                    <v-chip class="ma-2" color="primary" outlined >
-                        <v-icon left>mdi-car</v-icon>
-                        {{viagem.veiculo}} 
-                    </v-chip>
-                    <v-chip class="ma-2" color="error" dark >
-                        <v-icon left>mdi-alert-circle</v-icon>
-                        Veículo Lotado!
                     </v-chip>
                     <v-chip class="ma-2" color="deep-purple accent-4" outlined>
                         <v-icon left>mdi-map-marker</v-icon>
                         {{viagem.municipio_nome}}
+                    </v-chip>
+                    <v-chip class="ma-2" color="primary" outlined >
+                        <v-icon left>mdi-ambulance</v-icon>
+                        {{viagem.veiculo_nome}} 
+                    </v-chip>                    
+                    <v-chip v-if="viagem.lotacao > countPassageiros" class="ma-2" color="success" outlined>
+                        <v-icon left>mdi-account-group</v-icon>
+                        {{viagem.lotacao - countPassageiros}} vagas
+                    </v-chip>
+                    <v-chip v-if="viagem.lotacao == countPassageiros" class="ma-2" color="error" dark>
+                        <v-icon left>mdi-alert-circle</v-icon>
+                        Lotado!
+                    </v-chip>
+                    <v-chip dark @click="editViagem">
+                        <v-icon>mdi-pencil</v-icon>
                     </v-chip>
                 </div>
                 <v-data-table
@@ -298,7 +305,10 @@
 
             // vue não permite editar diretamente uma prop. por isso, usa-se emit aqui e prop.sync no componente pai
             close () {
-                this.$emit('update:dialogList', false)
+                this.$emit('update:dialogList', false);
+            },
+            editViagem () {
+                this.$emit('editViagem');
             },
 
             closeDialogPassageiro () {
@@ -362,6 +372,13 @@
                     this.getPacientesLookup();
                 }, 1400);
             },
+        },
+
+        computed: {
+            countPassageiros () {
+                return this.lista.reduce((total, element) => 
+                    (element.acompanhante_nome != null ? total + 2 : total + 1), 0)
+            }
         },
 
         watch: {

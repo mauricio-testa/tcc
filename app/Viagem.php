@@ -19,9 +19,10 @@ class Viagem extends Model
 
     public static function getViagemList($id_unidade) {
         return self::select('viagens.*', 
-                'mu.nome as municipio_nome', 
-                'mo.nome as motorista_nome', 
-                've.lotacao',
+                'mu.nome        as municipio_nome', 
+                'mo.nome        as motorista_nome', 
+                've.lotacao     as lotacao',
+                've.descricao   as veiculo_nome',
                 DB::raw("DATE_FORMAT(viagens.data_viagem,'%d/%m/%Y')    as data_formated"),
                 DB::raw("CONCAT(ve.descricao,' (',ve.placa,')')         as veiculo")
             )

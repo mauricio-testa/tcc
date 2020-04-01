@@ -69,7 +69,7 @@
 
         <!-- dialog edit / new -->
         <viagem-edit :viagem="selectedViagem" :dialogEdit.sync="dialogEdit" v-on:callback="callback"></viagem-edit>
-        <viagem-list :viagem="selectedViagem" :dialogList.sync="dialogList"></viagem-list>
+        <viagem-list :viagem="selectedViagem" :dialogList.sync="dialogList" v-on:editViagem="dialogEdit = true"></viagem-list>
 
     </div>
 </template>
