@@ -9,7 +9,8 @@ class ErrorInterpreter extends Controller
 {
     public static function getMessage($exception, $customMessages = [])
     {
-        $errorInfo  = $exception->getPrevious()->errorInfo;
+
+        $previous   = $exception->getPrevious();
         $message    = $exception->getMessage();
         $errorList  = [ // SQLSTATE [ERROR CODE]
             '23000' => [
@@ -18,6 +19,10 @@ class ErrorInterpreter extends Controller
                 '1062' => 'Registro duplicado!'
             ]
         ];
+
+        if (empty($previous)) return $message;
+
+        $errorInfo = $previous->errorInfo;
         
         if (!empty($errorInfo[1])) {
             $errorCode  = $errorInfo[1];
