@@ -78,12 +78,11 @@
 
     export default {
     
-        props: ['api'],
-
         data: () => ({
             
             // main data
             viagens: [],
+            api: window.__routes.api.viagem,
 
             // state of elements
             dialogDelete: false,

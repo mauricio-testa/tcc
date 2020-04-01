@@ -157,6 +157,7 @@
             // main data
             lista: [],
             lookupPacientes: [],
+            api: window.__routes.api.lista,
 
             // table column names
             headers: [
@@ -214,7 +215,7 @@
                 let vm = this;
 
                 axios
-                .get('http://localhost:8000/api/lista?viagem='+vm.viagem.id)
+                .get(vm.api+'?viagem='+vm.viagem.id)
                 .then(function(response) {
                     vm.lista = response.data
                 })
@@ -242,7 +243,7 @@
                 let vm = this;
                 
                 axios
-                    .delete('http://localhost:8000/api/lista/'+vm.selectedPassageiro.id_paciente, {
+                    .delete(vm.api+'/'+vm.selectedPassageiro.id_paciente, {
                         data: {"viagem": vm.selectedPassageiro.id_viagem}, 
                         headers: {"Authorization": "***"}}
                     )
@@ -270,7 +271,7 @@
 
                 if (vm.selectedPassageiroIndex > -1) {
                     axios
-                    .put('http://localhost:8000/api/lista/'+this.viagem.id, vm.selectedPassageiro)
+                    .put(vm.api+'/'+this.viagem.id, vm.selectedPassageiro)
                     .then(function(response){
                         if(response.data.error) {
                             vm.$toast.error('Erro ao editar: '+response.data.error)
@@ -284,7 +285,7 @@
 
                 } else {
                     axios
-                    .post('http://localhost:8000/api/lista/', {
+                    .post(vm.api, {
                         'id_paciente'       : vm.selectedPassageiro.id_paciente,
                         'id_viagem'         : vm.viagem.id,
                         'acompanhante_rg'   : vm.selectedPassageiro.acompanhante_rg,

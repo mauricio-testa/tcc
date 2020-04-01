@@ -129,12 +129,11 @@
 
     export default {
 
-        props: ['api'],
-
         data: () => ({
 
             // main data
             veiculos: [],
+            api: window.__routes.api.veiculo,
 
             // state of elements
             dialogDelete: false,

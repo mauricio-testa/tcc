@@ -113,13 +113,13 @@
 
     export default {
     
-        props: ['api'],
         components: {TheMask},
 
         data: () => ({
             
             // main data
             motoristas: [],
+            api: window.__routes.api.motorista,
 
             // state of elements
             dialogDelete: false,

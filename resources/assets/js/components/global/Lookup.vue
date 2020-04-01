@@ -10,10 +10,10 @@
                 let api = null;
                 let vm = this;
 
-                if (dataset == 'VEICULO')   api = 'http://localhost:8000/api/veiculos';
-                if (dataset == 'MOTORISTA') api = 'http://localhost:8000/api/motoristas';
-                if (dataset == 'MUNICIPIO') api = 'http://localhost:8000/api/municipios';
-                if (dataset == 'PACIENTE')  api = 'http://localhost:8000/api/pacientes?search='+search
+                if (dataset == 'VEICULO')   api = window.__routes.api.veiculo;
+                if (dataset == 'MOTORISTA') api = window.__routes.api.motorista;
+                if (dataset == 'MUNICIPIO') api = window.__routes.api.municipio;
+                if (dataset == 'PACIENTE')  api = window.__routes.api.paciente+'?search='+search
 
                 axios
                     .get(api)

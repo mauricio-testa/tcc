@@ -2,6 +2,6 @@
 
 @section('content')
 
-<pacientes api="{{ url('/api/pacientes') }}"></pacientes>
+<pacientes></pacientes>
 
 @endsection

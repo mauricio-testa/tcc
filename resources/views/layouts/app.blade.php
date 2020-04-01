@@ -19,23 +19,39 @@
     
 </head>
 <body>
-    <div id="app">
 
-        <?php 
-            $data = [
-                ['text' => 'Dashboard', 'url' => url('/'), 'icon' => 'mdi-monitor-dashboard'],
-                ['text' => 'Viagens', 'url' => url('/viagens'), 'icon' => 'mdi-ambulance'],
-                ['text' => 'Relatórios', 'url' => url('/'), 'icon' => 'mdi-file-chart'],
-                ['heading' => 'Cadastros'],
-                ['text' => 'Motoristas', 'url' => url('/cadastros/motoristas'), 'icon' => 'mdi-account-tie'],
-                ['text' => 'Veículos', 'url' => url('/cadastros/veiculos'), 'icon' => 'mdi-car'],
-                ['text' => 'Pacientes', 'url' => url('/cadastros/pacientes'), 'icon' => 'mdi-account-group'],
-                ['heading' => 'Administração'],
-                ['text' => 'Logs', 'url' => url('/'), 'icon' => 'mdi-format-list-bulleted-triangle'],
-                ['text' => 'Unidades', 'url' =>  url('/'), 'icon' => 'mdi-hospital-building'],
-                ['text' => 'Usuários', 'url' => route('register'), 'icon' => 'mdi-account'],
-            ];
-        ?>
+    <?php 
+        $data = [
+            ['text' => 'Dashboard', 'url' => url('/'), 'icon' => 'mdi-monitor-dashboard'],
+            ['text' => 'Viagens', 'url' => url('/viagens'), 'icon' => 'mdi-ambulance'],
+            ['text' => 'Relatórios', 'url' => url('/'), 'icon' => 'mdi-file-chart'],
+            ['heading' => 'Cadastros'],
+            ['text' => 'Motoristas', 'url' => url('/cadastros/motoristas'), 'icon' => 'mdi-account-tie'],
+            ['text' => 'Veículos', 'url' => url('/cadastros/veiculos'), 'icon' => 'mdi-car'],
+            ['text' => 'Pacientes', 'url' => url('/cadastros/pacientes'), 'icon' => 'mdi-account-group'],
+            ['heading' => 'Administração'],
+            ['text' => 'Logs', 'url' => url('/'), 'icon' => 'mdi-format-list-bulleted-triangle'],
+            ['text' => 'Unidades', 'url' =>  url('/'), 'icon' => 'mdi-hospital-building'],
+            ['text' => 'Usuários', 'url' => route('register'), 'icon' => 'mdi-account'],
+        ];
+
+        $routes = [
+            'api' => [
+                'motorista' => url('/api/motoristas'),
+                'veiculo'   => url('/api/veiculos'),
+                'paciente'  => url('/api/pacientes'),
+                'viagem'    => url('/api/viagens'),
+                'lista'     => url('/api/lista'),
+                'municipio' => url('/api/municipios')
+            ]
+        ];
+    ?>
+
+    <script>
+        window.__routes = <?= json_encode($routes)?>
+    </script>
+
+    <div id="app">
 
         <v-app>
             <navigation :menus="{{ htmlspecialchars(json_encode($data))}}" :user="{{ htmlspecialchars(json_encode(['nome' => Auth::user()->name]))}}"></navigation>
@@ -55,5 +71,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    
 </body>
 </html>

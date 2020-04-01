@@ -2,6 +2,6 @@
 
 @section('content')
 
-<viagens api="{{ url('/api/viagens') }}"></viagens>
+<viagens></viagens>
 
 @endsection

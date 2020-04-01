@@ -128,13 +128,13 @@
 
     export default {
     
-        props: ['api'],
         components: {TheMask},
 
         data: () => ({
             
             // main data
             pacientes: [],
+            api: window.__routes.api.paciente,
 
             // state of elements
             dialogDelete: false,
