@@ -23,7 +23,7 @@
                 </v-text-field>
                 </v-form>
             </v-col>
-            </v-row>                        
+            </v-row>
         </v-card-title>
 
         <!-- table  -->

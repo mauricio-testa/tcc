@@ -74,6 +74,7 @@
 
     </v-dialog>
 
+    <lookup ref="lookupComponent" v-on:updateLookup="updateLookup"></lookup>
 </div>
 </template>
 
@@ -184,26 +185,18 @@
                 this.$emit('update:dialogEdit', false)
             },
             
+            // busca o lookup para um determinado campo
             getLookup (dataset) {
-                
-                let api = null;
-                let vm  = this;
+                this.isLoading = true;
+                this.$refs.lookupComponent.getLookup(dataset);
+            },
 
-                if (dataset == 'VEICULO')   api = 'http://localhost:8000/api/veiculos';
-                if (dataset == 'MOTORISTA') api = 'http://localhost:8000/api/motoristas';
-                if (dataset == 'MUNICIPIO') api = 'http://localhost:8000/api/municipios';
-
-                axios
-                    .get(api)
-                    .then(function(response) {
-                        if (dataset == 'VEICULO')   vm.lookupVeiculos   = response.data.data
-                        if (dataset == 'MOTORISTA') vm.lookupMotoristas = response.data.data
-                        if (dataset == 'MUNICIPIO') vm.lookupMunicipios = response.data
-                    })
-                    .catch(function(error) {
-                        console.error(error)
-                    })
-                    .finally(() => (this.isLoading = false))
+            // callback da busca de lookup
+            updateLookup (datasetName, dataArray) {
+                if (datasetName == 'VEICULO')   this.lookupVeiculos   = dataArray
+                if (datasetName == 'MOTORISTA') this.lookupMotoristas = dataArray
+                if (datasetName == 'MUNICIPIO') this.lookupMunicipios = dataArray
+                this.isLoading = false;
             },
 
             initialize: function () {

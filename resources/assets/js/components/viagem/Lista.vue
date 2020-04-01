@@ -131,7 +131,10 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
-
+    <lookup 
+        ref="lookupComponentLista"
+        v-on:updateLookup="updateLookup"
+    ></lookup>
 </div>
 </template>
 <script>
@@ -349,17 +352,14 @@
             },
 
             // faz a busca de pacientes no autocomplete
-            getPacientesLookup: function (val) {
-                let vm = this;
-                axios
-                    .get('http://localhost:8000/api/pacientes?search='+vm.searchPacientes)
-                    .then(function(response) {
-                        vm.lookupPacientes = response.data.data
-                    })
-                    .catch(function(error) {
-                        console.error(error)
-                    })
-                    .finally(() => (vm.loadingPacientes = false))
+            getPacientesLookup: function () {
+                this.$refs.lookupComponentLista.getLookup('PACIENTE', this.searchPacientes);
+            },
+
+            // callback da busca de lookup
+            updateLookup (datasetName, dataArray) {
+                this.lookupPacientes = dataArray;
+                this.loadingPacientes = false;
             },
 
             // isso serve pra não fazer request a cada letra digitada, mas sim, após um tempo sem digitar

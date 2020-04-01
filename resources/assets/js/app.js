@@ -29,6 +29,8 @@ Vue.use(VuetifyToast, {
 
 // global
 Vue.component('navigation', require('./components/global/Navigation.vue'));
+Vue.component('lookup',     require('./components/global/Lookup.vue'));
+
 
 // views
 Vue.component('motoristas', require('./components/Motoristas.vue'));

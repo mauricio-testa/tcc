@@ -13,7 +13,7 @@ class MunicipioController extends Controller
     public function index()
     {
         try {
-            return Municipio::all();
+            return Municipio::paginate(1000);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => ErrorInterpreter::getMessage($th)
