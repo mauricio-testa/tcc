@@ -12,7 +12,7 @@
                             <v-autocomplete
                                 v-model="viagem.cod_destino"
                                 :items="lookupMunicipios"
-                                :loading="isLoading"
+                                :loading="isLoading.lookupMunicipios"
                                 :search-input.sync="searchMunicipios"
                                 item-text="nome"
                                 item-value="codigo"
@@ -22,7 +22,7 @@
                             <v-autocomplete
                                 v-model="viagem.id_veiculo"
                                 :items="lookupVeiculos"
-                                :loading="isLoading"
+                                :loading="isLoading.lookupVeiculos"
                                 :search-input.sync="searchVeiculos"
                                 item-text="descricao"
                                 item-value="id"
@@ -32,7 +32,7 @@
                             <v-autocomplete
                                 v-model="viagem.id_motorista"
                                 :items="lookupMotoristas"
-                                :loading="isLoading"
+                                :loading="isLoading.lookupMotoristas"
                                 :search-input.sync="searchMotoristas"
                                 item-text="nome"
                                 item-value="id"
@@ -95,7 +95,11 @@
 
         data: () => ({
 
-            isLoading: false,
+            isLoading: {
+                lookupVeiculos: false,
+                lookupMunicipios: false,
+                lookupMotoristas: false
+            },
 
             lookupVeiculos: [],
             lookupMunicipios: [],
@@ -119,16 +123,19 @@
             },
 
             searchVeiculos (val) {
-                if (this.lookupVeiculos.length > 1) return
-                this.getLookup('VEICULO');    
+                if (this.lookupVeiculos.length > 1 || this.isLoading.lookupVeiculos) return
+                this.isLoading.lookupVeiculos= true
+                this.$refs.lookupComponent.getLookup('VEICULO');
             },
             searchMotoristas(val) {
-                if (this.lookupMotoristas.length > 1) return
-                this.getLookup('MOTORISTA')
+                if (this.lookupMotoristas.length > 1 || this.isLoading.lookupMotoristas) return
+                this.isLoading.lookupMotoristas = true
+                this.$refs.lookupComponent.getLookup('MOTORISTA');
             },
             searchMunicipios(val) {
-                if (this.lookupMunicipios.length > 1) return
-                this.getLookup('MUNICIPIO')
+                if (this.lookupMunicipios.length > 1 || this.isLoading.lookupMunicipios) return
+                this.isLoading.lookupMunicipios = true
+                this.$refs.lookupComponent.getLookup('MUNICIPIO');
             }
         },
 
@@ -185,18 +192,20 @@
                 this.$emit('update:dialogEdit', false)
             },
             
-            // busca o lookup para um determinado campo
-            getLookup (dataset) {
-                this.isLoading = true;
-                this.$refs.lookupComponent.getLookup(dataset);
-            },
-
             // callback da busca de lookup
             updateLookup (datasetName, dataArray) {
-                if (datasetName == 'VEICULO')   this.lookupVeiculos   = dataArray
-                if (datasetName == 'MOTORISTA') this.lookupMotoristas = dataArray
-                if (datasetName == 'MUNICIPIO') this.lookupMunicipios = dataArray
-                this.isLoading = false;
+                if (datasetName == 'VEICULO') {
+                    this.lookupVeiculos             = dataArray
+                    this.isLoading.lookupVeiculos   = false
+                }
+                if (datasetName == 'MOTORISTA') {
+                    this.lookupMotoristas           = dataArray
+                    this.isLoading.lookupMotoristas = false
+                }
+                if (datasetName == 'MUNICIPIO') {
+                    this.lookupMunicipios           = dataArray
+                    this.isLoading.lookupMunicipios = false
+                }
             },
 
             initialize: function () {

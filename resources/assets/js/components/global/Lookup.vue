@@ -18,10 +18,17 @@
                 axios
                     .get(api)
                     .then(function(response) {
-                        vm.$emit('updateLookup', dataset, response.data.data)
+                        console.log('response', response)
+                        if (response.data.error) {
+                            console.log('error', response.data.error)
+                            vm.$emit('updateLookup', dataset, []);
+                        } else {
+                            vm.$emit('updateLookup', dataset, response.data.data)
+                        }
                     })
                     .catch(function(error) {
-                        console.error(error)
+                        console.log(error)
+                        vm.$emit('updateLookup', dataset, [])
                     })
             },
         },
