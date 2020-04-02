@@ -15,7 +15,7 @@ class ViagemController extends Controller
     public function index()
     {
         try {
-            return Viagem::getViagemList(Auth::user()->id_unidade);
+            return Viagem::getViagem(Auth::user()->id_unidade);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => ErrorInterpreter::getMessage($th)

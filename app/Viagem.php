@@ -17,8 +17,8 @@ class Viagem extends Model
         'data_viagem' => 'datetime:d-m-Y',
     ];
 
-    public static function getViagemList($id_unidade) {
-        return self::select('viagens.*', 
+    public static function getViagem($id_unidade = null, $id_viagem = null) {
+        $query = self::select('viagens.*', 
                 'mu.nome        as municipio_nome', 
                 'mo.nome        as motorista_nome', 
                 've.lotacao     as lotacao',
@@ -29,10 +29,19 @@ class Viagem extends Model
             ->leftJoin('municipios as mu'   , 'viagens.cod_destino',    '=', 'mu.codigo')
             ->leftJoin('unidades as un'     , 'viagens.id_unidade',     '=', 'un.id')
             ->leftJoin('motoristas as mo'   , 'viagens.id_motorista',   '=', 'mo.id')
-            ->leftJoin('veiculos as ve'     , 'viagens.id_veiculo',     '=', 've.id')
-            
-            ->where('viagens.id_unidade'    , '=', $id_unidade)
-            ->orderBy('viagens.id', 'desc')
-            ->paginate(config('constants.default_pagination_size'));
+            ->leftJoin('veiculos as ve'     , 'viagens.id_veiculo',     '=', 've.id');
+
+        // retorna uma viagem específica
+        if ($id_viagem) {
+            $query->where('viagens.id', $id_viagem);
+            return $query->first();
+        }
+
+        // retorna uma lista de viagens de uma unidade
+        if ($id_unidade) {
+            $query->where('viagens.id_unidade', $id_unidade);
+            $query->orderBy('viagens.id', 'desc');
+            return $query->paginate(config('constants.default_pagination_size'));
+        }
     }
 }

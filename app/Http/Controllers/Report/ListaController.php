@@ -6,17 +6,20 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\ViewLista;
 use App\Viagem;
+use App\Unidade;
 
 class ListaController extends Controller
 {
     public function index(Request $request)
     {
-        $lista  = ViewLista::where('id_viagem', $request->viagem)->get();
-        $viagem = [];
+        $lista   = ViewLista::where('id_viagem', $request->viagem)->get();
+        $viagem  = Viagem::getViagem(null, $request->viagem);
+        $unidade = Unidade::where('id', $viagem->id_unidade)->leftJoin('municipios as m', 'unidades.id_municipio','=', 'm.codigo')->first();
 
         return view('report.lista', [
-            'lista' => $lista, 
-            'viagem' => $viagem,
+            'lista'     => $lista, 
+            'viagem'    => $viagem,
+            'unidade'   => $unidade
         ]);
     }
 }

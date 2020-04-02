@@ -32,6 +32,23 @@
 <body>
     <div class="wrapper">
         <div class="content">
+            <br> === DADOS DA UNIDADE ===
+            <br>Nome: {{ $unidade->descricao }}
+            <br>Municipio: {{ $unidade->nome}}
+            <br>
+            <br>
+            <br> === DADOS DA VIAGEM ===
+            <br>ID viagem: {{ $viagem->id }}
+            <br>Data: {{ $viagem->data_formated }}
+            <br>Hora Saída: {{ $viagem->hora_saida }}
+            <br>Destino: {{ $viagem->municipio_nome }}
+            <br>Motorista: {{ $viagem->motorista_nome }}
+            <br>Lotação: {{ $viagem->lotacao }}
+            <br>Veículo: {{ $viagem->veiculo }}
+            <br>Criada em: {{ $viagem->created_at }}
+            <br>
+            <br>
+
             <table border="1" width="100%" cellpadding="3" cellspacing="0">
                 <thead>
                     <td>Nome</td>
