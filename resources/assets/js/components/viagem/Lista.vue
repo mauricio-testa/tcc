@@ -118,8 +118,18 @@
                             v-model="precisaAcompanhante"
                             label="Precisa acompanhante?"
                         ></v-switch>
-                        <v-text-field v-if="precisaAcompanhante" v-model="selectedPassageiro.acompanhante_nome" label="Nome do acompanhante"></v-text-field>
-                        <v-text-field v-if="precisaAcompanhante" v-model="selectedPassageiro.acompanhante_rg" label="RG do acompanhante"></v-text-field>
+                        <v-text-field 
+                            v-if="precisaAcompanhante" 
+                            v-model="selectedPassageiro.acompanhante_nome" 
+                            label="Nome do acompanhante"
+                            :rules="[v => !!v && precisaAcompanhante || 'Informe o nome do acompanhante']"
+                        ></v-text-field>
+                        <v-text-field 
+                            v-if="precisaAcompanhante" 
+                            v-model="selectedPassageiro.acompanhante_rg" 
+                            label="RG do acompanhante"
+                            :rules="[v => (v ? (v.length >= 7 && v.length <= 10) : !v) || 'RG deve ter 7 a 10 dígitos!']" 
+                        ></v-text-field>
                     </v-container>
                 </v-card-text>
                 <v-card-actions>

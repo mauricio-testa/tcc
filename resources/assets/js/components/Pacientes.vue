@@ -86,7 +86,8 @@
                                 </v-col>
                                 <v-col cols="12" sm="12" md="6">
                                 <v-text-field 
-                                    v-model="selectedItem.rg" 
+                                    v-model="selectedItem.rg"
+                                    type="number"
                                     :rules="[v => (v ? (v.length >= 7 && v.length <= 10) : !v) || 'RG deve ter 7 a 10 dígitos!']" 
                                     label="RG"
                                 ></v-text-field>
