@@ -12,6 +12,7 @@ class CreateListaView extends Migration
      */
     public function up()
     {
+        DB::statement("DROP VIEW IF EXISTS vw_lista");
         DB::statement("
             CREATE VIEW vw_lista AS
             SELECT 

@@ -17,6 +17,8 @@ class CreateUnidadesTable extends Migration
             $table->increments('id');
             $table->integer('id_municipio')->nullable(false);
             $table->string('descricao', 240)->nullable(false);
+            $table->integer('status')->nullable(false)->default(1);
+            $table->string('avatar', 240)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
 
