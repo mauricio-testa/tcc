@@ -211,7 +211,7 @@
             initialize: function () {
                 // fill veiculo field
                 this.lookupVeiculos.id = this.viagem.id_veiculo
-                this.searchVeiculos = this.viagem.veiculo
+                this.searchVeiculos = this.viagem.veiculo_nome
 
                 // fill veiculo field
                 this.lookupMunicipios.codigo = this.viagem.cod_destino
