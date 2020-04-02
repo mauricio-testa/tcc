@@ -32,6 +32,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('municipios'    , 'Api\MunicipioController');
     });
 
+    Route::prefix('relatorios')->group(function () {
+        Route::get('lista/{viagem}'     , 'Report\ListaController@index')->where('viagem', '[0-9]+');;
+    });    
+
 });
 
 Auth::routes();

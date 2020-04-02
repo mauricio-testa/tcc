@@ -41,6 +41,7 @@
                 <v-icon @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
                 <v-icon @click="listPassageiros(item)" class="mr-2" >mdi-view-list</v-icon>
                 <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
+                <v-icon @click="exportList(item.id)">mdi-printer-pos</v-icon>
             </template>
         </v-data-table>
 
@@ -90,6 +91,7 @@
             dialogList: false,
             loading: true,
             formValid: true,
+            popupParams: null,
 
             // table column names
             headers: [
@@ -130,6 +132,12 @@
         mounted() {
 
             this.getItems();
+
+            // define parametros de abertura do popup de exportação da lista
+            let windowWidth = window.innerWidth - 200;
+            let windowHeight = window.innerHeight - 200;
+            let left = (window.innerWidth / 2) - (windowWidth / 2)
+            this.popupParams = `width=${windowWidth}, height=${windowHeight}, top=50, left=${left}`;
 
         },
 
@@ -260,6 +268,13 @@
             onPageChange: function () {
                 this.getItems();
             },
+
+            exportList: function(id) {
+                let popup = window.open('./relatorios/lista/'+id, 'Exportação de lista', this.popupParams);
+                if (!popup || popup.closed || typeof popup.closed=='undefined') { 
+                    window.open('./relatorios/lista/'+id, 'blank')
+                }
+            }
         }
     }
 </script>
