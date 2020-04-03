@@ -7,21 +7,27 @@
             <v-col cols="12" md="8">
                 Viagens
                 <v-btn class="ml-4" fab dark small color="primary" @click="addNew">
-                <v-icon dark>mdi-plus</v-icon>
+                    <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="4" class="d-flex align-center">
                 <v-form @submit.prevent="search()">
-                <v-text-field 
-                    v-model="searchWord" 
-                    :prepend-icon="'mdi-magnify'"
-                    @click:clear="resetSearch()"
-                    :hint="'Digite sua busca e tecle Enter!'"
-                    label="Pesquisar"
-                    clearable
-                    >
-                </v-text-field>
+                    <v-text-field 
+                        v-model="searchWord" 
+                        :prepend-icon="'mdi-magnify'"
+                        @click:clear="resetSearch()"
+                        :hint="'Digite sua busca e tecle Enter!'"
+                        label="Pesquisar"
+                        clearable
+                        >
+                    </v-text-field>
                 </v-form>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                        <v-btn text class="ml-3" v-on="on"><v-icon dark>mdi-filter</v-icon></v-btn>
+                    </template>
+                    <span>Busca Avançada</span>
+                </v-tooltip>
             </v-col>
             </v-row>
         </v-card-title>
