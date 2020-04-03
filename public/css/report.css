@@ -2,7 +2,7 @@ body {
   background: #525659;
   font-family: Helvetica,Arial,sans-serif;
   font-size: 11pt;
-  color: #333;
+  color: black;
   -webkit-print-color-adjust: exact;
 }
 
@@ -10,6 +10,7 @@ body h1,
 body h2 {
   line-height: 1.4;
   margin: 0;
+  color: #444;
 }
 
 body h1 {
@@ -27,7 +28,8 @@ body span {
 
 body .wrapper {
   width: 210mm;
-  height: 297mm;
+  height: auto;
+  min-height: calc(100vh - 48px);
   margin: 24px auto;
   background: #fff;
   -webkit-box-shadow: 0px 0px 4px 2px #1a1a1a9e;
@@ -78,6 +80,7 @@ body .wrapper .content .header div {
 
 body .wrapper .content .header div img {
   width: 100px;
+  opacity: .4;
 }
 
 body .wrapper .content .infos {
@@ -86,7 +89,7 @@ body .wrapper .content .infos {
   display: flex;
   font-weight: bold;
   font-size: 12pt;
-  color: #555;
+  color: #444;
   line-height: 1.4;
 }
 
@@ -124,9 +127,13 @@ body .wrapper .content th,
 body .wrapper .content td,
 body .wrapper .content thead,
 body .wrapper .content table {
-  border: 0.01em solid #aaa;
+  border: 0.01em solid #ccc;
   border-collapse: collapse;
   padding: 6px 4px;
+}
+
+body .wrapper .content td {
+  font-size: 10.8pt;
 }
 
 body .wrapper .content table .acompanhante {
@@ -137,6 +144,41 @@ body .wrapper .content .observacoes {
   background: #ffe016;
   padding: 20px;
   margin-top: 30px;
-  color: black;
+  line-height: 1.4;
+}
+
+body .wrapper .content footer {
+  font-size: 10pt;
+  font: small-caption;
+  text-align: right;
+  color: #999999;
+  margin: 2px;
+}
+
+body .wrapper .content button {
+  border: unset;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  font-size: 3rem;
+  background: #F44336;
+  color: #fff;
+  position: absolute;
+  right: 4vw;
+  cursor: pointer;
+  bottom: 4vh;
+  -webkit-box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+          box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+}
+
+body .wrapper .content button:hover {
+  -webkit-box-shadow: 0px 1px 18px 0px rgba(0, 0, 0, 0.32);
+          box-shadow: 0px 1px 18px 0px rgba(0, 0, 0, 0.32);
+}
+
+@media print {
+  body .wrapper .content button {
+    display: none;
+  }
 }
 

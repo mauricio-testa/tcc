@@ -3,39 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SIMTRAP | Exportação de lista de viagem</title>
     <link href="{{ asset('css/report.css') }}" rel="stylesheet">
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="wrapper">
         <div class="content">
+
             <div class="header">
                 <div>
-                    <img src="https://estado.rs.gov.br/upload/recortes/201707/20075647_1210628_GDO.jpg" alt="">
+                    <img src="{{url('/images/unidades/'.$unidade->id.'.png')}}" alt="Logo da Unidade">
                 </div>
                 <div>
                     <h1>LISTA DE VIAGEM #{{ $viagem->id }}</h1>
                     <h2>{{ $unidade->descricao }}</h2>
-                    <h2>{{ $unidade->nome}}</h2>
+                    <h2>{{ $unidade->nome}} - {{ $unidade->uf}}</h2>
                 </div>
                 <div>
-                    <img src="https://estado.rs.gov.br/upload/recortes/201707/20075647_1210628_GDO.jpg" alt="">
+                <img src="{{url('/images/unidades/'.$unidade->id.'.png')}}" alt="Logo da Unidade">
                 </div>
             </div>
 
             <div class="infos">
                 <ul>
                     <li><span>Data: </span>{{ $viagem->data_formated }}</li>
-                    <li><span>Horário de saída: </span>{{ $viagem->hora_saida }}</li>
+                    <li><span>Horário de saída: </span>{{ date('H:i', strtotime($viagem->hora_saida)) }}</li>
                     <li><span>Destino: </span>{{ $viagem->municipio_nome }}</li>
                 </ul>
                 <ul>
                     <li><span>Motorista: </span>{{ $viagem->motorista_nome }}</li>
                     <li><span>Veículo: </span>{{ $viagem->veiculo }}</li>
-                    <li><span>Passageiros: </span>{{ sizeof($lista)}} para {{ $viagem->lotacao }} lugares</li>
+                    <li><span>Passageiros: </span>{{ sizeof($lista)}} ({{ $viagem->lotacao }} lugares)</li>
                 </ul>
             </div>
-
 
             <table border="1" width="100%" cellspacing=0 cellpadding=8>
                 <thead>
@@ -52,7 +54,6 @@
                 </thead>
                 <tbody>
                 @foreach ($lista as $passageiro)
-
                     @if ($passageiro->acompanhante)
                         <tr>
                             <td>{{ $passageiro->nome }}</td>
@@ -69,16 +70,25 @@
                             <td>{{ $passageiro->consulta_medico }}</td>
                         </tr>
                     @endif
-                    
                 @endforeach
-                    
                 </tbody>
             </table>
 
+            <footer>
+                Gerado em <?php echo  date('d/m/Y', strtotime(date("Y-m-d")))?> a partir do sistema SIMTRAP
+            </footer>
+
+            @if ($viagem->observacao)
             <div class="observacoes">
-                Observações:
-                {{ $viagem->observacao }}
+                <b>Observações:</b><br>
+                {!! nl2br(e($viagem->observacao)) !!}
             </div>
+            @endif
+
+            <button onclick="javascrpit:window.print()">
+                <i class="mdi mdi-printer-pos"></i>
+            </button>
+
         </div>
     </div>
     
