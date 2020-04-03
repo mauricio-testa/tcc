@@ -27,30 +27,30 @@
                 </v-row>                        
             </v-card-title>
             <v-card-text>
-                <div class="mb-4">
-                    <v-chip class="ma-2" color="indigo darken-3" outlined>
+                <div class="mt-2 mb-8">
+                    <v-chip class="mr-2" color="indigo darken-3" outlined>
                         <v-icon left>mdi-calendar-range</v-icon>
                         {{viagem.data_formated}}
                     </v-chip>
-                    <v-chip class="ma-2" color="deep-purple accent-4" outlined>
+                    <v-chip class="mr-2" color="deep-purple accent-4" outlined :title="viagem.municipio_nome">
                         <v-icon left>mdi-map-marker</v-icon>
-                        {{viagem.municipio_nome}}
+                        {{viagem.municipio_nome | substring}}
                     </v-chip>
-                    <v-chip class="ma-2" color="primary" outlined >
+                    <v-chip class="mr-2" color="primary" outlined :title="viagem.veiculo_nome">
                         <v-icon left>mdi-ambulance</v-icon>
-                        {{viagem.veiculo_nome}} 
+                        {{viagem.veiculo_nome | substring}} 
                     </v-chip>                    
-                    <v-chip v-if="vagasDisponiveis > 0" class="ma-2" color="success" outlined>
+                    <v-chip v-if="vagasDisponiveis > 0" class="mr-2" color="success" outlined>
                         <v-icon left>mdi-account-group</v-icon>
                         {{ vagasDisponiveis }} vagas
                     </v-chip>
-                    <v-chip v-else class="ma-2" color="error" dark>
+                    <v-chip v-else class="mr-2" color="error" dark>
                         <v-icon left>mdi-alert-circle</v-icon>
                         Lotado!
                     </v-chip>
-                    <v-chip dark @click="editViagem">
-                        <v-icon>mdi-pencil</v-icon>
-                    </v-chip>
+                    <v-btn text @click="editViagem">
+                        <v-icon dark>mdi-pencil</v-icon>
+                    </v-btn>
                 </div>
                 <v-data-table
                     :headers="headers"
@@ -409,6 +409,21 @@
             dialogList: function(val) {
                 if (val) this.initialize();
             },
+
+            precisaAcompanhante: function(val) {
+                if (!val) {
+                    this.selectedPassageiro.acompanhante_rg = null;
+                    this.selectedPassageiro.acompanhante_nome = null;
+                }
+            }
         },
+
+        filters: {
+            substring (str) {
+                let size = 14;
+                if (str == null) return;
+                return str.length > size ? str.substr(0, size)+'...' : str;
+            }
+        }
     }
 </script>

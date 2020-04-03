@@ -10,7 +10,7 @@
                     <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
             </v-col>
-            <v-col cols="12" md="4" class="d-flex align-center">
+            <v-col cols="12" md="4" class="d-flex align-center justify-end">
                 <v-form @submit.prevent="search()">
                     <v-text-field 
                         v-model="searchWord" 
@@ -155,7 +155,7 @@
             let page      = vm.pagination.current;
             let urlFetch  = this.api+'?page='+page;
 
-            // if(vm.searchWord != null && vm.searchWord != '') urlFetch+= '&search='+vm.searchWord;
+            if (vm.searchWord != null && vm.searchWord != '') urlFetch+= '&search='+vm.searchWord;
 
             vm.loading = true;
 
