@@ -137,7 +137,7 @@
             searchWord: null,
         }),
 
-        mounted() {
+        mounted () {
 
             this.getItems();
 
@@ -187,8 +187,20 @@
             */
            
             callback: async function (id) {
+                
                 await this.getItems();
-                if (!id) return;
+
+                // se estiver editando e Lista.vue está aberto, recarrega as informações da viagem 
+                // porque se o usuário editar veículo vai afetar o controle de vagas disponíveis / lotação
+                if (!id) {
+                    if (this.dialogList) {
+                        this.selectedViagem = this.viagens.find(
+                            (viagem) => viagem.id == this.selectedViagem.id
+                        )
+                    }
+                    return;
+                }
+
                 // se estiver inserindo, após inserir abre a tela de edição de passageiros
                 let inserted = this.viagens.find((viagem) => viagem.id == id);
                 if (typeof inserted === "object") {
