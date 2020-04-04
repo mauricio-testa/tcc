@@ -114,10 +114,25 @@
                             :rules="[v => !!v || 'Horário é obrigatório']"
                         ></v-text-field>
                         <v-text-field label="Médico" v-model="selectedPassageiro.consulta_medico"></v-text-field>
-                        <v-switch
+
+                        <v-tooltip right v-if="!precisaAcompanhanteOriginal && vagasDisponiveis == 0">
+                            <template v-slot:activator="{ on }">
+                                <div v-on="on" style="display: inline-block">
+                                    <v-switch 
+                                        v-model="precisaAcompanhante"
+                                        label="Precisa acompanhante?"
+                                        disabled
+                                    ></v-switch>
+                                </div>
+                            </template>
+                            <span>Você não pode adicionar<br> acompanhante a este paciente <br>porque o veículo já está lotado!</span>
+                        </v-tooltip>
+                        <v-switch 
+                            v-else
                             v-model="precisaAcompanhante"
                             label="Precisa acompanhante?"
                         ></v-switch>
+
                         <v-text-field 
                             v-if="precisaAcompanhante" 
                             v-model="selectedPassageiro.acompanhante_nome" 
@@ -198,6 +213,7 @@
             precisaAcompanhante: false,
             formPassageiroValid: false,
             timeoutId: null,
+            precisaAcompanhanteOriginal: false,
 
             // CRUD variables
             searchPacientes: null,
@@ -359,6 +375,7 @@
             addNewPassageiro: function () {
                 this.selectedPassageiroIndex = -1;
                 this.precisaAcompanhante = false;
+                this.precisaAcompanhanteOriginal = false;
                 this.selectedPassageiro = Object.assign({}, this.defaultPassageiro);
                 this.resetPassageiroEditValidation();
                 this.dialogEditPassageiro = true;
@@ -369,6 +386,8 @@
                 this.selectedPassageiroIndex = this.lista.indexOf(item);
                 this.selectedPassageiro = Object.assign({}, item);
                 this.precisaAcompanhante = item.acompanhante_nome != null && item.acompanhante_nome != '';
+                // variavel pra nao permitir ativação de acompanhante se a lista está cheia
+                this.precisaAcompanhanteOriginal = this.precisaAcompanhante;
                 this.resetPassageiroEditValidation();
                 this.lookupPacientes.push({id: item.id_paciente, nome: item.paciente_nome})
                 this.dialogEditPassageiro = true;
