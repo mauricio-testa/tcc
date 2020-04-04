@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\ViewViagem;
+use Illuminate\Support\Facades\DB;
 
 class Viagem extends Model
 {
@@ -38,5 +39,19 @@ class Viagem extends Model
         } else {
             return $query->paginate(config('constants.default_pagination_size'));
         }
+    }
+
+
+    public static function canUpdateVeiculoTo($newVeiculo, $idViagem) {
+
+        $query = self::select('viagens.id', 
+                DB::raw("(SELECT count(*) FROM lista WHERE id_viagem = $idViagem) AS passageiros"),
+                DB::raw("(SELECT count(*) FROM lista WHERE id_viagem = $idViagem AND acompanhante_nome IS NOT NULL) AS acompanhantes"),
+                DB::raw("(SELECT lotacao FROM veiculos WHERE id = $newVeiculo) AS lotacao"));
+
+        $result = $query->first();
+
+        return $result->lotacao >= ($result->passageiros + $result->acompanhantes);
+
     }
 }

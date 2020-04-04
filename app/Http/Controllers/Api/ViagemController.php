@@ -16,8 +16,10 @@ class ViagemController extends Controller
     public function index(Request $request)
     {
         try {
+
             if (empty($request->search)) {
                 return Viagem::getViagem(Auth::user()->id_unidade);
+
             } else {
                 // aqui é google papai \o/
                 $like = '%'.$request->search.'%';
@@ -28,6 +30,7 @@ class ViagemController extends Controller
                             ->orWhere('data_formated', '=' , $request->search);
                 return $query->paginate(config('constants.default_pagination_size'));
             }
+
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => ErrorInterpreter::getMessage($th)
@@ -38,10 +41,14 @@ class ViagemController extends Controller
     public function store(Request $request)
     {
         try {
+
             $viagem = $request->all();
             $viagem['id_unidade'] = Auth::user()->id_unidade;
             $last_id = Viagem::insertGetId($viagem);
+
+            // retorna o id inserido para abrir automaticamente modal de lista
             return response()->json(['id' => $last_id]);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => ErrorInterpreter::getMessage($th)
@@ -53,9 +60,16 @@ class ViagemController extends Controller
     public function update(Request $request, $id)
     {
         try {
+
             $viagem = Viagem::findOrFail($id);
             $viagem->updated_at = Carbon::now();
+
+            // se mudar de veiculo, verifica se possui vagas suficientes
+            if (!Viagem::canUpdateVeiculoTo($request->id_veiculo, $id))
+            throw new \Exception("Este veículo não tem vagas suficientes par o número de passageiros cadastrados nesta lista!");
+
             $viagem->update($request->all());
+
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => ErrorInterpreter::getMessage($th)
