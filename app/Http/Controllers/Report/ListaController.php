@@ -13,7 +13,7 @@ class ListaController extends Controller
     public function index(Request $request)
     {
         $lista   = ViewLista::where('id_viagem', $request->viagem)->get();
-        $viagem  = Viagem::getViagem(null, $request->viagem);
+        $viagem  = Viagem::getViagem(null, [['id', '=', $request->viagem]], true);
         $unidade = Unidade::where('id', $viagem->id_unidade)->leftJoin('municipios as m', 'unidades.id_municipio','=', 'm.codigo')->first();
 
         return view('report.lista', [
