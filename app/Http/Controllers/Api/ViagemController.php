@@ -8,14 +8,26 @@ use App\Viagem;
 use App\Http\Controllers\Helpers\ErrorInterpreter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
+use App\ViewViagem;
 
 class ViagemController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            return Viagem::getViagem(Auth::user()->id_unidade);
+            if (empty($request->search)) {
+                return Viagem::getViagem(Auth::user()->id_unidade);
+            } else {
+                // aqui é google papai \o/
+                $like = '%'.$request->search.'%';
+                $query = ViewViagem::where('municipio_nome', 'LIKE', $like)
+                            ->orWhere('veiculo', 'LIKE', $like)
+                            ->orWhere('motorista_nome', 'LIKE', $like)
+                            ->orWhere('observacao', 'LIKE', $like)
+                            ->orWhere('data_formated', '=' , $request->search);
+                return $query->paginate(config('constants.default_pagination_size'));
+            }
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => ErrorInterpreter::getMessage($th)

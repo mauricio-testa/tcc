@@ -4,30 +4,32 @@
         <!-- table header -->
         <v-card-title>
             <v-row>
-            <v-col cols="12" md="8">
+            <v-col cols="12" md="7">
                 Viagens
                 <v-btn class="ml-4" fab dark small color="primary" @click="addNew">
                     <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
             </v-col>
-            <v-col cols="12" md="4" class="d-flex align-center justify-end">
-                <v-form @submit.prevent="search()">
+            <v-col cols="12" md="5" class="d-flex align-center justify-end">
+                <v-form @submit.prevent="search()" style="width: 100%">
                     <v-text-field 
                         v-model="searchWord" 
                         :prepend-icon="'mdi-magnify'"
                         @click:clear="resetSearch()"
-                        :hint="'Digite sua busca e tecle Enter!'"
+                        hint="Pesquise por município, motorista, veículo, data, observação..."
                         label="Pesquisar"
                         clearable
                         >
                     </v-text-field>
                 </v-form>
+                <!--
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
                         <v-btn text class="ml-3" v-on="on"><v-icon dark>mdi-filter</v-icon></v-btn>
                     </template>
                     <span>Busca Avançada</span>
                 </v-tooltip>
+                -->
             </v-col>
             </v-row>
         </v-card-title>
