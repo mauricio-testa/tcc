@@ -16,12 +16,17 @@ class VeiculoController extends Controller
     public function index(Request $request)
     {
         try {
+            
             $query = Veiculo::where('id_unidade', '=', Auth::user()->id_unidade);
+            $limit = config('constants.default_pagination_size');
 
             if(!empty($request->search))
             $query->where('descricao', 'like', '%'.$request->search.'%');
 
-            return $query->paginate(config('constants.default_pagination_size'));
+            if(!empty($request->limit))
+            $limit = $request->limit;
+
+            return $query->paginate($limit);
 
         } catch (\Throwable $th) {
             return response()->json([

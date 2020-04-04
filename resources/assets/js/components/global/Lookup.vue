@@ -3,20 +3,29 @@
 
 <script>
     export default {
+        
+        data: () => ({
+
+            lookupLimit: 500
+        
+        }),
+
         methods: { 
-            
+
             getLookup (dataset, search) {
 
                 let api = null;
-                let vm = this;
+                let vm  = this;
+                let qs  = '?limit='+this.lookupLimit;
+                qs += typeof search == 'undefined' || search == null ? '' : '&search='+search;              
 
                 if (dataset == 'VEICULO')   api = window.__routes.api.veiculo;
                 if (dataset == 'MOTORISTA') api = window.__routes.api.motorista;
                 if (dataset == 'MUNICIPIO') api = window.__routes.api.municipio;
-                if (dataset == 'PACIENTE')  api = window.__routes.api.paciente+'?search='+search
+                if (dataset == 'PACIENTE')  api = window.__routes.api.paciente;
 
                 axios
-                    .get(api)
+                    .get(api+qs)
                     .then(function(response) {
                         console.log('response', response)
                         if (response.data.error) {

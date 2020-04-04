@@ -15,7 +15,7 @@ class PacienteController extends Controller
     public function index(Request $request)
     {
         try {
-            $query = Paciente::where('id_unidade', '=', Auth::user()->id_unidade);
+            $query = Paciente::where('id_unidade', Auth::user()->id_unidade);
 
             if(!empty($request->search))
             $query->where('nome', 'like', '%'.$request->search.'%');

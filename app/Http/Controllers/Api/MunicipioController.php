@@ -10,10 +10,16 @@ use App\Municipio;
 class MunicipioController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            return Municipio::where('uf', '=', 'RS')->paginate(500);
+
+            $limit = config('constants.default_pagination_size');
+
+            if(!empty($request->limit))
+            $limit = $request->limit;
+
+            return Municipio::where('uf', 'RS')->paginate($request->limit);
             
             // 500 é o número máximo de município que os 3 estados do sul tem
             // Se o sistema for pra fora do RS, basta alterar RS pela UF da unidade

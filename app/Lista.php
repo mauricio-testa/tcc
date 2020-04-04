@@ -16,7 +16,7 @@ class Lista extends Model
     public static function getViagemList($id_viagem) {
         return self::select ('lista.*', 'pa.nome as paciente_nome')
             ->leftJoin('pacientes as pa', 'pa.id', '=','lista.id_paciente')            
-            ->where('lista.id_viagem', '=', $id_viagem)
+            ->where('lista.id_viagem', $id_viagem)
             ->get();
     }
 }

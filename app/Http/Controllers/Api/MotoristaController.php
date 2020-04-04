@@ -16,12 +16,17 @@ class MotoristaController extends Controller
     public function index(Request $request)
     {
         try {
+            
             $query = Motorista::where('id_unidade', '=', Auth::user()->id_unidade);
+            $limit = config('constants.default_pagination_size');
 
             if(!empty($request->search))
             $query->where('nome', 'like', '%'.$request->search.'%');
 
-            return $query->paginate(config('constants.default_pagination_size'));
+            if(!empty($request->limit))
+            $limit = $request->limit;
+
+            return $query->paginate($limit);
 
         } catch (\Throwable $th) {
             return response()->json([

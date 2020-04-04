@@ -13,7 +13,6 @@
                                 v-model="viagem.cod_destino"
                                 :items="lookupMunicipios"
                                 :loading="isLoading.lookupMunicipios"
-                                :search-input.sync="searchMunicipios"
                                 item-text="nome"
                                 item-value="codigo"
                                 label="Qual o destino da viagem?"
@@ -23,7 +22,6 @@
                                 v-model="viagem.id_veiculo"
                                 :items="lookupVeiculos"
                                 :loading="isLoading.lookupVeiculos"
-                                :search-input.sync="searchVeiculos"
                                 item-text="descricao"
                                 item-value="id"
                                 label="Qual veículo será utilizado?"
@@ -33,7 +31,6 @@
                                 v-model="viagem.id_motorista"
                                 :items="lookupMotoristas"
                                 :loading="isLoading.lookupMotoristas"
-                                :search-input.sync="searchMotoristas"
                                 item-text="nome"
                                 item-value="id"
                                 label="Quem será o motorista?"
@@ -71,7 +68,6 @@
                 </v-card>
             </v-form>
 
-
     </v-dialog>
 
     <lookup ref="lookupComponent" v-on:updateLookup="updateLookup"></lookup>
@@ -104,11 +100,6 @@
             lookupVeiculos: [],
             lookupMunicipios: [],
             lookupMotoristas: [],
-
-            searchLista: null,
-            searchVeiculos: null,
-            searchMunicipios: null,
-            searchMotoristas: null,
             
             formViagemValid: false,
 
@@ -122,21 +113,6 @@
                 if (val) this.initialize();
             },
 
-            searchVeiculos (val) {
-                if (this.lookupVeiculos.length > 1 || this.isLoading.lookupVeiculos) return
-                this.isLoading.lookupVeiculos= true
-                this.$refs.lookupComponent.getLookup('VEICULO');
-            },
-            searchMotoristas(val) {
-                if (this.lookupMotoristas.length > 1 || this.isLoading.lookupMotoristas) return
-                this.isLoading.lookupMotoristas = true
-                this.$refs.lookupComponent.getLookup('MOTORISTA');
-            },
-            searchMunicipios(val) {
-                if (this.lookupMunicipios.length > 1 || this.isLoading.lookupMunicipios) return
-                this.isLoading.lookupMunicipios = true
-                this.$refs.lookupComponent.getLookup('MUNICIPIO');
-            }
         },
 
         methods: { 
@@ -209,24 +185,30 @@
             },
 
             initialize: function () {
-                // fill veiculo field
-                this.lookupVeiculos.id = this.viagem.id_veiculo
-                this.searchVeiculos = this.viagem.veiculo_nome
 
-                // fill veiculo field
-                this.lookupMunicipios.codigo = this.viagem.cod_destino
-                this.searchMunicipios = this.viagem.municipio_nome
+                if (this.lookupVeiculos.length == 0) {
+                    this.isLoading.lookupVeiculos = true
+                    this.$refs.lookupComponent.getLookup('VEICULO');
+                }
+                if (this.lookupMunicipios.length == 0) {
+                    this.isLoading.lookupMunicipios = true
+                    this.$refs.lookupComponent.getLookup('MOTORISTA');
+                }
+                if (this.lookupMunicipios.length == 0) {
+                    this.isLoading.lookupMunicipios = true
+                    this.$refs.lookupComponent.getLookup('MUNICIPIO');
+                }
 
-                // fill veiculo field
-                this.lookupMotoristas.id = this.viagem.id_motorista
-                this.searchMotoristas = this.viagem.motorista_nome
-
+                this.lookupMotoristas.id        = this.viagem.id_motorista
+                this.lookupVeiculos.id          = this.viagem.id_veiculo
+                this.lookupMunicipios.codigo    = this.viagem.cod_destino
+                
                 this.resetViagemEditValidation();
 
             },
 
             resetViagemEditValidation: function () {
-                if(typeof this.$refs.formEditViagem != "undefined") this.$refs.formEditViagem.resetValidation();
+                if (typeof this.$refs.formEditViagem != "undefined") this.$refs.formEditViagem.resetValidation();
             },
         }
     }
