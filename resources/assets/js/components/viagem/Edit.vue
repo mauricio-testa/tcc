@@ -132,7 +132,7 @@
                     .put(this.$parent.api+'/'+this.viagem.id, vm.viagem)
                     .then(function(response){
                         if(response.data.error) {
-                            vm.$toast.error('Erro ao editar: '+response.data.error)
+                            vm.$toast.error(response.data.error)
                         }
                         else {
                             vm.close()
