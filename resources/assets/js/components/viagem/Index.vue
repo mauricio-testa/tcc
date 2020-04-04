@@ -4,13 +4,13 @@
         <!-- table header -->
         <v-card-title>
             <v-row>
-            <v-col cols="12" md="7">
+            <v-col cols="12" md="8">
                 Viagens
                 <v-btn class="ml-4" fab dark small color="primary" @click="addNew">
                     <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
             </v-col>
-            <v-col cols="12" md="5" class="d-flex align-center justify-end">
+            <v-col cols="12" md="4" class="d-flex align-center justify-end">
                 <v-form @submit.prevent="search()" style="width: 100%">
                     <v-text-field 
                         v-model="searchWord" 
