@@ -20,7 +20,7 @@ class CreateViagemsTable extends Migration
             $table->unsignedInteger('id_motorista');
             $table->integer('cod_destino');
             $table->date('data_viagem')->nullable(false);
-            $table->time('hora_saida');
+            $table->time('hora_saida')->nullable();
             $table->string('observacao', 240)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();

@@ -112,7 +112,6 @@
                             type="time"
                             label="Horário da consulta" 
                             v-model="selectedPassageiro.consulta_hora"
-                            :rules="[v => !!v || 'Horário é obrigatório']"
                         ></v-text-field>
                         <v-text-field label="Médico" v-model="selectedPassageiro.consulta_medico"></v-text-field>
 

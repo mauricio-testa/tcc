@@ -19,7 +19,7 @@ class CreateListasTable extends Migration
             $table->decimal('acompanhante_rg', 10, 0)->nullable();
             $table->string('acompanhante_nome', 240)->nullable();
             $table->string('consulta_local', 240);
-            $table->time('consulta_hora');
+            $table->time('consulta_hora')->nullable();
             $table->string('consulta_medico', 240)->nullable();
             
             $table->timestamp('created_at')->useCurrent();
