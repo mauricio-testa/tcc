@@ -63,7 +63,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="red darken-1" text @click="close">Cancelar</v-btn>
-                        <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
+                        <v-btn color="blue darken-1" text :loading="loadingEdit" @click="save">Salvar</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-form>
@@ -91,6 +91,7 @@
 
         data: () => ({
 
+            loadingEdit: false,
             isLoading: {
                 lookupVeiculos: false,
                 lookupMunicipios: false,
@@ -125,8 +126,10 @@
             save: function () {
 
                 if (!this.$refs.formEditViagem.validate()) return;
-                let vm = this;
                 
+                let vm = this;
+                vm.loadingEdit = true;
+
                 if (this.viagem.id != null) {
                     axios
                     .put(this.$parent.api+'/'+this.viagem.id, vm.viagem)
@@ -140,6 +143,7 @@
                             vm.$toast.success('Viagem salva com sucesso!')
                         }
                     })
+                    .finally(() => vm.loadingEdit = false)
 
                 } else {
                     axios
@@ -161,6 +165,7 @@
                             vm.$toast.success('Viagem cadastrada com sucesso!')
                         }
                     })
+                    .finally(() => vm.loadingEdit = false)
                 }
             },
 
