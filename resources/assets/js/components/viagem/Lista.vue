@@ -10,6 +10,7 @@
 
                     Lista de Passageiros
 
+                    <!-- @RULE: desabilita botão adicionar se o veículo está lotado -->
                     <v-tooltip right v-if="vagasDisponiveis == 0">
                         <template v-slot:activator="{ on }">
                             <div v-on="on" style="display: inline-block">
@@ -91,7 +92,7 @@
                         <v-autocomplete
                             v-model="selectedPassageiro.id_paciente"
                             :items="lookupPacientes"
-                            :loading="loadingPacientes"
+                            :loading="loadingLookup"
                             :search-input.sync="searchPacientes"
                             item-text="nome"
                             item-value="id"
@@ -99,7 +100,7 @@
                             :disabled="selectedPassageiroIndex > -1"
                             :rules="[v => !!v || 'Obrigatório!']"
                             no-data-text="Digite algo para pesquisar..."
-                            @keypress="search"
+                            @keyup="search"
                         ></v-autocomplete>
 
                         <v-text-field 
@@ -115,6 +116,7 @@
                         ></v-text-field>
                         <v-text-field label="Médico" v-model="selectedPassageiro.consulta_medico"></v-text-field>
 
+                        <!-- @RULE: não deixa adicionar acompanhante na edição se o veículo está lotado -->
                         <v-tooltip right v-if="!precisaAcompanhanteOriginal && vagasDisponiveis == 0">
                             <template v-slot:activator="{ on }">
                                 <div v-on="on" style="display: inline-block">
@@ -150,7 +152,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="red darken-1" text @click="closeDialogPassageiro">Cancelar</v-btn>
-                    <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
+                    <v-btn color="blue darken-1" :loading="loadingEdit" text @click="save">Salvar</v-btn>
                 </v-card-actions>
             </v-card>
         </v-form>
@@ -164,7 +166,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialogDeletePassageiro = false">Cancelar</v-btn>
-                <v-btn color="red darken-1" text @click="deletePassageiro(selectedPassageiroIndex, true)">Excluir</v-btn>
+                <v-btn color="red darken-1" :loading="loadingDelete" text @click="deletePassageiro(selectedPassageiroIndex, true)">Excluir</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -207,7 +209,10 @@
 
             // state of elements
             loading: false,
-            loadingPacientes: false,
+            loadingLookup: false,
+            loadingEdit: false,
+            loadingDelete: false,
+
             dialogEditPassageiro: false,
             dialogDeletePassageiro: false,
             precisaAcompanhante: false,
@@ -243,7 +248,7 @@
             search () {
                 // pra não pesquisar se está disable
                 if (this.selectedPassageiroIndex > -1) return
-                if (this.searchPacientes == null) return
+                if (this.searchPacientes == null || this.searchPacientes == '') return
                 this._debounce();
             },
 
@@ -279,7 +284,8 @@
                 }
                 
                 let vm = this;
-                
+                vm.loadingDelete = true;
+
                 axios
                     .delete(vm.api+'/'+vm.selectedPassageiro.id_paciente, {
                         data: {"viagem": vm.selectedPassageiro.id_viagem}, 
@@ -292,9 +298,10 @@
                         else {
                             vm.$toast.success('Passageiro deletado com sucesso!')
                             vm.lista.splice(vm.selectedPassageiroIndex, 1);
+                            vm.dialogDeletePassageiro = false
                         }
                     })
-                    .finally(() => vm.dialogDeletePassageiro = false);
+                    .finally(() => vm.loadingDelete = false);
             },
 
             /*
@@ -304,8 +311,17 @@
 
             save: function () {
 
+                // @RULE: se estiver inserindo e só tem espaço para o paciente, da erro ao ativar acompanhante
+                if (this.selectedPassageiroIndex == -1 && this.vagasDisponiveis == 1 && this.precisaAcompanhante) {
+                    this.$toast.warning('Existe apenas uma vaga disponível neste veículo. \n Não há lugar para acompanhante.')
+                    return;
+                }
+
+                // validação regras do formulário
                 if (!this.$refs.formEditPassageiro.validate()) return;
+                
                 let vm = this;
+                vm.loadingEdit = true;
 
                 if (vm.selectedPassageiroIndex > -1) {
                     axios
@@ -320,6 +336,7 @@
                             vm.$toast.success('Passageiro salvo com sucesso!')
                         }
                     })
+                    .finally(() => vm.loadingEdit = false)
 
                 } else {
                     axios
@@ -342,6 +359,7 @@
                             vm.$toast.success('Passageiro cadastrado com sucesso!')
                         }
                     })
+                    .finally(() => vm.loadingEdit = false)
                 }
             },
 
@@ -354,8 +372,6 @@
             },
 
             closeDialogPassageiro () {
-                // fica com length == 1 quando edita 
-                if (this.lookupPacientes.length <= 2) this.lookupPacientes = []
                 this.dialogEditPassageiro = false;
             },
 
@@ -377,6 +393,7 @@
                 this.precisaAcompanhante = false;
                 this.precisaAcompanhanteOriginal = false;
                 this.selectedPassageiro = Object.assign({}, this.defaultPassageiro);
+                this.lookupPacientes = [];
                 this.resetPassageiroEditValidation();
                 this.dialogEditPassageiro = true;
             },
@@ -401,12 +418,12 @@
             // callback da busca de lookup
             updateLookup (datasetName, dataArray) {
                 this.lookupPacientes = dataArray;
-                this.loadingPacientes = false;
+                this.loadingLookup = false;
             },
 
             // isso serve pra não fazer request a cada letra digitada, mas sim, após um tempo sem digitar
             _debounce(){
-                this.loadingPacientes = true;
+                this.loadingLookup = true;
                 if (this.timeoutId !== null) {
                     clearTimeout(this.timeoutId);
                 }
