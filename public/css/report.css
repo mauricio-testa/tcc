@@ -163,7 +163,7 @@ body .wrapper .content button {
   font-size: 3rem;
   background: #F44336;
   color: #fff;
-  position: absolute;
+  position: fixed;
   right: 4vw;
   cursor: pointer;
   bottom: 4vh;
