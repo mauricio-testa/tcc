@@ -2,6 +2,6 @@
 
 @section('content')
 
-<viagens></viagens>
+<viagens :default_date="{{ json_encode(date('Y-m-d'))}}"  ></viagens>
 
 @endsection

@@ -86,7 +86,9 @@
 <script>
 
     export default {
-    
+        
+        props: ['default_date'],
+
         data: () => ({
             
             // main data
@@ -143,6 +145,8 @@
         mounted () {
 
             this.getItems();
+
+            this.defaultItem.data_viagem = this.default_date;
 
             // define parametros de abertura do popup de exportação da lista
             let windowWidth = window.innerWidth - 200;
