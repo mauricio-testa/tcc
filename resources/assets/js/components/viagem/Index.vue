@@ -78,7 +78,7 @@
 
         <!-- dialog edit / new -->
         <viagem-edit :viagem="selectedViagem" :dialogEdit.sync="dialogEdit" v-on:callback="callback"></viagem-edit>
-        <viagem-list :viagem="selectedViagem" :dialogList.sync="dialogList" v-on:editViagem="dialogEdit = true"></viagem-list>
+        <viagem-list :viagem="selectedViagem" :dialogList.sync="dialogList" v-on:editViagem="dialogEdit = true" v-on:export="exportList"></viagem-list>
 
     </div>
 </template>
@@ -150,7 +150,7 @@
 
             // define parametros de abertura do popup de exportação da lista
             let windowWidth = window.innerWidth - 200;
-            let windowHeight = window.innerHeight - 200;
+            let windowHeight = window.innerHeight - 100;
             let left = (window.innerWidth / 2) - (windowWidth / 2)
             this.popupParams = `width=${windowWidth}, height=${windowHeight}, top=50, left=${left}`;
 

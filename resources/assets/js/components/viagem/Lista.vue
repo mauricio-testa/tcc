@@ -28,7 +28,7 @@
                 </v-row>                        
             </v-card-title>
             <v-card-text>
-                <div class="mt-2 mb-8">
+                <div class="d-flex mt-2 mb-8 pr-8">
                     <v-chip class="mr-2" color="indigo darken-3" outlined>
                         <v-icon left>mdi-calendar-range</v-icon>
                         {{viagem.data_formated}}
@@ -49,9 +49,9 @@
                         <v-icon left>mdi-alert-circle</v-icon>
                         Lotado!
                     </v-chip>
-                    <v-btn text @click="editViagem">
-                        <v-icon dark>mdi-pencil</v-icon>
-                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-icon @click="editViagem" class="mr-2">mdi-pencil</v-icon>
+                    <v-icon @click="$emit('export', viagem.id)">mdi-printer-pos</v-icon>
                 </div>
                 <v-data-table
                     :headers="headers"
@@ -433,7 +433,7 @@
                 }
                 this.timeoutId = setTimeout( _ => {
                     this.getPacientesLookup();
-                }, 1400);
+                }, this.$debounceTime);
             },
         },
 

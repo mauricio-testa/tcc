@@ -307,7 +307,7 @@
                     })
                 .finally(function() {
                     vm.dialogDelete = false;
-                    vm.loading.delete = true;
+                    vm.loading.delete = false;
                 });
             },
 

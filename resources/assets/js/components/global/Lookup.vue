@@ -27,7 +27,7 @@
                 axios
                     .get(api+qs)
                     .then(function(response) {
-                        console.log('response', response)
+
                         if (response.data.error) {
                             console.log('error', response.data.error)
                             vm.$emit('updateLookup', dataset, []);
