@@ -38,7 +38,7 @@
                         {{viagem.municipio_nome | substring}}
                     </v-chip>
                     <v-chip class="mr-2" color="primary" outlined :title="viagem.veiculo_nome">
-                        <v-icon left>mdi-ambulance</v-icon>
+                        <v-icon left>mdi-car</v-icon>
                         {{viagem.veiculo_nome | substring}} 
                     </v-chip>                    
                     <v-chip v-if="vagasDisponiveis > 0" class="mr-2" color="success" outlined>
@@ -60,7 +60,7 @@
                     disable-sort
                     no-data-text="Nenhum paciente adicionado na lista ainda."
                     loading-text="Buscando dados..."
-                    :loading="loading"
+                    :loading="loading.list"
                 >
                     <template v-slot:item.acompanhante_nome="{ item }">
                         <v-icon color="green" text  v-if="item.acompanhante_nome != null">mdi-check</v-icon>
@@ -92,7 +92,7 @@
                         <v-autocomplete
                             v-model="selectedPassageiro.id_paciente"
                             :items="lookupPacientes"
-                            :loading="loadingLookup"
+                            :loading="loading.lookup"
                             :search-input.sync="searchPacientes"
                             item-text="nome"
                             item-value="id"
@@ -101,7 +101,11 @@
                             :rules="[v => !!v || 'Obrigatório!']"
                             no-data-text="Digite algo para pesquisar..."
                             @keyup="search"
-                        ></v-autocomplete>
+                            >
+                            <template v-slot:append-outer>
+                                <v-icon @click="$openBlank('/cadastros/pacientes')">mdi-plus</v-icon>
+                            </template>
+                            </v-autocomplete>
 
                         <v-text-field 
                             label="Local da Consulta" 
@@ -151,7 +155,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="red darken-1" text @click="closeDialogPassageiro">Cancelar</v-btn>
-                    <v-btn color="blue darken-1" :loading="loadingEdit" text @click="save">Salvar</v-btn>
+                    <v-btn color="blue darken-1" :loading="loading.edit" text @click="save">Salvar</v-btn>
                 </v-card-actions>
             </v-card>
         </v-form>
@@ -165,7 +169,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialogDeletePassageiro = false">Cancelar</v-btn>
-                <v-btn color="red darken-1" :loading="loadingDelete" text @click="deletePassageiro(selectedPassageiroIndex, true)">Excluir</v-btn>
+                <v-btn color="red darken-1" :loading="loading.delete" text @click="deletePassageiro(selectedPassageiroIndex, true)">Excluir</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -207,11 +211,12 @@
             ],
 
             // state of elements
-            loading: false,
-            loadingLookup: false,
-            loadingEdit: false,
-            loadingDelete: false,
-
+            loading: {
+                edit: false,
+                delete: false,
+                lookup: false,
+                list: false
+            },
             dialogEditPassageiro: false,
             dialogDeletePassageiro: false,
             precisaAcompanhante: false,
@@ -253,7 +258,7 @@
 
             getListaPassageiros () {
 
-                this.loading = true;
+                this.loading.list = true;
                 let vm = this;
 
                 axios
@@ -262,7 +267,7 @@
                     vm.lista = response.data
                 })
                 .catch((error) => console.log(error))
-                .finally(() => vm.loading = false)
+                .finally(() => vm.loading.list = false)
             },
 
             /*
@@ -283,7 +288,7 @@
                 }
                 
                 let vm = this;
-                vm.loadingDelete = true;
+                vm.loading.delete = true;
 
                 axios
                     .delete(vm.api+'/'+vm.selectedPassageiro.id_paciente, {
@@ -300,7 +305,7 @@
                             vm.dialogDeletePassageiro = false
                         }
                     })
-                    .finally(() => vm.loadingDelete = false);
+                    .finally(() => vm.loading.delete = false);
             },
 
             /*
@@ -320,7 +325,7 @@
                 if (!this.$refs.formEditPassageiro.validate()) return;
                 
                 let vm = this;
-                vm.loadingEdit = true;
+                vm.loading.edit = true;
 
                 if (vm.selectedPassageiroIndex > -1) {
                     axios
@@ -335,7 +340,7 @@
                             vm.$toast.success('Passageiro salvo com sucesso!')
                         }
                     })
-                    .finally(() => vm.loadingEdit = false)
+                    .finally(() => vm.loading.edit = false)
 
                 } else {
                     axios
@@ -358,7 +363,7 @@
                             vm.$toast.success('Passageiro cadastrado com sucesso!')
                         }
                     })
-                    .finally(() => vm.loadingEdit = false)
+                    .finally(() => vm.loading.edit = false)
                 }
             },
 
@@ -417,12 +422,12 @@
             // callback da busca de lookup
             updateLookup (datasetName, dataArray) {
                 this.lookupPacientes = dataArray;
-                this.loadingLookup = false;
+                this.loading.lookup = false;
             },
 
             // isso serve pra não fazer request a cada letra digitada, mas sim, após um tempo sem digitar
             _debounce(){
-                this.loadingLookup = true;
+                this.loading.lookup = true;
                 if (this.timeoutId !== null) {
                     clearTimeout(this.timeoutId);
                 }

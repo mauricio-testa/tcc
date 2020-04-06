@@ -38,7 +38,7 @@
         <v-data-table
             :headers="headers"
             :items="viagens"
-            :loading="loading"
+            :loading="loading.list"
             hide-default-footer
             disable-sort
             no-data-text="Nenhum dado encontrado."
@@ -47,8 +47,8 @@
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
                 <v-icon @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
+                <v-icon @click="deleteItem(item, false)" class="mr-2">mdi-delete</v-icon>
                 <v-icon @click="listPassageiros(item)" class="mr-2" >mdi-view-list</v-icon>
-                <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
                 <v-icon @click="exportList(item.id)">mdi-printer-pos</v-icon>
             </template>
         </v-data-table>
@@ -71,7 +71,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialogDelete = false">Cancelar</v-btn>
-                <v-btn color="red darken-1" text @click="deleteItem(selectedIndex, true)">Excluir</v-btn>
+                <v-btn color="red darken-1" text @click="deleteItem(selectedIndex, true)" :loading="loading.delete">Excluir</v-btn>
             </v-card-actions>
         </v-card>
         </v-dialog>
@@ -97,7 +97,10 @@
             dialogDelete: false,
             dialogEdit: false,
             dialogList: false,
-            loading: true,
+            loading: {
+                list: false,
+                delete: false,
+            },
             formValid: true,
             popupParams: null,
 
@@ -159,7 +162,7 @@
 
             if (vm.searchWord != null && vm.searchWord != '') urlFetch+= '&search='+vm.searchWord;
 
-            vm.loading = true;
+            vm.loading.list = true;
 
             await axios
                 .get(urlFetch)
@@ -175,7 +178,7 @@
                     vm.$toast.error('Erro ao buscar viagens')
                 })
                 .finally(function() {
-                    vm.loading = false;
+                    vm.loading.list = false;
                 });
             },
 
@@ -228,6 +231,8 @@
                 }
 
                 let vm = this;
+                vm.loading.delete = true;
+
                 axios
                     .delete(this.api+'/'+this.selectedViagem.id)
                     .then(function(response){
@@ -246,9 +251,10 @@
                             }
                         }
                     })
-                .finally(function() {
-                    vm.dialogDelete = false;
-                });
+                    .finally(function() {
+                        vm.dialogDelete = false;
+                        vm.loading.delete = false;
+                    });
             },
 
             // Abre modal e assinala index nulo e valores padrão para inserir novo registro

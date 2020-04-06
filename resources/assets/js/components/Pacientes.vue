@@ -30,7 +30,7 @@
         <v-data-table
             :headers="headers"
             :items="pacientes"
-            :loading="loading"
+            :loading="loading.list"
             hide-default-footer
             disable-sort
             no-data-text="Nenhum dado encontrado."
@@ -61,7 +61,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="dialogDelete = false">Cancelar</v-btn>
-                <v-btn color="red darken-1" text @click="deleteItem(selectedIndex, true)">Excluir</v-btn>
+                <v-btn color="red darken-1" text @click="deleteItem(selectedIndex, true)" :loading="loading.delete">Excluir</v-btn>
             </v-card-actions>
         </v-card>
         </v-dialog>
@@ -114,7 +114,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="red darken-1" text @click="dialogEdit = false">Cancelar</v-btn>
-                        <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
+                        <v-btn color="blue darken-1" text @click="save" :loading="loading.edit">Salvar</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-form>
@@ -140,8 +140,12 @@
             // state of elements
             dialogDelete: false,
             dialogEdit: false,
-            loading: true,
             formValid: true,
+            loading: {
+                list: false,
+                edit: false,
+                delete: false
+            },
 
             // table column names
             headers: [
@@ -195,7 +199,7 @@
 
                 if(vm.searchWord != null && vm.searchWord != '') urlFetch+= '&search='+vm.searchWord;
 
-                vm.loading = true;
+                vm.loading.list = true;
 
                 axios
                     .get(urlFetch)
@@ -210,9 +214,7 @@
                     .catch(function(error) {
                         vm.$toast.error('Erro ao buscar pacientes')
                     })
-                    .finally(function() {
-                        vm.loading = false;
-                    });
+                    .finally(() => { vm.loading.list = false; });
             },
 
             /*
@@ -224,6 +226,7 @@
 
                 if (!this.$refs.formEdit.validate()) return;
                 let vm = this;
+                vm.loading.edit = true;
                 
                 if (this.selectedIndex > -1) {
                 axios
@@ -238,6 +241,7 @@
                         vm.$toast.success('Paciente salvo com sucesso!')
                         }
                     })
+                    .finally(() => { vm.loading.edit = false; });
 
                 } else {
                 axios
@@ -259,6 +263,7 @@
                             vm.$toast.success('Paciente cadastrado com sucesso!')
                         }
                     })
+                    .finally(() => { vm.loading.edit = false; });
                 }
             },
 
@@ -280,6 +285,8 @@
                 }
 
                 let vm = this;
+                vm.loading.delete = true;
+
                 axios
                     .delete(this.api+'/'+this.selectedItem.id)
                     .then(function(response){
@@ -300,6 +307,7 @@
                     })
                 .finally(function() {
                     vm.dialogDelete = false;
+                    vm.loading.delete = true;
                 });
             },
 

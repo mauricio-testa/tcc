@@ -12,29 +12,43 @@
                             <v-autocomplete
                                 v-model="viagem.cod_destino"
                                 :items="lookupMunicipios"
-                                :loading="isLoading.lookupMunicipios"
+                                :loading="loading.lookupMunicipios"
                                 item-text="nome"
                                 item-value="codigo"
                                 label="Qual o destino da viagem?"
                                 :rules="[v => !!v || 'Destino é obrigatório']"
+                                prepend-icon="mdi-map-marker"
                             ></v-autocomplete>
+
                             <v-autocomplete
                                 v-model="viagem.id_veiculo"
                                 :items="lookupVeiculos"
-                                :loading="isLoading.lookupVeiculos"
+                                :loading="loading.lookupVeiculos"
                                 item-text="descricao"
                                 item-value="id"
                                 label="Qual veículo será utilizado?"
                                 :rules="[v => !!v || 'Veículo é obrigatório']"
-                            ></v-autocomplete>
+                                prepend-icon="mdi-car"
+                                >
+                                <template v-slot:append-outer>
+                                    <v-icon @click="$openBlank('/cadastros/veiculos')">mdi-plus</v-icon>
+                                </template>
+                            </v-autocomplete>
+
                             <v-autocomplete
                                 v-model="viagem.id_motorista"
                                 :items="lookupMotoristas"
-                                :loading="isLoading.lookupMotoristas"
+                                :loading="loading.lookupMotoristas"
                                 item-text="nome"
                                 item-value="id"
                                 label="Quem será o motorista?"
-                            ></v-autocomplete>
+                                prepend-icon="mdi-account-tie"
+                                >
+                                <template v-slot:append-outer>
+                                    <v-icon @click="$openBlank('/cadastros/motoristas')">mdi-plus</v-icon>
+                                </template>
+                            </v-autocomplete>
+
                             <v-row>
                                 <v-col cols="12" sm="12" md="6">
                                     <v-text-field 
@@ -42,6 +56,7 @@
                                         label="Qual a data da viagem?" 
                                         v-model="viagem.data_viagem"
                                         :rules="[v => !!v || 'Data é obrigatório']"
+                                        prepend-icon="mdi-calendar-range"
                                     ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="6">
@@ -49,12 +64,12 @@
                                         label="Qual o horário de saída?" 
                                         v-model="viagem.hora_saida"
                                         type="time"
+                                        prepend-icon="mdi-clock-outline"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
                             <v-textarea
                                 label="Alguma observação?"
-                                hint="Hint text"
                                 v-model="viagem.observacao"
                                 rows="3"
                             ></v-textarea>
@@ -63,7 +78,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="red darken-1" text @click="close">Cancelar</v-btn>
-                        <v-btn color="blue darken-1" text :loading="loadingEdit" @click="save">Salvar</v-btn>
+                        <v-btn color="blue darken-1" text :loading="loading.edit" @click="save">Salvar</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-form>
@@ -91,8 +106,9 @@
 
         data: () => ({
 
-            loadingEdit: false,
-            isLoading: {
+            loading: {
+                edit: false,
+                delete: false,
                 lookupVeiculos: false,
                 lookupMunicipios: false,
                 lookupMotoristas: false
@@ -128,7 +144,7 @@
                 if (!this.$refs.formEditViagem.validate()) return;
                 
                 let vm = this;
-                vm.loadingEdit = true;
+                vm.loading.edit = true;
 
                 if (this.viagem.id != null) {
                     axios
@@ -143,7 +159,7 @@
                             vm.$toast.success('Viagem salva com sucesso!')
                         }
                     })
-                    .finally(() => vm.loadingEdit = false)
+                    .finally(() => vm.loading.edit = false)
 
                 } else {
                     axios
@@ -165,7 +181,7 @@
                             vm.$toast.success('Viagem cadastrada com sucesso!')
                         }
                     })
-                    .finally(() => vm.loadingEdit = false)
+                    .finally(() => vm.loading.edit = false)
                 }
             },
 
@@ -177,30 +193,30 @@
             updateLookup (datasetName, dataArray) {
                 if (datasetName == 'VEICULO') {
                     this.lookupVeiculos             = dataArray
-                    this.isLoading.lookupVeiculos   = false
+                    this.loading.lookupVeiculos   = false
                 }
                 if (datasetName == 'MOTORISTA') {
                     this.lookupMotoristas           = dataArray
-                    this.isLoading.lookupMotoristas = false
+                    this.loading.lookupMotoristas = false
                 }
                 if (datasetName == 'MUNICIPIO') {
                     this.lookupMunicipios           = dataArray
-                    this.isLoading.lookupMunicipios = false
+                    this.loading.lookupMunicipios = false
                 }
             },
 
             initialize: function () {
 
                 if (this.lookupVeiculos.length == 0) {
-                    this.isLoading.lookupVeiculos = true
+                    this.loading.lookupVeiculos = true
                     this.$refs.lookupComponent.getLookup('VEICULO');
                 }
                 if (this.lookupMunicipios.length == 0) {
-                    this.isLoading.lookupMunicipios = true
+                    this.loading.lookupMunicipios = true
                     this.$refs.lookupComponent.getLookup('MOTORISTA');
                 }
                 if (this.lookupMunicipios.length == 0) {
-                    this.isLoading.lookupMunicipios = true
+                    this.loading.lookupMunicipios = true
                     this.$refs.lookupComponent.getLookup('MUNICIPIO');
                 }
 

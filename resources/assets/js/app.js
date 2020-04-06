@@ -21,6 +21,10 @@ Vue.use(VuetifyToast, {
     timeout: 5000,
 })
 
+Vue.prototype.$openBlank = function (url) {
+    window.open(url,'_blank')
+},
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
