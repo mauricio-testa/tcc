@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Http\Controllers\Helpers\ErrorInterpreter;
+use Illuminate\Support\Facades\Auth;
 
 
 class UsuarioController extends Controller
@@ -51,6 +52,9 @@ class UsuarioController extends Controller
     public function destroy($id)
     {
         try {
+            if ($id == Auth::user()->id_unidade){
+                throw new \Exception("Você não pode se deletar né");
+            }
             $unidade = User::findOrFail($id);
             $unidade->delete();
         } catch (\Throwable $th) {

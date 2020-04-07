@@ -42,6 +42,19 @@
             </v-card>
         </v-dialog>
 
+        <!-- dialog delete -->
+        <v-dialog v-model="dialogDelete" max-width="290">
+        <v-card>
+            <v-card-title class="headline">Confirmar exclusão?</v-card-title>
+            <v-card-text>Tem certeza que deseja deletar o usuário "{{ selectedItem.name }}"?</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="dialogDelete = false">Cancelar</v-btn>
+                <v-btn color="red darken-1" text @click="deleteItem(selectedIndex, true)" :loading="loading.delete">Excluir</v-btn>
+            </v-card-actions>
+        </v-card>
+        </v-dialog>
+
         <!-- dialog edit / new -->
         <v-dialog v-model="dialogEdit" max-width="500px">
             <v-form v-model="formValid" ref="formEdit">
@@ -211,6 +224,35 @@
                 }
             },
 
+            deleteItem: function (item, confirm) {
+                
+                if (!confirm) {
+                    this.selectedItem = item;
+                    this.selectedIndex = this.usuarios.indexOf(item);
+                    this.dialogDelete = true
+                    return;
+                }
+
+                let vm = this;
+                vm.loading.delete = true;
+
+                axios
+                    .delete(this.api+'/'+this.selectedItem.id)
+                    .then(function(response){
+                        if(response.data.error) {
+                            vm.$toast.error('Erro ao deletar: '+response.data.error)
+                        }
+                        else {
+                            vm.$toast.success('Usuário deletado com sucesso!')
+                            vm.usuarios.splice(vm.selectedIndex, 1)
+                        }
+                    })
+                .finally(function() {
+                    vm.dialogDelete = false;
+                    vm.loading.delete = false;
+                });
+            },
+
             // Abre modal e assinala index nulo e valores padrão para inserir novo registro
             addNew: function () {
                 this.selectedItem = Object.assign({}, this.defaultItem);
@@ -230,10 +272,6 @@
             // $ref do formulario nao está disponivel na criação do componente
             resetEditValidation: function () {
                 if(typeof this.$refs.formEdit != "undefined") this.$refs.formEdit.resetValidation();
-            },
-
-            deleteItem: function (item) {
-                console.log(item);
             },
 
             resetPassword: function() {
