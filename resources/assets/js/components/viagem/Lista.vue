@@ -63,7 +63,8 @@
                     :loading="loading.list"
                 >
                     <template v-slot:item.acompanhante_nome="{ item }">
-                        <v-icon color="green" text  v-if="item.acompanhante_nome != null">mdi-check</v-icon>
+                        <v-icon color="success" text v-if="item.acompanhante_nome != null">mdi-check</v-icon>
+                        <v-icon color="error" text v-else>mdi-close</v-icon>
                     </template>
                     <!-- table actions -->
                     <template v-slot:item.action="{ item }">

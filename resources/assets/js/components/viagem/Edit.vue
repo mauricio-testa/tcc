@@ -122,8 +122,6 @@
 
         }),
 
-        mounted () {},
-
         watch: {
 
             dialogEdit: function(val) {
