@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('lista'         , 'Api\ListaController');
         Route::resource('municipios'    , 'Api\MunicipioController');
         Route::resource('unidades'      , 'Api\UnidadeController');
+        Route::resource('usuarios'      , 'Api\UsuarioController');
     });
 
     Route::prefix('relatorios')->group(function () {

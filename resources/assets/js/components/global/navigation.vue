@@ -80,15 +80,6 @@
                         </v-list-item-content>
                     </v-list-item>          
                 </template>
-
-                <v-list-item @click="logout">
-                    <v-list-item-action>
-                        <v-icon>mdi-logout</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Logout</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
             </v-list>
         </v-navigation-drawer>
 
@@ -114,6 +105,9 @@
                         alt="Vuetify"
                     />
                 </v-avatar>
+            </v-btn>
+            <v-btn icon @click="logout">
+                <v-icon>mdi-logout</v-icon>
             </v-btn>
         </v-app-bar>
 

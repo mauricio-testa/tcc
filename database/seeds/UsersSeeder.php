@@ -18,7 +18,8 @@ class UsersSeeder extends Seeder
                 'email' => 'mauriciotesta97@gmail.com', 
                 'password' => '$2y$10$BMy8cxW4iW1BRkpTy/H4puczglrC3YusDv4PUua9ljdxlCMYA8xS2', // 123456
                 'id_unidade' => 1, 
-                'remember_token' => null
+                'remember_token' => null,
+                'level' => -1
             ] 
         ];
         \App\User::insert($users);

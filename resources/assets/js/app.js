@@ -47,6 +47,7 @@ Vue.component('viagem-edit',    require('./components/viagem/Edit.vue'));
 Vue.component('viagem-list',    require('./components/viagem/Lista.vue'));
 
 Vue.component('admin-unidade',  require('./components/admin/Unidades.vue'));
+Vue.component('admin-usuario',  require('./components/admin/Usuarios.vue'));
 
 const app = new Vue({
     el: '#app',

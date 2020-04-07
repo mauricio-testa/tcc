@@ -29,11 +29,21 @@
             ['text' => 'Motoristas', 'url' => url('/cadastros/motoristas'), 'icon' => 'mdi-account-tie'],
             ['text' => 'Veículos', 'url' => url('/cadastros/veiculos'), 'icon' => 'mdi-car'],
             ['text' => 'Pacientes', 'url' => url('/cadastros/pacientes'), 'icon' => 'mdi-account-group'],
-            ['heading' => 'Administração'],
-            ['text' => 'Logs', 'url' => url('/'), 'icon' => 'mdi-format-list-bulleted-triangle'],
-            ['text' => 'Unidades', 'url' =>  url('/admin/unidades'), 'icon' => 'mdi-hospital-building'],
-            ['text' => 'Usuários', 'url' => route('register'), 'icon' => 'mdi-account'],
+            ['heading' => 'Administração', 'level' => -1],
+            ['text' => 'Logs', 'url' => url('/'), 'icon' => 'mdi-format-list-bulleted-triangle', 'level' => -1],
+            ['text' => 'Unidades', 'url' =>  url('/admin/unidades'), 'icon' => 'mdi-hospital-building', 'level' => -1],
         ];
+
+        // remove menus administrativos se não for admin
+        // -1 = adm geral
+        // 0 = adm da unidade
+        // 1 = normal
+        
+        if (Auth::user()->level != -1) {
+            $data = array_values(array_filter($data, function($item) {
+                return empty($item['level']) || $item['level'] != -1;
+            }));
+        }
 
         $routes = [
             'api' => [
@@ -43,7 +53,8 @@
                 'viagem'    => url('/api/viagens'),
                 'lista'     => url('/api/lista'),
                 'municipio' => url('/api/municipios'),
-                'unidade'   => url('/api/unidades')
+                'unidade'   => url('/api/unidades'),
+                'usuario'   => url('/api/usuarios'),
             ]
         ];
     ?>

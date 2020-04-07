@@ -29,7 +29,8 @@
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
                 <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
+                <v-icon class="mr-2" @click="deleteItem(item, false)">mdi-delete</v-icon>
+                <v-icon @click="openUsers(item)" title="Usuários da Unidade">mdi-account</v-icon>
             </template>
         </v-data-table>
 
@@ -92,6 +93,7 @@
         </v-dialog>
 
         <lookup ref="lookupComponent" v-on:updateLookup="updateLookup"></lookup>
+        <admin-usuario :unidade="selectedItem" :dialogUsers.sync="dialogUsers"></admin-usuario>
 
     </div>
 </template>
@@ -113,6 +115,7 @@
             // state of elements
             dialogDelete: false,
             dialogEdit: false,
+            dialogUsers: false,
             loading: {
                 list: false,
                 edit: false,
@@ -144,8 +147,7 @@
                 id_municipio: null,
                 descricao: null
             },
-            searchWord: null,
-            }),
+        }),
 
         mounted() {
 
@@ -283,16 +285,11 @@
                 if(typeof this.$refs.formEdit != "undefined") this.$refs.formEdit.resetValidation();
             },
 
-            // Inicia uma pesquisa
-            search: function () {
-                this.getItems();
-            },
-
-            // Limpa a pesquisa
-            resetSearch: function () {
-                this.searchWord = null;
-                this.getItems();
-            },
+            // abre o dialog de usuarios
+            openUsers: function (item) {
+                this.selectedItem = item;
+                this.dialogUsers = true;
+            }
         },
 
         watch: {

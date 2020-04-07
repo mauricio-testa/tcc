@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('status')->default(1)->nullable();
             $table->string('avatar', 240)->nullable();
             $table->unsignedInteger('id_unidade')->nullable(false);
+            $table->integer('level')->default(1)->nullable(false);
             $table->rememberToken();
 
             $table->timestamp('created_at')->useCurrent();
