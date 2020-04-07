@@ -20,7 +20,7 @@ class PacienteController extends Controller
             if(!empty($request->search))
             $query->where('nome', 'like', '%'.$request->search.'%');
 
-            return $query->paginate(config('constants.default_pagination_size'));
+            return $query->paginate(config('constants.PAGINATION_SIZE'));
 
         } catch (\Throwable $th) {
             dd($th);

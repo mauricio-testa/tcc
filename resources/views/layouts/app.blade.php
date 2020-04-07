@@ -39,9 +39,9 @@
         // 0 = adm da unidade
         // 1 = normal
         
-        if (Auth::user()->level != -1) {
+        if (Auth::user()->level != config('constants.LEVEL_ROOT')) {
             $data = array_values(array_filter($data, function($item) {
-                return empty($item['level']) || $item['level'] != -1;
+                return empty($item['level']) || $item['level'] != config('constants.LEVEL_ROOT');
             }));
         }
 

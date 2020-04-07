@@ -14,7 +14,7 @@ class MunicipioController extends Controller
     {
         try {
 
-            $limit = config('constants.default_pagination_size');
+            $limit = config('constants.PAGINATION_SIZE');
 
             if(!empty($request->limit))
             $limit = $request->limit;

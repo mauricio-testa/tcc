@@ -17,7 +17,7 @@ class Admin
     public function handle($request, Closure $next)
     {
 
-        if (Auth::user()->level != -1) {
+        if (Auth::user()->level != config('constants.LEVEL_ROOT')) {
             return response('Não permitido. <a href="/"> Voltar</a> ', 403);
         }
 

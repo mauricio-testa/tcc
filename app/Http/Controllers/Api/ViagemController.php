@@ -28,7 +28,7 @@ class ViagemController extends Controller
                             ->orWhere('motorista_nome', 'LIKE', $like)
                             ->orWhere('observacao', 'LIKE', $like)
                             ->orWhere('data_formated', '=' , $request->search);
-                return $query->paginate(config('constants.default_pagination_size'));
+                return $query->paginate(config('constants.PAGINATION_SIZE'));
             }
 
         } catch (\Throwable $th) {

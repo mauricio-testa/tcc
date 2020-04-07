@@ -18,7 +18,7 @@ class VeiculoController extends Controller
         try {
             
             $query = Veiculo::where('id_unidade', '=', Auth::user()->id_unidade);
-            $limit = config('constants.default_pagination_size');
+            $limit = config('constants.PAGINATION_SIZE');
 
             if(!empty($request->search))
             $query->where('descricao', 'like', '%'.$request->search.'%');
