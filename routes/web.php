@@ -23,6 +23,10 @@ Route::middleware(['auth'])->group(function () {
         Route::view('/pacientes'    , 'paciente');
     });
 
+    Route::group(['prefix' => 'admin'], function () {
+        Route::view('/unidades'     , 'admin.unidade');
+    });
+
     Route::prefix('api')->group(function () {
         Route::resource('motoristas'    , 'Api\MotoristaController');
         Route::resource('veiculos'      , 'Api\VeiculoController');
@@ -30,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('viagens'       , 'Api\ViagemController');
         Route::resource('lista'         , 'Api\ListaController');
         Route::resource('municipios'    , 'Api\MunicipioController');
+        Route::resource('unidades'      , 'Api\UnidadeController');
     });
 
     Route::prefix('relatorios')->group(function () {

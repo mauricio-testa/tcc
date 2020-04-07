@@ -31,7 +31,7 @@
             ['text' => 'Pacientes', 'url' => url('/cadastros/pacientes'), 'icon' => 'mdi-account-group'],
             ['heading' => 'Administração'],
             ['text' => 'Logs', 'url' => url('/'), 'icon' => 'mdi-format-list-bulleted-triangle'],
-            ['text' => 'Unidades', 'url' =>  url('/'), 'icon' => 'mdi-hospital-building'],
+            ['text' => 'Unidades', 'url' =>  url('/admin/unidades'), 'icon' => 'mdi-hospital-building'],
             ['text' => 'Usuários', 'url' => route('register'), 'icon' => 'mdi-account'],
         ];
 
@@ -42,7 +42,8 @@
                 'paciente'  => url('/api/pacientes'),
                 'viagem'    => url('/api/viagens'),
                 'lista'     => url('/api/lista'),
-                'municipio' => url('/api/municipios')
+                'municipio' => url('/api/municipios'),
+                'unidade'   => url('/api/unidades')
             ]
         ];
     ?>
