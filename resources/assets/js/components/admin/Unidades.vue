@@ -125,8 +125,8 @@
             // table column names
             headers: [
                 { text: '#', value: 'id'},
-                { text: 'Município', value: 'id_municipio'},
                 { text: 'Descrição', value: 'descricao'},
+                { text: 'Município', value: 'municipio_nome'},
                 { text: 'Active', value: 'status'},
                 { text: 'Data Criação', value: 'created_at'},
                 { text: 'Ações', value: 'action'},
@@ -169,7 +169,7 @@
                 axios
                     .get(urlFetch)
                     .then(function(response) {
-                        vm.unidades             = response.data.data;                   
+                        vm.unidades = response.data;
                     })
                     .catch(function(error) {
                         vm.$toast.error('Erro ao buscar unidades')

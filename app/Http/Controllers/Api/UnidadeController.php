@@ -14,7 +14,9 @@ class UnidadeController extends Controller
     public function index()
     {
         try {
-            return Unidade::paginate(config('constants.default_pagination_size'));
+            $query = Unidade::select('*','mu.nome as municipio_nome')
+            ->leftJoin('municipios as mu', 'unidades.id_municipio','=','mu.codigo');
+            return $query->get();
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => ErrorInterpreter::getMessage($th)
