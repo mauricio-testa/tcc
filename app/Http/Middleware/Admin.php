@@ -18,7 +18,7 @@ class Admin
     {
 
         if (Auth::user()->level != -1) {
-            return response('Não permitido', 403);
+            return response('Não permitido. <a href="/"> Voltar</a> ', 403);
         }
 
         return $next($request);
