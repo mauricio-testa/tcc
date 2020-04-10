@@ -10,13 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 use App\Http\Middleware\Admin;
-use App\Http\Middleware\Active;
 
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/', 'IndexController@index')->name('index');
-    Route::get('/home', 'IndexController@index')->name('index');
     Route::view('/viagens', 'viagem');
 
     Route::group(['prefix' => 'cadastros'], function () {
@@ -45,9 +44,3 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Auth::routes();
-
-// override default login to validade user and unidade status
-Route::post('/login', [
-    'uses'  => 'Auth\LoginController@login',
-    'middleware' => Active::class,
-]);

@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Unidade;
 
 class LoginController extends Controller
 {
@@ -27,13 +30,24 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function login(Request $request)
     {
-        $this->middleware('guest')->except('logout');
+        $loginSuccess = Auth::attempt([
+            'email'     => $request->email, 
+            'password'  => $request->password, 
+            'status'    => '1']);
+
+        if (!$loginSuccess){
+            return $this->handleLoginError ('Essas credenciais não existem ou você está inativo!');
+        } else if (!Unidade::UnidadeIsActiveByUserEmail($request->email)) {
+            return $this->handleLoginError ('Sua unidade está inativa! Contate o administrador.');
+        }
+        
+        return redirect($this->redirectTo);
+    }
+
+    private function handleLoginError($message) {
+        Auth::logout();
+        return redirect('/login')->with('login_error', $message);
     }
 }
