@@ -112,6 +112,7 @@ body .wrapper .content .infos ul li {
 
 body .wrapper .content thead {
   font-weight: bold;
+  text-align: center;
 }
 
 body .wrapper .content thead:nth-child(1) {
@@ -127,7 +128,7 @@ body .wrapper .content th,
 body .wrapper .content td,
 body .wrapper .content thead,
 body .wrapper .content table {
-  border: 0.01em solid #ccc;
+  border: 0.01em solid #414141;
   border-collapse: collapse;
   padding: 6px 4px;
 }

@@ -80,6 +80,7 @@ body {
             }
             thead {
                 font-weight: bold;
+                text-align: center;
                 &:nth-child(1) {
                     background: #414141;
                     color: #fff;
@@ -90,7 +91,7 @@ body {
             }
             
             th, td, thead, table{
-                border: 0.01em solid #ccc;
+                border: 0.01em solid #414141;
                 border-collapse: collapse;
                 padding: 6px 4px;
             }

@@ -42,7 +42,7 @@
             <table border="1" width="100%" cellspacing=0 cellpadding=8>
                 <thead>
                     <th colspan="3">Detalhes do Passageiro</th>
-                    <th colspan="3">Detalhes da Consulta</th>
+                    <th colspan="4">Detalhes da Consulta</th>
                 </thead>
                 <thead>
                     <td>Nome</td>
@@ -51,6 +51,7 @@
                     <td>Local</td>
                     <td>Horário</td>
                     <td>Médico</td>
+                    <td>X</td>
                 </thead>
                 <tbody>
                 @foreach ($lista as $passageiro)
@@ -59,6 +60,7 @@
                             <td>{{ $passageiro->nome }}</td>
                             <td>{{ $passageiro->rg }}</td>
                             <td colspan="4" class="acompanhante"><span>{{ $passageiro->acompanhante_desc }}</span></td>
+                            <td></td>
                         </tr>
                     @else
                         <tr>
@@ -68,6 +70,7 @@
                             <td>{{ $passageiro->consulta_local }}</td>
                             <td>{{ $passageiro->consulta_hora }}</td>
                             <td>{{ $passageiro->consulta_medico }}</td>
+                            <td></td>
                         </tr>
                     @endif
                 @endforeach
