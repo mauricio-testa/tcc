@@ -82,13 +82,15 @@
                                     label="Nome" 
                                     required 
                                     :rules="[v => !!v || 'Nome é obrigatório']"
+                                    prepend-icon="mdi-account"
                                 ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="6">
                                 <v-text-field 
                                     v-model="selectedItem.rg"
-                                    :rules="[v => (v ? (v.length >= 7 && v.length <= 10) : !v) || 'RG deve ter 7 a 10 caracteres!']" 
+                                    :rules="[v => (v ? (v.length >= 7 && v.length <= 10) : !v) || 'Deve ter 7 a 10 caracteres!']" 
                                     label="RG"
+                                    prepend-icon="mdi-account-details"
                                 ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -99,6 +101,7 @@
                                     v-model="selectedItem.telefone" 
                                     :rules="[v => (v ? (v.length > 14) : !v) || 'Telefone deve ter 11 números']" 
                                     label="Telefone"
+                                    prepend-icon="mdi-phone"
                                 ></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="6">
@@ -107,6 +110,7 @@
                                     v-model="selectedItem.sus" 
                                     :rules="[v => (v ? (v < 999999999999999) : !v) || 'SUS deve ter até 15 algarismos']"
                                     label="Cartão SUS" 
+                                    prepend-icon="mdi-account-details-outline"
                                 ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -115,6 +119,7 @@
                                 <v-text-field 
                                     v-model="selectedItem.endereco" 
                                     label="Endereço" 
+                                    prepend-icon="mdi-map-marker"
                                 ></v-text-field>
                                 </v-col>
                             </v-row>
