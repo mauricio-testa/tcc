@@ -15,9 +15,10 @@ class CreatePacientesTable extends Migration
     {
         Schema::create('pacientes', function (Blueprint $table) {
             $table->increments('id');
-            $table->decimal('rg', 10, 0)->nullable()->unique();
+            $table->string('rg', 10)->nullable()->unique();
             $table->string('nome', 240)->nullable(false);
             $table->string('telefone', 15)->nullable();
+            $table->bigInteger('sus')->nullable();
             $table->string('endereco', 240)->nullable();
             $table->unsignedInteger('id_unidade');
             $table->integer('codigo_municipio')->nullable(false);

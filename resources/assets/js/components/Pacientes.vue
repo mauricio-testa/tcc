@@ -87,8 +87,7 @@
                                 <v-col cols="12" sm="12" md="6">
                                 <v-text-field 
                                     v-model="selectedItem.rg"
-                                    type="number"
-                                    :rules="[v => (v ? (v.length >= 7 && v.length <= 10) : !v) || 'RG deve ter 7 a 10 dígitos!']" 
+                                    :rules="[v => (v ? (v.length >= 7 && v.length <= 10) : !v) || 'RG deve ter 7 a 10 caracteres!']" 
                                     label="RG"
                                 ></v-text-field>
                                 </v-col>
@@ -96,16 +95,26 @@
                             <v-row>
                                 <v-col cols="12" sm="12" md="6">
                                 <v-text-field 
-                                    v-model="selectedItem.endereco" 
-                                    label="Endereço" 
-                                ></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="12" md="6">
-                                <v-text-field 
                                     v-mask="'(##) #####-####'" 
                                     v-model="selectedItem.telefone" 
                                     :rules="[v => (v ? (v.length > 14) : !v) || 'Telefone deve ter 11 números']" 
                                     label="Telefone"
+                                ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="6">
+                                <v-text-field 
+                                    type="number"
+                                    v-model="selectedItem.sus" 
+                                    :rules="[v => (v ? (v < 999999999999999) : !v) || 'SUS deve ter até 15 algarismos']"
+                                    label="Cartão SUS" 
+                                ></v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12" sm="12" md="12">
+                                <v-text-field 
+                                    v-model="selectedItem.endereco" 
+                                    label="Endereço" 
                                 ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -154,7 +163,7 @@
                 { text: 'RG', value: 'rg'},
                 { text: 'Telefone', value: 'telefone'},
                 { text: 'Endereço', value: 'endereco'},
-                { text: 'Criação', value: 'created_at'},
+                { text: 'SUS', value: 'sus'},
                 { text: 'Ações', value: 'action'},
                 ],
 
@@ -171,12 +180,14 @@
             selectedItem: {
                 nome: null,
                 telefone: null,
+                sus: null,
                 rg: null,
                 endereco: null
             },
             defaultItem: {
                 nome: null,
                 telefone: null,
+                sus: null,
                 rg: null,
                 endereco: null
             },
@@ -227,6 +238,9 @@
                 if (!this.$refs.formEdit.validate()) return;
                 let vm = this;
                 vm.loading.edit = true;
+
+                if (vm.selectedItem.rg != null)
+                vm.selectedItem.rg = vm.selectedItem.rg.toUpperCase();
                 
                 if (this.selectedIndex > -1) {
                 axios
@@ -249,6 +263,7 @@
                         'nome'      : vm.selectedItem.nome,
                         'telefone'  : vm.selectedItem.telefone,
                         'rg'        : vm.selectedItem.rg,
+                        'sus'       : vm.selectedItem.sus,
                         'endereco'  : vm.selectedItem.endereco
                     })
                     .then(function(response){
