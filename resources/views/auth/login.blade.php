@@ -1,6 +1,9 @@
 @extends('layouts.auth')
 
 @section('content')
+<?php
+?>{{ session('login_error') }}
+
 <div class="container">
     <div class="row" style="justify-content: center; margin-top: 10vh">
         <div class="col-md-8 col-md-offset-2">
