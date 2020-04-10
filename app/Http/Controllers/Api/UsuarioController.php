@@ -40,8 +40,15 @@ class UsuarioController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $unidade = User::findOrFail($id);
-            $unidade->update($request->all());
+            $usuario = $request->all();
+            if (isset($request->password)) {
+                $usuario['password'] = bcrypt($request['password']);
+            }
+            if (isset($request->status)) {
+                $usuario['status'] = $request['status'] ? 1 : 0;
+            }
+            $user = User::findOrFail($id);
+            $user->update($usuario);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => ErrorInterpreter::getMessage($th)

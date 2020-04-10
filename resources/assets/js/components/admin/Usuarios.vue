@@ -31,7 +31,7 @@
                         <template v-slot:item.action="{ item }">
                             <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                             <v-icon class="mr-2" @click="deleteItem(item, false)">mdi-delete</v-icon>
-                            <v-icon @click="resetPassword(item)" title="Resetar Senha">mdi-key</v-icon>
+                            <v-icon @click="openResetPassword(item)" title="Resetar Senha">mdi-key</v-icon>
                         </template>
                     </v-data-table>
                 </v-card-text>
@@ -53,6 +53,29 @@
                 <v-btn color="red darken-1" text @click="deleteItem(selectedIndex, true)" :loading="loading.delete">Excluir</v-btn>
             </v-card-actions>
         </v-card>
+        </v-dialog>
+
+        <!-- dialog reset password -->
+        <v-dialog v-model="dialogResetPassword" max-width="290">
+            <v-form v-model="formValidResetPassword" ref="formResetPassword">
+                <v-card>
+                    <v-card-title class="headline">Resetar senha</v-card-title>
+                    <v-card-text>
+                        <v-text-field 
+                            v-model="newPassword" 
+                            :label="'Nova Senha para '+selectedItem.name" 
+                            required
+                            type="password"
+                            :rules="[v => !!v || 'Senha é obrigatória']"
+                        ></v-text-field>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="dialogResetPassword = false">Cancelar</v-btn>
+                        <v-btn color="red darken-1" text @click="resetPassword()" :loading="loading.reset">Resetar Senha</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-form>
         </v-dialog>
 
         <!-- dialog edit / new -->
@@ -139,11 +162,14 @@
 
             dialogDelete: false,
             dialogEdit: false,
+            dialogResetPassword: false,
             formValid: true,
+            formValidResetPassword: true,
             loading: {
                 list: false,
                 edit: false,
                 delete: false,
+                reset: false,
             },
 
             // CRUD variables
@@ -155,6 +181,7 @@
                 name: null,
                 email: null
             },
+            newPassword: null,
         }),
 
         methods: { 
@@ -253,6 +280,25 @@
                 });
             },
 
+            resetPassword: function () {
+                if (!this.$refs.formResetPassword.validate()) return;
+                let vm = this;
+                axios
+                    .put(this.api+'/'+this.selectedItem.id, {
+                        password: this.newPassword
+                    })
+                    .then(function(response){
+                        if(response.data.error) {
+                            vm.$toast.error('Erro ao resetar senha: '+response.data.error)
+                        }
+                        else {
+                            vm.$toast.success('Senha resetada com sucesso!')
+                            vm.dialogResetPassword = false;
+                        }
+                    })
+                    .finally(() => {vm.loading.reset = false;});
+            },
+
             // Abre modal e assinala index nulo e valores padrão para inserir novo registro
             addNew: function () {
                 this.selectedItem = Object.assign({}, this.defaultItem);
@@ -269,13 +315,20 @@
                 this.dialogEdit = true;
             },
 
+            openResetPassword: function (item) {
+                this.newPassword = null;
+                this.selectedItem = item;
+                this.dialogResetPassword = true;
+                this.resetPasswordValidation();
+            },
+
             // $ref do formulario nao está disponivel na criação do componente
             resetEditValidation: function () {
                 if(typeof this.$refs.formEdit != "undefined") this.$refs.formEdit.resetValidation();
             },
 
-            resetPassword: function() {
-
+            resetPasswordValidation: function () {
+                if(typeof this.$refs.formResetPassword != "undefined") this.$refs.formResetPassword.resetValidation();
             },
 
             close () {
