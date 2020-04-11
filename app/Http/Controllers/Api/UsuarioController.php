@@ -7,10 +7,16 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Http\Controllers\Helpers\ErrorInterpreter;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\Admin;
 
 
 class UsuarioController extends Controller
 {
+    public function __construct()
+    {
+        // todos usuarios podem update senha, mas só os admins podem fazer o resto
+        $this->middleware(Admin::class)->except(['update']);
+    }
 
     public function index(Request $request)
     {

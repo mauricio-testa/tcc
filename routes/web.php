@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('lista', 'Api\ListaController');
         Route::resource('municipios', 'Api\MunicipioController');
         Route::resource('unidades', 'Api\UnidadeController')->middleware(Admin::class);
-        Route::resource('usuarios', 'Api\UsuarioController')->middleware(Admin::class);
+        Route::resource('usuarios', 'Api\UsuarioController');
     });
 
     Route::prefix('relatorios')->group(function () {

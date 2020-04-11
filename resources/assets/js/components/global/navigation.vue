@@ -201,6 +201,7 @@
                         else {
                             vm.$toast.success('Senha alterada com sucesso!')
                             vm.dialogResetPassword = false;
+                            vm.newPassword = null;
                         }
                     })
                     .finally(() => {vm.loading.reset = false;});
