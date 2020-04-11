@@ -51,5 +51,15 @@ Vue.component('admin-usuario',  require('./components/admin/Usuarios.vue'));
 
 const app = new Vue({
     el: '#app',
-    vuetify: new Vuetify(),
+    vuetify: new Vuetify({
+        theme: {
+            themes: {
+              light: {
+                primary: '#0288D1',
+                secondary: '#E65100',
+                accent: '#0091EA'
+              },
+            },
+          },
+    }),
 });
