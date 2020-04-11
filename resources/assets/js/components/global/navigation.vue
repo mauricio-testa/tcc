@@ -2,7 +2,7 @@
     <div>
         <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" color="grey lighten-4" app>
 
-            <v-list-item two-line class="py-2">
+            <v-list-item two-line class="py-3">
                 <v-list-item-content>
                     <v-list-item-title>{{unidade.descricao}}</v-list-item-title>
                     <v-list-item-subtitle class="pt-1">{{unidade.nome}} - {{unidade.uf}}</v-list-item-subtitle>
