@@ -13,6 +13,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
@@ -24,12 +26,12 @@
         $data = [
             ['text' => 'Dashboard', 'url' => url('/'), 'icon' => 'mdi-monitor-dashboard'],
             ['text' => 'Viagens', 'url' => url('/viagens'), 'icon' => 'mdi-ambulance'],
-            ['text' => 'Relatórios', 'url' => url('/'), 'icon' => 'mdi-file-chart'],
-            ['heading' => 'Cadastros'],
+            // ['heading' => 'Cadastros'],
             ['text' => 'Motoristas', 'url' => url('/cadastros/motoristas'), 'icon' => 'mdi-account-tie'],
             ['text' => 'Veículos', 'url' => url('/cadastros/veiculos'), 'icon' => 'mdi-car'],
             ['text' => 'Pacientes', 'url' => url('/cadastros/pacientes'), 'icon' => 'mdi-account-group'],
-            ['heading' => 'Administração', 'level' => -1],
+            ['heading' => 'Administração'],
+            ['text' => 'Relatórios', 'url' => url('/'), 'icon' => 'mdi-file-chart'],
             ['text' => 'Logs', 'url' => url('/'), 'icon' => 'mdi-format-list-bulleted-triangle', 'level' => -1],
             ['text' => 'Unidades', 'url' =>  url('/admin/unidades'), 'icon' => 'mdi-hospital-building', 'level' => -1],
         ];

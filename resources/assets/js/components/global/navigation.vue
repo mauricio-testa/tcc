@@ -1,11 +1,11 @@
 <template>
     <div>
-        <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" color="primary" app dark>
+        <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" color="grey lighten-4" app >
             <!-- src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg" -->
 
-            <v-list-item two-line>
+            <v-list-item two-line class="py-2">
                 <v-list-item-avatar>
-                    <img src="https://randomuser.me/api/portraits/women/81.jpg">
+                    <img src="images/usuarios/default.png">
                 </v-list-item-avatar>
                 <v-list-item-content>
                     <v-list-item-title>{{ user.nome }}</v-list-item-title>
@@ -79,7 +79,7 @@
         </v-navigation-drawer>
 
         <!-- heading -->
-        <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="primary darken-1" dark>
+        <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="primary" dark dense>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
                 <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
                     <span class="hidden-sm-and-down">SIMTRAP  |  {{unidade}}</span>

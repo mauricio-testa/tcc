@@ -1,9 +1,10 @@
 <template>
-      <v-container class="fill-height blue-grey darken-3" fluid>
+      <v-container class="fill-height grey lighten-4" fluid>
         <div class="container__center">
             <v-card>
                 <div class="primary pa-4 card__top">
                     <img src="/images/favicon.png" class="ma-3" width="30px">
+                    <span class="white--text font-weight-bold">SIMTRAP | Login</span>
                 </div>
 
                 <v-card-text>                 
@@ -86,9 +87,11 @@
 .container__center {
     margin: auto; width: 400px;
     .card__top {
-        text-align:center;
-        img {
-            filter: grayscale(100%) brightness(2) opacity(0.5)
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        img, span{
+            filter: grayscale(100%) brightness(2) opacity(0.8)
         }
     }
 }
