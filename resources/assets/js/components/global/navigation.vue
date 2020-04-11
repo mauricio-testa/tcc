@@ -1,18 +1,12 @@
 <template>
     <div>
-        <v-navigation-drawer
-            v-model="drawer"
-            :clipped="$vuetify.breakpoint.lgAndUp"
-            color="primary"
-            app
-            dark
-        >
+        <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" color="primary" app dark>
             <!-- src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg" -->
+
             <v-list-item two-line>
                 <v-list-item-avatar>
                     <img src="https://randomuser.me/api/portraits/women/81.jpg">
                 </v-list-item-avatar>
-
                 <v-list-item-content>
                     <v-list-item-title>{{ user.nome }}</v-list-item-title>
                     <v-list-item-subtitle>Logado</v-list-item-subtitle>
@@ -23,7 +17,8 @@
             
             <v-list dense>
                 <template v-for="item in menus">
-                    
+
+                    <!-- heading -->
                     <v-row
                         v-if="item.heading"
                         :key="item.heading"
@@ -36,6 +31,7 @@
                         </v-col>
                     </v-row>
 
+                    <!-- items -->
                     <v-list-group
                         v-else-if="item.children"
                         :key="item.text"
@@ -63,9 +59,7 @@
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-group>
-
-                    <v-list-item
-                        v-else
+                    <v-list-item v-else
                         :key="item.text"
                         link
                         @click="open(item.url)"
@@ -78,26 +72,19 @@
                             {{ item.text }}
                             </v-list-item-title>
                         </v-list-item-content>
-                    </v-list-item>          
+                    </v-list-item> 
+
                 </template>
             </v-list>
         </v-navigation-drawer>
 
-
-        <v-app-bar
-            :clipped-left="$vuetify.breakpoint.lgAndUp"
-            app
-            color="blue darken-3"
-            dark
-        >
+        <!-- heading -->
+        <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="primary darken-1" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
                 <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-                <span class="hidden-sm-and-down">SIMTRAP</span>
+                    <span class="hidden-sm-and-down">SIMTRAP  |  {{unidade}}</span>
                 </v-toolbar-title>
             <v-spacer />
-            <v-btn icon>
-                <v-icon>mdi-bell</v-icon>
-            </v-btn>
             <v-btn icon large>
                 <v-avatar size="32px" item>
                     <v-img
@@ -119,7 +106,8 @@
         props: {
             source: String,
             menus: Array,
-            user: Object
+            user: Object,
+            unidade: String,
         },
         data: () => ({
             dialog: false,

@@ -66,7 +66,11 @@
     <div id="app">
 
         <v-app>
-            <navigation :menus="{{ htmlspecialchars(json_encode($data))}}" :user="{{ htmlspecialchars(json_encode(['nome' => Auth::user()->name]))}}"></navigation>
+            <navigation 
+                :menus="{{ htmlspecialchars(json_encode($data))}}" 
+                :user="{{ htmlspecialchars(json_encode(['nome' => Auth::user()->name]))}}"
+                :unidade="{{ htmlspecialchars(json_encode(session('unidade'))) }}"
+            ></navigation>
             <v-content>
                 <v-container fluid>
                     @yield('content')

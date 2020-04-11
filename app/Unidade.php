@@ -21,4 +21,14 @@ class Unidade extends Model
 
         return $select->status;
     }
+
+    public static function GetUnidadeByUserEmail($email) {
+        $select = DB::table('unidades')
+            ->select('unidades.descricao')
+            ->join('users', 'users.id_unidade', '=','unidades.id')
+            ->where('users.email', $email)
+            ->first();
+
+        return $select->descricao;
+    }
 }

@@ -42,6 +42,8 @@ class LoginController extends Controller
         } else if (!Unidade::UnidadeIsActiveByUserEmail($request->email)) {
             return $this->handleLoginError ('Sua unidade está inativa! Contate o administrador.');
         }
+
+        session(['unidade' => Unidade::GetUnidadeByUserEmail($request->email)]);
         
         return redirect($this->redirectTo);
     }
