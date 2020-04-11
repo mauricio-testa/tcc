@@ -11,20 +11,27 @@
     <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
     
 </head>
 <body>
-    <div id="app">      
-            <div class="container">
+
+    <div id="app">
+
+        <v-app>
+            <v-content>
                 @yield('content')
-            </div>        
+            </v-content>
+        </v-app>
+        
     </div>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    
 </body>
 </html>

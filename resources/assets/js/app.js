@@ -49,6 +49,8 @@ Vue.component('viagem-list',    require('./components/viagem/Lista.vue'));
 Vue.component('admin-unidade',  require('./components/admin/Unidades.vue'));
 Vue.component('admin-usuario',  require('./components/admin/Usuarios.vue'));
 
+Vue.component('auth-login',     require('./components/auth/Login.vue'));
+
 const app = new Vue({
     el: '#app',
     vuetify: new Vuetify({
