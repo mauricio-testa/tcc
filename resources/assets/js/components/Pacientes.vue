@@ -97,9 +97,9 @@
                             <v-row>
                                 <v-col cols="12" sm="12" md="6">
                                 <v-text-field 
-                                    v-mask="'(##) #####-####'" 
+                                    v-mask="['(##) ####-####', '(##) #####-####']" 
                                     v-model="selectedItem.telefone" 
-                                    :rules="[v => (v ? (v.length > 14) : !v) || 'Telefone deve ter 11 números']" 
+                                    :rules="[v => (v ? (v.length > 13) : !v) || 'Telefone deve ter 10 ou 11 números']" 
                                     label="Telefone"
                                     prepend-icon="mdi-phone"
                                 ></v-text-field>
