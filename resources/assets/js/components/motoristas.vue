@@ -86,10 +86,10 @@
                                 </v-col>
                                 <v-col cols="12" sm="12" md="6">
                                 <v-text-field 
-                                    v-mask="'(##) #####-####'" 
                                     v-model="selectedItem.telefone" 
-                                    :rules="[v => (v ? (v.length > 14) : !v) || 'Telefone deve ter 11 números']" 
                                     label="Telefone"
+                                    v-mask="['(##) ####-####', '(##) #####-####']" 
+                                    :rules="[v => (v ? (v.length > 13) : !v) || 'Telefone deve ter 10 ou 11 números']" 
                                 ></v-text-field>
                                 </v-col>
                             </v-row>
