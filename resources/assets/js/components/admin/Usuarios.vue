@@ -87,6 +87,9 @@
                     </v-card-title>
                     <v-card-text>
                         <v-container>
+                            <v-alert type="warning" v-if="selectedItem.level == -1">
+                                Este usuário tem nível máximo de permissão!
+                            </v-alert>
                             <v-text-field 
                                 v-model="selectedItem.name" 
                                 label="Nome" 
