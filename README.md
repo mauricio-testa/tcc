@@ -1,8 +1,7 @@
 ## Install
 - ```npm install```
 - create database and configure in ```.env``` file
-- ```php artisan migrate:fresh --seed``` to create the tables and populate the municipalities
-- if you want sample data, here are a few to run manually in your database:  ```database\seeds\PlainSeeder.sql```
+- ```php artisan migrate:fresh --seed``` to create the tables and seed the base data
 ## Run
 - ```npm run watch```
 - ```php artisan serve```
