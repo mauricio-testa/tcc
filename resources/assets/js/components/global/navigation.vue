@@ -4,7 +4,8 @@
 
             <v-list-item two-line class="py-2">
                 <v-list-item-content>
-                    <v-list-item-title>{{unidade}}</v-list-item-title>
+                    <v-list-item-title>{{unidade.descricao}}</v-list-item-title>
+                    <v-list-item-subtitle class="pt-1">{{unidade.nome}} - {{unidade.uf}}</v-list-item-subtitle>
                 </v-list-item-content>
             </v-list-item>
 
@@ -139,7 +140,7 @@
                             v-model="newPassword" 
                             label="Digite a nova senha" 
                             type="password"
-                            :rules="[v => !!v || 'Senha é obrigatória']"
+                            :rules="passwordRules"
                         ></v-text-field>
                     </v-card-text>
                     <v-card-actions>
@@ -159,7 +160,7 @@
         props: {
             menus: Array,
             user: Object,
-            unidade: String,
+            unidade: Object,
         },
 
         data: () => ({
@@ -220,8 +221,14 @@
                     
                 } catch (error) {
                     return '  ';
-                }
-                
+                }    
+            },
+            passwordRules: function() {
+                const rules = [];
+                rules.push(v => (v || '').length > 5 || 'Senha deve conter 6 caracteres no mínimo')
+                rules.push(v => (/[0-9]/).test(v) || 'Senha deve conter pelo menos um número')
+                rules.push(v => (/[a-zA-Z]/).test(v) || 'Senha deve conter pelo menos uma letra')
+                return rules;
             }
         }
     }

@@ -24,11 +24,12 @@ class Unidade extends Model
 
     public static function GetUnidadeByUserEmail($email) {
         $select = DB::table('unidades')
-            ->select('unidades.descricao')
+            ->select('unidades.descricao', 'municipios.nome', 'municipios.uf')
             ->join('users', 'users.id_unidade', '=','unidades.id')
+            ->join('municipios','unidades.id_municipio', '=', 'municipios.codigo')
             ->where('users.email', $email)
             ->first();
 
-        return $select->descricao;
+        return $select;
     }
 }
