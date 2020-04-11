@@ -38,7 +38,7 @@ class LoginController extends Controller
             'status'    => '1']);
 
         if (!$loginSuccess){
-            return $this->handleLoginError ('Essas credenciais não existem no nosso banco de dados ou seu usuário está inativo!');
+            return $this->handleLoginError ('Essas credenciais não existem ou seu usuário está inativo!');
         } else if (!Unidade::UnidadeIsActiveByUserEmail($request->email)) {
             return $this->handleLoginError ('Sua unidade está inativa! Contate o administrador.');
         }

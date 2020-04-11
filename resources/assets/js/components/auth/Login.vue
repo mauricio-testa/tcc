@@ -7,7 +7,7 @@
                 </div>
 
                 <v-card-text>                 
-                    <v-alert type="error"  v-if="error != ''" :icon="false">
+                    <v-alert type="error"  v-if="error != ''" :icon="false" dismissible>
                         {{error}}
                     </v-alert>
                     
