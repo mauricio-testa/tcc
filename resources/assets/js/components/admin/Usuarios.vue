@@ -110,10 +110,6 @@
                                 type="password" 
                                 :rules="[v => !!v || 'Senha é obrigatório!']"
                             ></v-text-field>
-                            <v-text-field 
-                                v-model="selectedItem.avatar" 
-                                label="Avatar" 
-                            ></v-text-field>
                             <v-switch 
                                 v-model="selectedItem.status"
                                 :label="selectedItem.status == '1' ? 'Ativo' : 'Inativo'"
@@ -236,7 +232,6 @@
                         'name'          : vm.selectedItem.name,
                         'status'        : vm.selectedItem.status,
                         'id_unidade'    : vm.unidade.id,
-                        'avatar'        : vm.selectedItem.avatar,
                         'email'         : vm.selectedItem.email,
                         'password'      : vm.selectedItem.password,
                     })

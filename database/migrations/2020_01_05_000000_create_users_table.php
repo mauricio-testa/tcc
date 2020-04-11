@@ -19,7 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->tinyInteger('status')->default(1)->nullable();
-            $table->string('avatar', 240)->nullable();
             $table->unsignedInteger('id_unidade')->nullable(false);
             $table->integer('level')->default(1)->nullable(false);
             $table->rememberToken();

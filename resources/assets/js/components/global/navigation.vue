@@ -1,15 +1,10 @@
 <template>
     <div>
-        <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" color="grey lighten-4" app >
-            <!-- src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg" -->
+        <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" color="grey lighten-4" app>
 
             <v-list-item two-line class="py-2">
-                <v-list-item-avatar>
-                    <img src="images/usuarios/default.png">
-                </v-list-item-avatar>
                 <v-list-item-content>
-                    <v-list-item-title>{{ user.nome }}</v-list-item-title>
-                    <v-list-item-subtitle>Logado</v-list-item-subtitle>
+                    <v-list-item-title>{{unidade}}</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
 
@@ -82,22 +77,54 @@
         <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="primary" dark dense>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
                 <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-                    <span class="hidden-sm-and-down">SIMTRAP  |  {{unidade}}</span>
+                    <span class="hidden-sm-and-down">SIMTRAP </span>
                 </v-toolbar-title>
-            <v-spacer />
-            <v-btn icon large>
-                <v-avatar size="32px" item>
-                    <v-img
-                        src="https://randomuser.me/api/portraits/women/81.jpg"
-                        alt="Vuetify"
-                    />
-                </v-avatar>
-            </v-btn>
-            <v-btn icon @click="logout">
-                <v-icon>mdi-logout</v-icon>
-            </v-btn>
-        </v-app-bar>
 
+            <v-spacer/>
+
+            <div class="text-center">
+                <v-menu
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :nudge-width="240"
+                    offset-y
+                >
+                    <template v-slot:activator="{ on }">
+                        <v-btn icon large v-on="on">
+                                <v-avatar size="32px" item color="red">
+                                    <span class="white--text">{{ avatar }}</span>
+                                </v-avatar>
+                            </v-btn>
+                    </template>
+
+                    <v-card>
+
+                        <v-list>
+                            <v-list-item>
+                                <v-list-item-avatar color="red">
+                                    <span class="white--text">{{ avatar }}</span>
+                                </v-list-item-avatar>
+                                <v-list-item-content>
+                                    <v-list-item-title>{{user.nome}}</v-list-item-title>
+                                    <v-list-item-subtitle>Logado</v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
+
+                        <v-divider></v-divider>
+
+                        <v-card-actions>
+                            <v-btn color="primary" text>alterar senha</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="logout" >
+                                <v-icon class="ml-2">mdi-logout</v-icon>
+                            </v-btn>
+                        </v-card-actions>
+
+                    </v-card>
+                </v-menu>
+            </div>
+        </v-app-bar>
     </div>
 </template>
 
@@ -112,6 +139,7 @@
         data: () => ({
             dialog: false,
             drawer: null,
+            menu: false,
         }),
 
         methods: {
@@ -121,6 +149,18 @@
             logout: function() {
                 event.preventDefault();
                 document.getElementById('logout-form').submit();
+            }
+        },
+
+        computed: {
+
+            avatar: function () {
+                let ar = this.user.nome.split(' ');
+                let avatar = ar[0].substr(0,1)
+                if (ar.length > 1) {
+                    avatar += ar[ar.length-1].substr(0,1)
+                }
+                return avatar.toUpperCase();
             }
         }
     }
