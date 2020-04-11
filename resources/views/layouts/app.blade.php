@@ -70,7 +70,7 @@
         <v-app>
             <navigation 
                 :menus="{{ htmlspecialchars(json_encode($data))}}" 
-                :user="{{ htmlspecialchars(json_encode(['nome' => Auth::user()->name]))}}"
+                :user="{{ htmlspecialchars(json_encode(['nome' => Auth::user()->name, 'id' => Auth::user()->id]))}}"
                 :unidade="{{ htmlspecialchars(json_encode(session('unidade'))) }}"
             ></navigation>
             <v-content>

@@ -114,53 +114,114 @@
                         <v-divider></v-divider>
 
                         <v-card-actions>
-                            <v-btn color="primary" text>alterar senha</v-btn>
+                            <v-btn color="primary" text @click="dialogResetPassword=true">alterar senha</v-btn>
                             <v-spacer></v-spacer>
-                            <v-btn color="primary" text @click="logout" >
-                                <v-icon class="ml-2">mdi-logout</v-icon>
-                            </v-btn>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn v-on="on" color="primary" text @click="logout" >
+                                        <v-icon class="ml-2">mdi-logout</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Logout</span>
+                            </v-tooltip>
                         </v-card-actions>
 
                     </v-card>
                 </v-menu>
             </div>
         </v-app-bar>
+
+        <v-dialog v-model="dialogResetPassword" max-width="290">
+            <v-form v-model="formValidResetPassword" ref="formResetPassword">
+                <v-card>
+                    <v-card-text>
+                        <v-text-field 
+                            v-model="newPassword" 
+                            label="Digite a nova senha" 
+                            type="password"
+                            :rules="[v => !!v || 'Senha é obrigatória']"
+                        ></v-text-field>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="dialogResetPassword = false">Cancelar</v-btn>
+                        <v-btn color="red darken-1" text @click="resetPassword()" :loading="loading.reset">Resetar Senha</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-form>
+        </v-dialog>
+
     </div>
 </template>
 
 <script>
     export default {
         props: {
-            source: String,
             menus: Array,
             user: Object,
             unidade: String,
         },
+
         data: () => ({
             dialog: false,
             drawer: null,
             menu: false,
+
+            dialogResetPassword: false,
+            newPassword: null,
+            formValidResetPassword: true,
+
+            loading: {
+                reset: false,
+            }
         }),
 
         methods: {
             open: function(url){
                 window.location = url
             },
+
             logout: function() {
                 event.preventDefault();
                 document.getElementById('logout-form').submit();
+            },
+
+            resetPassword: function() {
+                if (!this.$refs.formResetPassword.validate()) return;
+                let vm = this;
+                axios
+                    .put(window.__routes.api.usuario+'/'+this.user.id, {
+                        password: vm.newPassword
+                    })
+                    .then(function(response){
+                        if(response.data.error) {
+                            vm.$toast.error('Erro ao resetar senha: '+response.data.error)
+                        }
+                        else {
+                            vm.$toast.success('Senha alterada com sucesso!')
+                            vm.dialogResetPassword = false;
+                        }
+                    })
+                    .finally(() => {vm.loading.reset = false;});
             }
         },
 
         computed: {
 
             avatar: function () {
-                let ar = this.user.nome.split(' ');
-                let avatar = ar[0].substr(0,1)
-                if (ar.length > 1) {
-                    avatar += ar[ar.length-1].substr(0,1)
+
+                try {
+                    let ar = this.user.nome.split(' ');
+                    let avatar = ar[0].substr(0,1)
+                    if (ar.length > 1) {
+                        avatar += ar[ar.length-1].substr(0,1)
+                    }
+                    return avatar.toUpperCase();
+                    
+                } catch (error) {
+                    return '  ';
                 }
-                return avatar.toUpperCase();
+                
             }
         }
     }
