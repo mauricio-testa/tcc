@@ -66,7 +66,7 @@ class ViagemController extends Controller
 
             // se mudar de veiculo, verifica se possui vagas suficientes
             if (!Viagem::canUpdateVeiculoTo($request->id_veiculo, $id))
-            throw new \Exception("Este veículo não tem vagas suficientes par o número de passageiros cadastrados nesta lista!");
+            throw new \Exception("Este veículo não tem vagas suficientes para o número de passageiros cadastrados nesta lista!");
 
             $viagem->update($request->all());
 

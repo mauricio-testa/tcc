@@ -195,6 +195,7 @@
            
             callback: async function (id) {
                 
+                this.pagination.current = 1;
                 await this.getItems();
 
                 // se estiver editando e Lista.vue está aberto, recarrega as informações da viagem 
