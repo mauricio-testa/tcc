@@ -21,9 +21,6 @@ class CreateListasTable extends Migration
             $table->string('consulta_local', 240);
             $table->time('consulta_hora')->nullable();
             $table->string('consulta_medico', 240)->nullable();
-            
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('id_paciente')->references('id')->on('pacientes');
             $table->foreign('id_viagem')->references('id')->on('viagens')->onDelete('cascade');;

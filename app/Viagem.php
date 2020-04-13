@@ -10,6 +10,8 @@ class Viagem extends Model
 {
     protected $table = 'viagens';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'id_veiculo', 'id_motorista', 'cod_destino', 'data_viagem', 'hora_saida', 'observacao', 'id_unidade'
     ];

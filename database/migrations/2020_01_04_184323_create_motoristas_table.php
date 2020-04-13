@@ -18,8 +18,6 @@ class CreateMotoristasTable extends Migration
             $table->string('nome', 240)->nullable(false);
             $table->string('telefone', 15)->nullable();
             $table->unsignedInteger('id_unidade')->nullable(false);
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
 

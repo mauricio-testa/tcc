@@ -136,7 +136,6 @@
                 { text: '#', value: 'id'},
                 { text: 'Nome', value: 'nome'},
                 { text: 'Telefone', value: 'telefone'},
-                { text: 'Data Criação', value: 'created_at'},
                 { text: 'Ações', value: 'action'},
             ],
 

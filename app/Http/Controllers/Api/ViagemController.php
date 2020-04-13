@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Viagem;
 use App\Http\Controllers\Helpers\ErrorInterpreter;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
 use App\ViewViagem;
 
 class ViagemController extends Controller
@@ -62,7 +61,6 @@ class ViagemController extends Controller
         try {
 
             $viagem = Viagem::findOrFail($id);
-            $viagem->updated_at = Carbon::now();
 
             // se mudar de veiculo, verifica se possui vagas suficientes
             if (!Viagem::canUpdateVeiculoTo($request->id_veiculo, $id))

@@ -22,8 +22,6 @@ class CreateVeiculosTable extends Migration
             $table->enum('tipo', ['PROPRIO', 'TERCEIRIZADO'])->default('PROPRIO');
             $table->string('ano_modelo', 9)->nullable();
             $table->string('marca_modelo', 45)->nullable();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
 

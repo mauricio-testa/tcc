@@ -22,8 +22,6 @@ class CreatePacientesTable extends Migration
             $table->string('endereco', 240)->nullable();
             $table->unsignedInteger('id_unidade');
             $table->integer('codigo_municipio')->nullable(false);
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
             $table->foreign('codigo_municipio')->references('codigo')->on('municipios');

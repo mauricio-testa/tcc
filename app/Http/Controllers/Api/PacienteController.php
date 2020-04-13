@@ -8,7 +8,6 @@ use App\Paciente;
 use App\Unidade;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Helpers\ErrorInterpreter;
-use Illuminate\Support\Carbon;
 
 class PacienteController extends Controller
 {
@@ -50,7 +49,6 @@ class PacienteController extends Controller
     {
         try {
             $paciente = Paciente::findOrFail($id);
-            $paciente->updated_at = Carbon::now();
             $paciente->update($request->all());
         } catch (\Throwable $th) {
             return response()->json([

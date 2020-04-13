@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Veiculo;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
 use App\Http\Controllers\Helpers\ErrorInterpreter;
 
 
@@ -53,7 +52,6 @@ class VeiculoController extends Controller
     {
         try {
             $veiculo = Veiculo::findOrFail($id);
-            $veiculo->updated_at = Carbon::now();
             $veiculo->update($request->all());
         } catch (\Throwable $th) {
             return response()->json([

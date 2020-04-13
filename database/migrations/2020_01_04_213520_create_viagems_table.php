@@ -23,7 +23,6 @@ class CreateViagemsTable extends Migration
             $table->time('hora_saida')->nullable();
             $table->string('observacao', 240)->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
             $table->foreign('cod_destino')->references('codigo')->on('municipios');

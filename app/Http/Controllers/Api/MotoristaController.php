@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Motorista;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
 use App\Http\Controllers\Helpers\ErrorInterpreter;
 
 
@@ -53,7 +52,6 @@ class MotoristaController extends Controller
     {
         try {
             $motorista = Motorista::findOrFail($id);
-            $motorista->updated_at = Carbon::now();
             $motorista->update($request->all());
         } catch (\Throwable $th) {
             return response()->json([

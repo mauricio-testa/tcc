@@ -9,6 +9,8 @@ class Lista extends Model
 {
     protected $table = 'lista';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'id_paciente','id_viagem', 'acompanhante_rg', 'acompanhante_nome', 'consulta_local', 'consulta_medico', 'consulta_hora'
     ];
