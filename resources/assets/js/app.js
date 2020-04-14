@@ -38,19 +38,24 @@ Vue.prototype.$openBlank = function (url) {
 Vue.component('navigation', require('./components/global/Navigation.vue'));
 Vue.component('lookup',     require('./components/global/Lookup.vue'));
 
-// views
+//dashboard
+Vue.component('dashboard',  require('./components/dashboard/Index.vue'));
+
+// cadastros
 Vue.component('motoristas', require('./components/Motoristas.vue'));
 Vue.component('veiculos',   require('./components/Veiculos.vue'));
-Vue.component('dashboard',  require('./components/Dashboard.vue'));
 Vue.component('pacientes',  require('./components/Pacientes.vue'));
 
+// viagens
 Vue.component('viagens',        require('./components/viagem/Index.vue'));
 Vue.component('viagem-edit',    require('./components/viagem/Edit.vue'));
 Vue.component('viagem-list',    require('./components/viagem/Lista.vue'));
 
+// admin
 Vue.component('admin-unidade',  require('./components/admin/Unidades.vue'));
 Vue.component('admin-usuario',  require('./components/admin/Usuarios.vue'));
 
+// auth
 Vue.component('auth-login',     require('./components/auth/Login.vue'));
 
 const app = new Vue({
