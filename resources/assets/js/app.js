@@ -39,7 +39,10 @@ Vue.component('navigation', require('./components/global/Navigation.vue'));
 Vue.component('lookup',     require('./components/global/Lookup.vue'));
 
 //dashboard
-Vue.component('dashboard',  require('./components/dashboard/Index.vue'));
+Vue.component('dashboard',          require('./components/dashboard/Index.vue'));
+Vue.component('dashboard-graphic',  require('./components/dashboard/Graph.vue'));
+Vue.component('dashboard-stats',    require('./components/dashboard/Stats.vue'));
+Vue.component('dashboard-lists',    require('./components/dashboard/Lists.vue'));
 
 // cadastros
 Vue.component('motoristas', require('./components/Motoristas.vue'));
