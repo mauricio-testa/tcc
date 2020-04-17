@@ -36,7 +36,9 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('relatorios')->group(function () {
-        Route::get('lista/{viagem}', 'Report\ListaController@index')->where('viagem', '[0-9]+');;
+        Route::get('lista/{viagem}', 'Report\ReportController@lista')->where('viagem', '[0-9]+');
+        Route::get('paciente/{paciente}', 'Report\ReportController@paciente')->where('paciente', '[0-9]+');
+        Route::get('viagens', 'Report\ReportController@viagens');
     });
 
     Route::view('admin/unidades', 'admin.unidade')->middleware(Admin::class);

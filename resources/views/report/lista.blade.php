@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="wrapper">
+    <div class="wrapper report__lista">
         <div class="content">
 
             <div class="header">
@@ -31,8 +31,6 @@
                     <li><span>Data: </span>{{ $viagem->data_formated }}</li>
                     <li><span>Horário de saída: </span>{{ date('H:i', strtotime($viagem->hora_saida)) }}</li>
                     <li><span>Destino: </span>{{ $viagem->municipio_nome }}</li>
-                </ul>
-                <ul>
                     <li><span>Motorista: </span>{{ $viagem->motorista_nome }}</li>
                     <li><span>Veículo: </span>{{ $viagem->veiculo }}</li>
                     <li><span>Passageiros: </span>{{ sizeof($lista)}} ({{ $viagem->lotacao }} lugares)</li>
