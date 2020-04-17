@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Helpers\ErrorInterpreter;
 
-
-class DashboardController extends Controller
+class Dashboard extends Model
 {
     protected $unidade = NULL;
 
-    public function index() {
+    public function getAll() {
 
         $this->unidade = Auth::user()->id_unidade;
 
@@ -95,7 +94,7 @@ class DashboardController extends Controller
 
         foreach ($results as $key => $value) {
             array_push($labels, $this->monthName($value->month_num));
-            array_push($data, $value->viagens);
+            array_push($data, (int) $value->viagens);
         }
 
         return [

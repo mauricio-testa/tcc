@@ -2,6 +2,6 @@
 
 @section('content')
 
-<dashboard></dashboard>
+<dashboard :data="{{ htmlspecialchars(json_encode($data))}}"></dashboard>
 
 @endsection
