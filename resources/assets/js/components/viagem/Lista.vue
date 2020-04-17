@@ -51,7 +51,7 @@
                     </v-chip>
                     <v-spacer></v-spacer>
                     <v-icon @click="editViagem" class="mr-2">mdi-pencil</v-icon>
-                    <v-icon @click="$emit('export', viagem.id)">mdi-printer-pos</v-icon>
+                    <v-icon @click="$openPopup('./relatorios/lista/'+viagem.id, 'Lista')">mdi-printer-pos</v-icon>
                 </div>
                 <v-data-table
                     :headers="headers"

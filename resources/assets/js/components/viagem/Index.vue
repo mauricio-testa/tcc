@@ -49,7 +49,7 @@
                 <v-icon @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
                 <v-icon @click="deleteItem(item, false)" class="mr-2">mdi-delete</v-icon>
                 <v-icon @click="listPassageiros(item)" class="mr-2" >mdi-view-list</v-icon>
-                <v-icon @click="exportList(item.id)">mdi-printer-pos</v-icon>
+                <v-icon @click="$openPopup('./relatorios/lista/'+item.id, 'Lista')">mdi-printer-pos</v-icon>
             </template>
         </v-data-table>
 
@@ -78,7 +78,7 @@
 
         <!-- dialog edit / new -->
         <viagem-edit :viagem="selectedViagem" :dialogEdit.sync="dialogEdit" v-on:callback="callback"></viagem-edit>
-        <viagem-list :viagem="selectedViagem" :dialogList.sync="dialogList" v-on:editViagem="dialogEdit = true" v-on:export="exportList"></viagem-list>
+        <viagem-list :viagem="selectedViagem" :dialogList.sync="dialogList" v-on:editViagem="dialogEdit = true"></viagem-list>
 
     </div>
 </template>
@@ -145,14 +145,7 @@
         mounted () {
 
             this.getItems();
-
             this.defaultItem.data_viagem = this.default_date;
-
-            // define parametros de abertura do popup de exportação da lista
-            let windowWidth = window.innerWidth - 200;
-            let windowHeight = window.innerHeight - 100;
-            let left = (window.innerWidth / 2) - (windowWidth / 2)
-            this.popupParams = `width=${windowWidth}, height=${windowHeight}, top=50, left=${left}`;
 
         },
 
@@ -299,13 +292,6 @@
             onPageChange: function () {
                 this.getItems();
             },
-
-            exportList: function(id) {
-                let popup = window.open('./relatorios/lista/'+id, 'Exportação de lista', this.popupParams);
-                if (!popup || popup.closed || typeof popup.closed=='undefined') { 
-                    window.open('./relatorios/lista/'+id, 'blank')
-                }
-            }
         }
     }
 </script>

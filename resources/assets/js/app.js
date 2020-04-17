@@ -1,10 +1,3 @@
-
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
 
 window.Vue = require('vue');
@@ -22,17 +15,6 @@ Vue.use(VuetifyToast, {
   x: 'center',
   y: 'bottom',
 })
-
-Vue.prototype.$debounceTime = 1200;
-Vue.prototype.$openBlank = function (url) {
-  window.open(url,'_blank')
-},
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
 // global
 Vue.component('navigation', require('./components/global/Navigation.vue'));
@@ -62,6 +44,34 @@ Vue.component('dashboard-stats',            require('./components/dashboard/Stat
 Vue.component('dashboard-graph-pacientes',  require('./components/dashboard/GraphPacientes.vue'));
 Vue.component('dashboard-graph-viagens',    require('./components/dashboard/GraphViagens.vue'));
 Vue.component('dashboard-next-viagens',     require('./components/dashboard/NextViagens.vue'));
+
+/*
+ * Tempo de debounce para autocompletes
+ */
+Vue.prototype.$debounceTime = 1200;
+
+/*
+ * Apenas abre uma URL em target _blank
+ */
+Vue.prototype.$openBlank = function (url) {
+  window.open(url,'_blank')
+},
+
+/*
+ * Abre um popup centralizado na tela
+ */
+Vue.prototype.$openPopup = function (url, title) {
+  
+  let windowWidth = window.innerWidth - 200;
+  let windowHeight = window.innerHeight - 100;
+  let left = (window.innerWidth / 2) - (windowWidth / 2)
+  let popupParams = `width=${windowWidth}, height=${windowHeight}, top=50, left=${left}`;
+
+  let popup = window.open(url, title, popupParams);
+  if (!popup || popup.closed || typeof popup.closed=='undefined') { 
+      window.open(url, 'blank')
+  }
+}
 
 const app = new Vue({
   el: '#app',

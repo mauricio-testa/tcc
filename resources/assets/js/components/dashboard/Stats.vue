@@ -23,10 +23,10 @@
   export default {
     data: () => ({
       stats: [
-        {icon: 'mdi-account', title: 'Viagens Cadastradas', 'value' : 0, color: 'blue darken-2'},
-        {icon: 'mdi-account', title: 'Pacientes Transportados', 'value' : 0, color: 'indigo darken-2'},
+        {icon: 'mdi-account', title: 'Listas Cadastradas', 'value' : 0, color: 'blue darken-2'},
+        {icon: 'mdi-account', title: 'Pacientes em Listas', 'value' : 0, color: 'indigo darken-2'},
         {icon: 'mdi-account', title: 'Pacientes com Acompanhantes', 'value' : 0, color: 'teal darken-2'},
-        {icon: 'mdi-account', title: 'Média de Passageios por Viagem', 'value' : 0, color: ' deep-purple darken-2'}
+        {icon: 'mdi-account', title: 'Média de Passageiros por Viagem', 'value' : 0, color: ' deep-purple darken-2'}
       ]
     }),
     
