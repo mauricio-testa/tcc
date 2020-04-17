@@ -25,7 +25,7 @@ Vue.use(VuetifyToast, {
 
 Vue.prototype.$debounceTime = 1200;
 Vue.prototype.$openBlank = function (url) {
-    window.open(url,'_blank')
+  window.open(url,'_blank')
 },
 
 /**
