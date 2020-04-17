@@ -22,7 +22,6 @@ class PacienteController extends Controller
             return $query->paginate(config('constants.PAGINATION_SIZE'));
 
         } catch (\Throwable $th) {
-            dd($th);
             return response()->json([
                 'error' => ErrorInterpreter::getMessage($th)
             ]);

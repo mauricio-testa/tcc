@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('municipios', 'Api\MunicipioController');
         Route::resource('unidades', 'Api\UnidadeController')->middleware(Admin::class);
         Route::resource('usuarios', 'Api\UsuarioController');
+        Route::resource('dashboard', 'Api\DashboardController');
     });
 
     Route::prefix('relatorios')->group(function () {
