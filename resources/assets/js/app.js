@@ -38,12 +38,6 @@ Vue.prototype.$openBlank = function (url) {
 Vue.component('navigation', require('./components/global/Navigation.vue'));
 Vue.component('lookup',     require('./components/global/Lookup.vue'));
 
-//dashboard
-Vue.component('dashboard',          require('./components/dashboard/Index.vue'));
-Vue.component('dashboard-graphic',  require('./components/dashboard/Graph.vue'));
-Vue.component('dashboard-stats',    require('./components/dashboard/Stats.vue'));
-Vue.component('dashboard-lists',    require('./components/dashboard/Lists.vue'));
-
 // cadastros
 Vue.component('motoristas', require('./components/Motoristas.vue'));
 Vue.component('veiculos',   require('./components/Veiculos.vue'));
@@ -60,6 +54,14 @@ Vue.component('admin-usuario',  require('./components/admin/Usuarios.vue'));
 
 // auth
 Vue.component('auth-login',     require('./components/auth/Login.vue'));
+
+//dashboard
+Vue.component('dashboard',                  require('./components/dashboard/Index.vue'));
+Vue.component('dashboard-top5',             require('./components/dashboard/Top5.vue'));
+Vue.component('dashboard-stats',            require('./components/dashboard/Stats.vue'));
+Vue.component('dashboard-graph-pacientes',  require('./components/dashboard/GraphPacientes.vue'));
+Vue.component('dashboard-graph-viagens',    require('./components/dashboard/GraphViagens.vue'));
+Vue.component('dashboard-next-viagens',     require('./components/dashboard/NextViagens.vue'));
 
 const app = new Vue({
   el: '#app',
