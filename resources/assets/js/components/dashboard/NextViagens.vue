@@ -18,7 +18,7 @@
                 <td>{{viagem.municipio_nome}}</td>
                 <td>{{viagem.veiculo}}</td>
                 <td>{{viagem.passageiros}}</td>
-                <td><v-icon>mdi-printer-pos</v-icon></td>
+                <td><v-icon @click="exportList(viagem.id)">mdi-printer-pos</v-icon></td>
                 </tr>
             </tbody>
             </template>
@@ -32,9 +32,24 @@
 export default {
     data: () => ({
         viagens: [],
+        popupParams: null,
     }),
-    mounted() {
-      this.viagens = this.$parent.data.proximas_viagens;
+    mounted () {
+        // define parametros de abertura do popup de exportação da lista
+        let windowWidth = window.innerWidth - 200;
+        let windowHeight = window.innerHeight - 100;
+        let left = (window.innerWidth / 2) - (windowWidth / 2)
+        this.popupParams = `width=${windowWidth}, height=${windowHeight}, top=50, left=${left}`;
+
+        this.viagens = this.$parent.data.proximas_viagens;
+    },
+    methods: {
+        exportList: function(id) {
+            let popup = window.open('./relatorios/lista/'+id, 'Exportação de lista', this.popupParams);
+            if (!popup || popup.closed || typeof popup.closed=='undefined') { 
+                window.open('./relatorios/lista/'+id, 'blank')
+            }
+        }
     }
   }
 </script>
