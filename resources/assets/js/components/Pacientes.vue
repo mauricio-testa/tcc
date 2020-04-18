@@ -39,7 +39,8 @@
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
                 <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                <v-icon @click="deleteItem(item, false)">mdi-delete</v-icon>
+                <v-icon class="mr-2" @click="deleteItem(item, false)">mdi-delete</v-icon>
+                <v-icon @click="$openPopup('../relatorios/paciente/'+item.id, 'paciente')">mdi-printer-pos</v-icon>
             </template>
         </v-data-table>
 

@@ -131,7 +131,7 @@ body {
 }
 
 // estilos somente para a lista
-.wrapper.report__lista {
+.report {
     table .acompanhante {
         text-align: center;;
     }
@@ -145,8 +145,8 @@ body {
 }
 
 // estilos para todos menos a lista
-.wrapper:not(.report__lista) {
-    .content > .header > div {
+.report:not(.report__lista) {
+    .header > div {
         &:first-child, &:last-child {
             display: none;
         }

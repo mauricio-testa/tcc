@@ -165,19 +165,19 @@ body .wrapper .content button:hover {
   }
 }
 
-.wrapper.report__lista table .acompanhante {
+.report table .acompanhante {
   text-align: center;
 }
 
-.wrapper.report__lista .observacoes {
+.report .observacoes {
   background: #ffe016;
   padding: 20px;
   margin-top: 30px;
   line-height: 1.4;
 }
 
-.wrapper:not(.report__lista) .content > .header > div:first-child,
-.wrapper:not(.report__lista) .content > .header > div:last-child {
+.report:not(.report__lista) .header > div:first-child,
+.report:not(.report__lista) .header > div:last-child {
   display: none;
 }
 
