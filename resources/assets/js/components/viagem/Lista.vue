@@ -106,7 +106,7 @@
                             <template v-slot:append-outer>
                                 <v-icon @click="$openBlank('/cadastros/pacientes')">mdi-plus</v-icon>
                             </template>
-                            </v-autocomplete>
+                        </v-autocomplete>
 
                         <v-text-field 
                             label="Local da Consulta" 

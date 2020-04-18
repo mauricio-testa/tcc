@@ -30,7 +30,7 @@
             ['text' => 'Veículos', 'url' => url('/cadastros/veiculos'), 'icon' => 'mdi-car'],
             ['text' => 'Pacientes', 'url' => url('/cadastros/pacientes'), 'icon' => 'mdi-account-group'],
             ['heading' => 'Administração'],
-            ['text' => 'Relatórios', 'url' => url('/'), 'icon' => 'mdi-file-chart'],
+            ['text' => 'Relatórios', 'url' => url('/relatorios'), 'icon' => 'mdi-file-chart'],
             ['text' => 'Logs', 'url' => url('/'), 'icon' => 'mdi-format-list-bulleted-triangle', 'level' => -1],
             ['text' => 'Unidades', 'url' =>  url('/admin/unidades'), 'icon' => 'mdi-hospital-building', 'level' => -1],
         ];
