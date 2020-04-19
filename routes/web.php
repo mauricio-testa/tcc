@@ -39,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
         Route::view('./','report.index');
         Route::get('lista/{viagem}', 'Report\ReportController@lista')->where('viagem', '[0-9]+');
         Route::get('paciente/{paciente}', 'Report\ReportController@paciente')->where('paciente', '[0-9]+');
-        Route::get('viagens', 'Report\ReportController@viagens');
+        Route::get('viagens/{qs}', 'Report\ReportController@viagens');
     });
 
     Route::view('admin/unidades', 'admin.unidade')->middleware(Admin::class);

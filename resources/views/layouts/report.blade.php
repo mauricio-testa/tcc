@@ -16,7 +16,7 @@
             @yield('content')
 
             <footer>
-                Gerado em <?php echo  date('d/m/Y', strtotime(date("Y-m-d")))?> a partir do sistema SIMTRAP
+                Gerado em <?php echo date('d/m/Y', strtotime(date("Y-m-d")))?> a partir do sistema SIMTRAP
             </footer>
 
             <button onclick="javascrpit:window.print()">

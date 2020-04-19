@@ -1,79 +1,220 @@
 <template>
     <div>
-        <v-card>
-        
-            <v-card-title>Relatório de Viagens por Paciente</v-card-title>
-            <v-card-text>
-                <v-alert outlined color="blue">
-                    Dica! Você também pode gerar este relatório pela lista de pacientes
-                </v-alert>
-                <div class="d-flex align-center">
-                    <v-autocomplete
-                        v-model="id_paciente"
-                        :items="lookupPacientes"
-                        :loading="loading.lookup"
-                        :search-input.sync="searchPacientes"
-                        item-text="nome"
-                        item-value="id"
-                        label="Selecione um paciente..."
-                        :rules="[v => !!v || 'Obrigatório!']"
-                        no-data-text="Digite algo para pesquisar..."
-                        @keyup="search"
-                    ></v-autocomplete>
-                    <v-btn class="ml-5" large dark
-                        @click="gerarRelatorioPaciente"
-                    >Gerar</v-btn>
-                </div>
-            </v-card-text>
-        </v-card>
 
-        <br><br><br><br><br>
+        <v-row>
+            <v-col cols="6">
+                <v-card>
+                    <v-card-title>Relatório de Viagens</v-card-title>
+                    <v-card-text>
+                        <v-text-field 
+                            v-model="get.start" 
+                            label="Data inicial" 
+                            type="date" 
+                            prepend-icon="mdi-calendar-range"
+                        ></v-text-field>
+                        
+                        <v-text-field 
+                            v-model="get.end" 
+                            label="Data final" 
+                            type="date" 
+                            prepend-icon="mdi-calendar-range"
+                        ></v-text-field>
 
-        Relatório de Viagens [A DESENVOLVER]
-        <br> Filtrar por: data inicial e final, motorista, destino, order by
-        <br> Exibir: id viagem, data, hora saída, veiculo, destino, motorista, número de passageiros (pacientes/acompanhantes)
+                        <v-autocomplete
+                            v-model="get.destino"
+                            :items="lookupMunicipios"
+                            :loading="loading.lookupMunicipios"
+                            item-text="nome"
+                            item-value="codigo"
+                            label="Filtrar por destino"
+                            prepend-icon="mdi-map-marker"
+                            clearable
+                        ></v-autocomplete>
 
-        <br><br><br><br><br>
+                        <v-autocomplete
+                            v-model="get.veiculo"
+                            :items="lookupVeiculos"
+                            :loading="loading.lookupVeiculos"
+                            item-text="descricao"
+                            item-value="id"
+                            label="Filtrar por veículo"
+                            prepend-icon="mdi-car"
+                            clearable
+                            >
+                        </v-autocomplete>
 
-        Lista de Viagem
-        <v-alert type="info">
-            Para gerar este relatório, utilize o menu "Viagens" e clique no ícone da impressora da viagem que deseja exportar. 
-            Você também pode exportar esse relatório diretamente pela própria tela de adição de passageiros
-        </v-alert>
+                        <v-autocomplete
+                            v-model="get.motorista"
+                            :items="lookupMotoristas"
+                            :loading="loading.lookupMotoristas"
+                            item-text="nome"
+                            item-value="id"
+                            label="Filtrar por motorista?"
+                            prepend-icon="mdi-account-tie"
+                            clearable
+                        ></v-autocomplete>
+                        
+                        <v-select
+                            :items="orderby"
+                            v-model="get.order"
+                            label="Ordenar por:"
+                            prepend-icon="mdi-sort-ascending"
+                        ></v-select>
 
+                        <v-btn block color="secondary" @click="gerarRelatorioViagens" dark>Gerar o Relatório</v-btn>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+            <v-col cols="6">
 
-        <lookup  ref="lookupComponent" v-on:updateLookup="updateLookup"></lookup>
+                <v-card>
+                    <v-card-title>Relatório de Viagens por Paciente</v-card-title>
+                    <v-card-text>
+                        <v-alert outlined color="blue">
+                            Dica! Você também pode gerar este relatório pela lista de pacientes
+                        </v-alert>
+                            <v-autocomplete
+                                v-model="id_paciente"
+                                :items="lookupPacientes"
+                                :loading="loading.lookupPacientes"
+                                :search-input.sync="searchPacientes"
+                                item-text="nome"
+                                item-value="id"
+                                label="Selecione um paciente..."
+                                :rules="[v => !!v || 'Obrigatório!']"
+                                no-data-text="Digite algo para pesquisar..."
+                                @keyup="search"
+                                prepend-icon="mdi-account"
+                            ></v-autocomplete>
+                            <v-btn block color="secondary" dark @click="gerarRelatorioPaciente">Gerar o Relatório</v-btn>
+                    </v-card-text>
+                </v-card>
+
+                <v-card class="mt-6">
+                    <v-card-title>Lista de Viagem</v-card-title>
+                    <v-card-text>
+                        <v-alert outlined color="blue">
+                            Para gerar este relatório, utilize o menu "Viagens" e clique no ícone da impressora da viagem que deseja exportar. 
+                            Você também pode exportar esse relatório diretamente pela própria tela de adição de passageiros
+                        </v-alert>
+                        <v-btn block color="secondary" dark href="./viagens">Vamos lá</v-btn>
+                    </v-card-text>
+                </v-card>
+
+            </v-col>
+        </v-row>
+
+        <lookup ref="lookupComponent" v-on:updateLookup="updateLookup"></lookup>
     </div>
 </template>
 <script>
 export default {
     data: () => ({
+
         lookupPacientes: [],
+        lookupMunicipios: [],
+        lookupVeiculos: [],
+        lookupMotoristas: [],
+
         loading: {
-            lookup: false,
+            lookupPacientes: false,
+            lookupMunicipios: false,
+            lookupVeiculos: false,
+            lookupMotoristas: false
         },
+
+        orderby: [
+            { text: 'ID', value: 'id'},
+            { text: 'Data', value: 'data_viagem'},
+            { text: 'Veículo', value: 'veiculo_nome'},
+            { text: 'Motorista', value: 'motorista_nome'},
+            { text: 'Município', value: 'municipio_nome'},
+        ],
+
         searchPacientes: null,
         timeoutId: null,
         id_paciente: null,
+
+        get: {
+            start: null,
+            end: null,
+            destino: null,
+            veiculo: null,
+            motorista: null,
+            order: 'id'
+        }
     }),
+
+    mounted () {
+        this.getStaticLookups();
+    },
 
     methods: {
 
+        // relatorio paciente
         gerarRelatorioPaciente () {
             if (this.id_paciente < 1) {
                 this.$toast.warning('Por favor, selecione o paciente para o qual deseja gerar o relatório');
                 return;
             }
-            this.$openPopup('./relatorios/paciente/'+this.id_paciente, 'paciente')
+            this.$openPopup('/relatorios/paciente/'+this.id_paciente, 'paciente')
         },
 
-        /* LOOKUP E SEARCH */
+        // relatorio viagens
+        gerarRelatorioViagens () {
+            let params = '';
+
+            params+= '&start='      +this.sanitize(this.get.start)
+            params+= '&end='        +this.sanitize(this.get.end)
+            params+= '&veiculo='    +this.sanitize(this.get.veiculo)
+            params+= '&motorista='  +this.sanitize(this.get.motorista)
+            params+= '&destino='    +this.sanitize(this.get.destino)
+            params+= '&order='      +this.get.order
+
+            this.$openPopup('/relatorios/viagens/?qs='+encodeURIComponent(params))
+        },
+
+        sanitize (val) {
+            return typeof val == 'undefined' || val == '' ? null : val
+        },
+
+        // lookups relatorio viagens 
+        getStaticLookups () {
+            this.loading.lookupVeiculos = true
+            this.$refs.lookupComponent.getLookup('VEICULO');
+            this.loading.lookupMunicipios = true
+            this.$refs.lookupComponent.getLookup('MOTORISTA');
+            this.loading.lookupMunicipios = true
+            this.$refs.lookupComponent.getLookup('MUNICIPIO');
+        },
+
+        // callback lookups
+        updateLookup (datasetName, dataArray) {
+            if (datasetName == 'PACIENTE') {
+                this.lookupPacientes = dataArray;
+                this.loading.lookupPacientes = false;
+            }
+            if (datasetName == 'VEICULO') {
+                this.lookupVeiculos = dataArray
+                this.loading.lookupVeiculos = false
+            }
+            if (datasetName == 'MOTORISTA') {
+                this.lookupMotoristas = dataArray
+                this.loading.lookupMotoristas = false
+            }
+            if (datasetName == 'MUNICIPIO') {
+                this.lookupMunicipios = dataArray
+                this.loading.lookupMunicipios = false
+            }
+        },
+
+        // lookup pacientes
         search () {
             if (this.searchPacientes == null || this.searchPacientes == '') return
             this._debounce();
         },
         _debounce(){
-            this.loading.lookup = true;
+            this.loading.lookupPacientes = true;
             if (this.timeoutId !== null) {
                 clearTimeout(this.timeoutId);
             }
@@ -83,10 +224,6 @@ export default {
         },
         getPacientesLookup: function () {
             this.$refs.lookupComponent.getLookup('PACIENTE', this.searchPacientes);
-        },
-        updateLookup (datasetName, dataArray) {
-            this.lookupPacientes = dataArray;
-            this.loading.lookup = false;
         },
     }
 }

@@ -209,8 +209,8 @@
                     this.loading.lookupVeiculos = true
                     this.$refs.lookupComponent.getLookup('VEICULO');
                 }
-                if (this.lookupMunicipios.length == 0) {
-                    this.loading.lookupMunicipios = true
+                if (this.lookupMotoristas.length == 0) {
+                    this.loading.lookupMotoristas = true
                     this.$refs.lookupComponent.getLookup('MOTORISTA');
                 }
                 if (this.lookupMunicipios.length == 0) {
