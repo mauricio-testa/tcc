@@ -1,9 +1,47 @@
 <template>
     <div>
-
         <v-row>
             <v-col cols="6">
-                <v-card>
+                <v-card :class="['d-flex align-center pa-5', {'blue-grey lighten-5' : currentReport == report.index}]" 
+                    v-for="report in reports" 
+                    :key="report.index"
+                    elevation="0">
+                    <div>
+                        <span class="title">{{report.title}}</span>
+                        <p class="body-2 mt-1">{{report.text}}</p>
+                    </div>
+                    <div class="pa-3">
+                        <v-icon @click="currentReport = report.index" size="40">mdi-chevron-right</v-icon>
+                    </div>
+                    <v-divider></v-divider>
+                </v-card>
+            </v-col>
+            <v-col cols="6">
+
+                <v-card v-show="currentReport == 1">
+                    <v-card-title>Relatório de Viagens por Paciente</v-card-title>
+                    <v-card-text>
+                        <v-alert outlined color="blue">
+                            Dica! Você também pode gerar este relatório pela lista de pacientes
+                        </v-alert>
+                            <v-autocomplete
+                                v-model="id_paciente"
+                                :items="lookupPacientes"
+                                :loading="loading.lookupPacientes"
+                                :search-input.sync="searchPacientes"
+                                item-text="nome"
+                                item-value="id"
+                                label="Selecione um paciente..."
+                                :rules="[v => !!v || 'Obrigatório!']"
+                                no-data-text="Digite algo para pesquisar..."
+                                @keyup="search"
+                                prepend-icon="mdi-account"
+                            ></v-autocomplete>
+                            <v-btn block color="secondary" dark @click="gerarRelatorioPaciente">Gerar o Relatório</v-btn>
+                    </v-card-text>
+                </v-card>
+
+                <v-card v-show="currentReport == 2">
                     <v-card-title>Relatório de Viagens</v-card-title>
                     <v-card-text>
                         <v-text-field 
@@ -49,7 +87,7 @@
                             :loading="loading.lookupMotoristas"
                             item-text="nome"
                             item-value="id"
-                            label="Filtrar por motorista?"
+                            label="Filtrar por motorista"
                             prepend-icon="mdi-account-tie"
                             clearable
                         ></v-autocomplete>
@@ -64,33 +102,8 @@
                         <v-btn block color="secondary" @click="gerarRelatorioViagens" dark>Gerar o Relatório</v-btn>
                     </v-card-text>
                 </v-card>
-            </v-col>
-            <v-col cols="6">
 
-                <v-card>
-                    <v-card-title>Relatório de Viagens por Paciente</v-card-title>
-                    <v-card-text>
-                        <v-alert outlined color="blue">
-                            Dica! Você também pode gerar este relatório pela lista de pacientes
-                        </v-alert>
-                            <v-autocomplete
-                                v-model="id_paciente"
-                                :items="lookupPacientes"
-                                :loading="loading.lookupPacientes"
-                                :search-input.sync="searchPacientes"
-                                item-text="nome"
-                                item-value="id"
-                                label="Selecione um paciente..."
-                                :rules="[v => !!v || 'Obrigatório!']"
-                                no-data-text="Digite algo para pesquisar..."
-                                @keyup="search"
-                                prepend-icon="mdi-account"
-                            ></v-autocomplete>
-                            <v-btn block color="secondary" dark @click="gerarRelatorioPaciente">Gerar o Relatório</v-btn>
-                    </v-card-text>
-                </v-card>
-
-                <v-card class="mt-6">
+                <v-card v-show="currentReport == 3">
                     <v-card-title>Lista de Viagem</v-card-title>
                     <v-card-text>
                         <v-alert outlined color="blue">
@@ -110,6 +123,25 @@
 <script>
 export default {
     data: () => ({
+
+        reports: [
+            {
+                index: 1,
+                title: 'Relatório de Viagens por Paciente',
+                text: 'Selecione um paciente e exporte uma lista de todas as viagens em que o mesmo já foi transportado, contendo data da viagem, destino, veículo utilizado, local, médico e hora da consulta',
+            },
+            {
+                index: 2,
+                title: 'Relatório de Viagens',
+                text: 'Neste relatório você poderá exportar uma lista de viagens realizadas entre um determinado período, podendo ainda filtrar por motorista, veículo, destino e ordenar o resultado'
+            },
+            {
+                index: 3,
+                title: 'Lista de Viagem',
+                text: 'Este é o relatório contém no seu cabeçalho dados básicos sobre a viagem e a relação de passageiros cadastrados, bem como acompanhantes, observações e campo para poder marcar a chamada dos passageiros'
+            }
+        ],
+        currentReport: 1,
 
         lookupPacientes: [],
         lookupMunicipios: [],
@@ -145,8 +177,11 @@ export default {
         }
     }),
 
-    mounted () {
-        this.getStaticLookups();
+    watch: {
+        currentReport: function (val) {
+            if (this.lookupMunicipios.length > 0 || val != 2) return;
+            this.getStaticLookups();
+        }
     },
 
     methods: {
@@ -228,3 +263,8 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+p {
+    color: rgba(0,0,0,.7)
+}
+</style>
