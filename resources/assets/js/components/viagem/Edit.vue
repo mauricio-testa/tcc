@@ -69,7 +69,7 @@
                                 </v-col>
                             </v-row>
                             <v-textarea
-                                label="Alguma observação?"
+                                label="Observações da viagem"
                                 v-model="viagem.observacao"
                                 rows="3"
                             ></v-textarea>

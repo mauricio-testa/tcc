@@ -39,7 +39,7 @@
             <td>Telefone</td>
             <td>Local</td>
             <td>Horário</td>
-            <td>Médico</td>
+            <td>Obs</td>
             <td>X</td>
         </thead>
         <tbody>
@@ -58,7 +58,7 @@
                     <td>{{ $passageiro->telefone }}</td>
                     <td>{{ $passageiro->consulta_local }}</td>
                     <td>{{ $passageiro->consulta_hora }}</td>
-                    <td>{{ $passageiro->consulta_medico }}</td>
+                    <td>{{ $passageiro->consulta_observacao }}</td>
                     <td></td>
                 </tr>
             @endif

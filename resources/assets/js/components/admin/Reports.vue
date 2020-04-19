@@ -5,13 +5,14 @@
                 <v-card :class="['d-flex align-center pa-5', {'blue-grey lighten-5' : currentReport == report.index}]" 
                     v-for="report in reports" 
                     :key="report.index"
-                    elevation="0">
+                    elevation="0"
+                    @click="currentReport = report.index">
                     <div>
                         <span class="title">{{report.title}}</span>
                         <p class="body-2 mt-1">{{report.text}}</p>
                     </div>
                     <div class="pa-3">
-                        <v-icon @click="currentReport = report.index" size="40">mdi-chevron-right</v-icon>
+                        <v-icon size="40">mdi-chevron-right</v-icon>
                     </div>
                     <v-divider></v-divider>
                 </v-card>
@@ -128,7 +129,7 @@ export default {
             {
                 index: 1,
                 title: 'Relatório de Viagens por Paciente',
-                text: 'Selecione um paciente e exporte uma lista de todas as viagens em que o mesmo já foi transportado, contendo data da viagem, destino, veículo utilizado, local, médico e hora da consulta',
+                text: 'Selecione um paciente e exporte uma lista de todas as viagens em que o mesmo já foi transportado, contendo data da viagem, destino, veículo utilizado, local, observação e hora da consulta',
             },
             {
                 index: 2,

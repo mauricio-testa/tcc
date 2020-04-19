@@ -20,7 +20,7 @@ class CreateListasTable extends Migration
             $table->string('acompanhante_nome', 240)->nullable();
             $table->string('consulta_local', 240);
             $table->time('consulta_hora')->nullable();
-            $table->string('consulta_medico', 240)->nullable();
+            $table->string('consulta_observacao', 240)->nullable();
 
             $table->foreign('id_paciente')->references('id')->on('pacientes');
             $table->foreign('id_viagem')->references('id')->on('viagens')->onDelete('cascade');;

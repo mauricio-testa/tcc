@@ -19,6 +19,9 @@ class PacienteController extends Controller
             if(!empty($request->search))
             $query->where('nome', 'like', '%'.$request->search.'%');
 
+            if($request->only_active)
+            $query->where('status', 1);
+
             return $query->paginate(config('constants.PAGINATION_SIZE'));
 
         } catch (\Throwable $th) {

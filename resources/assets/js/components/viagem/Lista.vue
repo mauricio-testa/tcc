@@ -118,7 +118,7 @@
                             label="Horário da consulta" 
                             v-model="selectedPassageiro.consulta_hora"
                         ></v-text-field>
-                        <v-text-field label="Médico" v-model="selectedPassageiro.consulta_medico"></v-text-field>
+                        <v-text-field label="Observação do Paciente" v-model="selectedPassageiro.consulta_observacao"></v-text-field>
 
                         <!-- @RULE: não deixa adicionar acompanhante na edição se o veículo está lotado -->
                         <v-tooltip right v-if="!precisaAcompanhanteOriginal && vagasDisponiveis == 0">
@@ -235,7 +235,7 @@
                 acompanhante_nome: null,
                 consulta_local: null,
                 consulta_hora: null,
-                consulta_medico: null,
+                consulta_observacao: null,
             },
             defaultPassageiro: {
                 id_paciente: null,
@@ -244,7 +244,7 @@
                 acompanhante_nome: null,
                 consulta_local: null,
                 consulta_hora: null,
-                consulta_medico: null,
+                consulta_observacao: null,
             },
         }),      
 
@@ -352,7 +352,7 @@
                         'acompanhante_nome' : vm.selectedPassageiro.acompanhante_nome,
                         'consulta_local'    : vm.selectedPassageiro.consulta_local,
                         'consulta_hora'     : vm.selectedPassageiro.consulta_hora,
-                        'consulta_medico'   : vm.selectedPassageiro.consulta_medico,
+                        'consulta_observacao'   : vm.selectedPassageiro.consulta_observacao,
                     })
                     .then(function(response){
                         if(response.data.error) {

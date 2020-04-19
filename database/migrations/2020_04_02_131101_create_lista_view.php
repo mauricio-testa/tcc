@@ -21,7 +21,7 @@ class CreateListaView extends Migration
                 rg,
                 telefone,
                 consulta_hora,
-                consulta_medico,
+                consulta_observacao,
                 consulta_local,
                 acompanhante,
                 acompanhante_desc
@@ -33,7 +33,7 @@ class CreateListaView extends Migration
                         p.rg,
                         p.telefone,
                         l.consulta_hora,
-                        l.consulta_medico,
+                        l.consulta_observacao,
                         l.consulta_local,
                         0 AS acompanhante,
                         NULL AS acompanhante_desc
@@ -46,7 +46,7 @@ class CreateListaView extends Migration
                         l.acompanhante_rg AS rg,
                         NULL AS telefone,
                         NULL AS consulta_hora,
-                        NULL AS consulta_medico,
+                        NULL AS consulta_observacao,
                         NULL AS consulta_local,
                         1 AS acompanhante,
                         CONCAT('Acompanhante de ', p.nome) AS acompanhante_desc

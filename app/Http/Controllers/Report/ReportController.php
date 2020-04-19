@@ -108,7 +108,7 @@ class ReportController extends Controller
 
         $title      = 'RELATÓRIO DE VIAGENS POR PACIENTE';
         $unidade    = $this->getUnidadeInfos();
-        $headers    = ['#','Data', 'Local', 'Veículo', 'Local da Consulta', 'Médico', 'Hora'];
+        $headers    = ['#','Data', 'Local', 'Veículo', 'Local da Consulta', 'Observação', 'Hora'];
         $infos      = [];
         $data       = [];
 
@@ -118,7 +118,7 @@ class ReportController extends Controller
                 'vw_viagem.municipio_nome', 
                 'vw_viagem.data_formated',
                 'lista.consulta_local', 
-                'lista.consulta_medico',
+                'lista.consulta_observacao',
                 'lista.consulta_hora'
             )
             ->leftJoin('pacientes', 'lista.id_paciente','=','pacientes.id')
@@ -145,7 +145,7 @@ class ReportController extends Controller
                 $value->municipio_nome, 
                 $value->veiculo_nome,
                 $value->consulta_local,
-                $value->consulta_medico,
+                $value->consulta_observacao,
                 $value->consulta_hora,
             ]);
         }

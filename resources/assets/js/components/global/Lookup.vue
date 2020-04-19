@@ -24,6 +24,10 @@
                 if (dataset == 'MUNICIPIO') api = window.__routes.api.municipio;
                 if (dataset == 'PACIENTE')  api = window.__routes.api.paciente;
 
+                if (dataset == 'PACIENTE') {
+                    qs += '&only_active=1'
+                }
+
                 axios
                     .get(api+qs)
                     .then(function(response) {

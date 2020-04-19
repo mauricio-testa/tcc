@@ -36,6 +36,10 @@
             no-data-text="Nenhum dado encontrado."
             loading-text="Buscando dados..."
         >
+            <template v-slot:item.status="{ item }">
+                <v-icon v-if="item.status == '1'" color="success">mdi-check</v-icon>
+                <v-icon v-else color="error">mdi-close</v-icon>
+            </template>
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
                 <v-icon class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -73,6 +77,12 @@
                 <v-card>
                     <v-card-title>
                         <span class="headline">Paciente</span>
+                        <v-spacer></v-spacer>
+                        <v-switch 
+                            class="pr-4"
+                            v-model="selectedItem.status"
+                            :label="selectedItem.status == '1' ? 'Ativo' : 'Inativo'"
+                        ></v-switch>
                     </v-card-title>
                     <v-card-text>
                         <v-container>
@@ -169,9 +179,9 @@
                 { text: 'RG', value: 'rg'},
                 { text: 'Telefone', value: 'telefone'},
                 { text: 'Endereço', value: 'endereco'},
-                { text: 'SUS', value: 'sus'},
+                { text: 'Status', value: 'status'},
                 { text: 'Ações', value: 'action'},
-                ],
+            ],
 
             // server side pagination
             pagination: {
@@ -188,14 +198,16 @@
                 telefone: null,
                 sus: null,
                 rg: null,
-                endereco: null
+                endereco: null,
+                status: 1
             },
             defaultItem: {
                 nome: null,
                 telefone: null,
                 sus: null,
                 rg: null,
-                endereco: null
+                endereco: null,
+                status: 1
             },
             searchWord: null,
         }),
@@ -270,7 +282,8 @@
                         'telefone'  : vm.selectedItem.telefone,
                         'rg'        : vm.selectedItem.rg,
                         'sus'       : vm.selectedItem.sus,
-                        'endereco'  : vm.selectedItem.endereco
+                        'endereco'  : vm.selectedItem.endereco,
+                        'status'    : vm.selectedItem.status
                     })
                     .then(function(response){
                         if(response.data.error) {
