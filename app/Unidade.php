@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class Unidade extends Model
 {
+    public $timestamps = false;
+    
     protected $fillable = [
         'descricao', 'id_municipio', 'status', 'avatar'
     ];
