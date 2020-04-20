@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Helpers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helpers\Log;
 
 class ErrorInterpreter extends Controller
 {
@@ -19,6 +19,8 @@ class ErrorInterpreter extends Controller
                 '1062' => 'Registro duplicado!'
             ]
         ];
+
+        Log::Exception($message, $previous);
 
         if (empty($previous)) return $message;
 

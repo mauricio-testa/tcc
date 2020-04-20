@@ -14,6 +14,7 @@ use App\ViewViagem;
 use App\Motorista;
 use App\Municipio;
 use App\Veiculo;
+use App\Http\Controllers\Helpers\Log;
 
 class ReportController extends Controller
 {
@@ -23,11 +24,9 @@ class ReportController extends Controller
         $viagem  = Viagem::getViagem(null, [['id', '=', $request->viagem]], true);
         $unidade = $this->getUnidadeInfos();
 
-        // adiciona o dia da semana ao report
-        $weekDay = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sabado'];
-        $data = date($viagem->data_viagem);
-        $weekDayNumber = date('w', strtotime($data));
-        $viagem->data_formated = date('d/m/Y', strtotime($data)).", ".$weekDay[$weekDayNumber];
+        $viagem->data_formated = $this->formatDate($viagem->data_viagem);
+
+        Log::add('viagem', $request->viagem, Log::$levelInfo, Log::$actionExport, 'Lista Exportada');
 
         return view('report.lista', [
             'lista'     => $lista, 
@@ -167,5 +166,12 @@ class ReportController extends Controller
 
     private function sanitize ($text) {
         return $text == '' ? 'Não Informado' : $text;
+    }
+
+    private function formatDate($date){
+        $weekDay = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sabado'];
+        $data = date($date);
+        $weekDayNumber = date('w', strtotime($data));
+        return date('d/m/Y', strtotime($data)).", ".$weekDay[$weekDayNumber];
     }
 }
