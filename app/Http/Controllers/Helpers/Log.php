@@ -26,6 +26,7 @@ class Log extends Controller
         $log->message    = $message;
         $log->payload    = json_encode($payload);
         $log->id_user    = Auth::user()->id;
+        $log->id_unidade = Auth::user()->id_unidade;
         $log->save();
     }
 

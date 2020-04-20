@@ -15,6 +15,7 @@ class CreateLogsTable extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('id_unidade');
             $table->unsignedInteger('id_user');
             $table->string('context', 240)->nullable();
             $table->unsignedInteger('context_id')->nullable();
@@ -23,6 +24,8 @@ class CreateLogsTable extends Migration
             $table->text('message');
             $table->json('payload')->nullable();            
             $table->timestamp('created_at')->useCurrent();
+
+            $table->foreign('id_unidade')->references('id')->on('unidades');
         });
     }
 

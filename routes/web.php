@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('municipios', 'Api\MunicipioController');
         Route::resource('unidades', 'Api\UnidadeController')->middleware(Admin::class);
         Route::resource('usuarios', 'Api\UsuarioController');
+        Route::resource('logs', 'Api\LogController');
     });
 
     Route::prefix('relatorios')->group(function () {
@@ -43,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::view('admin/unidades', 'admin.unidade')->middleware(Admin::class);
+    Route::view('admin/logs', 'admin.log')->middleware(Admin::class);
 
 });
 
