@@ -24,7 +24,6 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
 
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
 
