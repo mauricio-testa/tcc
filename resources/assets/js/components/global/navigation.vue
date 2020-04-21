@@ -31,7 +31,8 @@
                     <v-list-item v-else
                         :key="i"
                         link
-                        @click="open(item.url)"
+                        :href="item.url"
+                        :class="{'v-list-item--active' : item.url == currentLocation}"
                     >
                         <v-list-item-action>
                             <v-icon>{{ item.icon }}</v-icon>
@@ -147,7 +148,7 @@
 
             loading: {
                 reset: false,
-            }
+            },
         }),
 
         methods: {
@@ -182,6 +183,14 @@
         },
 
         computed: {
+
+            // remover ultimo caracter se for /. Porque sim
+            currentLocation () {
+                let url = window.location.href;
+                let lastChar = url.substr(url.length -1, url.length);
+                if (lastChar == '/') return url.substr(0, url.length -1)
+                return url;
+            },
 
             avatar: function () {
 
