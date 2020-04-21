@@ -56,7 +56,7 @@
                         ></v-pagination>
                     </div>
                 </v-col>
-                <v-col cols="4">
+                <v-col cols="4" v-if="logs.length > 0 && !loading.list">
                     <span class="title d-block text-capitalize"> {{selectedItem.context}} #{{selectedItem.context_id}}</span>
                     <span class="caption text--secondary">{{ selectedItem.created_at }}</span>
                     <v-divider></v-divider>
@@ -68,7 +68,7 @@
                     </v-chip-group>
                     <v-divider></v-divider>
                     <div class="subtitle-2 my-3"> {{ selectedItem.message }} </div>
-                    <code class="pa-4">
+                    <code class="pa-4 pr-8">
                         <span>{{selectedItem.payload | format}}</span>
                     </code>
                     
