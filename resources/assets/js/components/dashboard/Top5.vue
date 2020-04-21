@@ -17,7 +17,7 @@
                         </v-list-item>
                     </v-list>
 
-                    <v-list dense>
+                    <v-list dense v-if="rank.rank.length > 1">
                         <v-list-item v-for="(item, z) in rank.rank" :key="z" :class="{'d-none': z == 0}">
                             <v-list-item-icon>
                                 <span class="subtitle-2 text--secondary"># {{z+1}}</span>
