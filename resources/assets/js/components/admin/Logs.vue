@@ -23,7 +23,7 @@
             </v-card-title>
 
             <v-row>
-                <v-col cols="8">
+                <v-col :cols="this.loading.list ? '12' : '8'">
                     <!-- table  -->
                     <v-data-table
                         :headers="headers"
