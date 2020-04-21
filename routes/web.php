@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('relatorios')->group(function () {
-        Route::view('./','report.index');
+        Route::view('/','report.index');
         Route::get('lista/{viagem}', 'Report\ReportController@lista')->where('viagem', '[0-9]+');
         Route::get('paciente/{paciente}', 'Report\ReportController@paciente')->where('paciente', '[0-9]+');
         Route::get('viagens/{qs}', 'Report\ReportController@viagens');
