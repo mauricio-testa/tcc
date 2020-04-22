@@ -32,7 +32,8 @@ class ReportController extends Controller
         return view('report.lista', [
             'lista'     => $lista, 
             'viagem'    => $viagem,
-            'unidade'   => $unidade
+            'unidade'   => $unidade,
+            'chamada'   => url("/chamada/$request->viagem"),
         ]);
     }
 

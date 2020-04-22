@@ -135,12 +135,15 @@ body {
     table .acompanhante {
         text-align: center;;
     }
+    .info {
+        padding: 10px 15px;
+        line-height: 1.4;
+        background-color: #eeeeee;
+        margin-top: 10px;
 
-    .observacoes {
-        background: #ffe016;
-        padding: 20px;
-        margin-top: 30px;
-        line-height: 1.4;           
+        &.observacoes {
+            background: #ffe016;          
+        }
     }
 }
 

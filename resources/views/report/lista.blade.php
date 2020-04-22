@@ -65,5 +65,14 @@
         @endforeach
         </tbody>
     </table>
+    <div class="info">
+        <b>Chamada:</b> <span style="font-weight: bold">{{ $chamada }}</span>
+    </div>
+    @if ($viagem->observacao)
+        <div class="info observacoes">
+            <b>Observações:</b><br>
+            {!! nl2br(e($viagem->observacao)) !!}
+        </div>
+    @endif
 </div>
 @endsection
