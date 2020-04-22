@@ -76,7 +76,7 @@
                     <v-card-text>
                         <v-container>
                             <v-row>
-                                <v-col cols="12" sm="12" md="6">
+                                <v-col cols="12" sm="12" md="12">
                                 <v-text-field 
                                     v-model="selectedItem.nome" 
                                     label="Nome" 
@@ -84,12 +84,23 @@
                                     :rules="[v => !!v || 'Nome é obrigatório']"
                                 ></v-text-field>
                                 </v-col>
+                            </v-row>
+                            <v-row>
                                 <v-col cols="12" sm="12" md="6">
                                 <v-text-field 
                                     v-model="selectedItem.telefone" 
                                     label="Telefone"
                                     v-mask="['(##) ####-####', '(##) #####-####']" 
                                     :rules="[v => (v ? (v.length > 13) : !v) || 'Telefone deve ter 10 ou 11 números']" 
+                                ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="6">
+                                <v-text-field 
+                                    v-model="selectedItem.access_key" 
+                                    label="Chave de Acesso"
+                                    type="number"
+                                    :rules="[v => (v ? (v > 1000) : !v) || 'Deve ter no mínimo 4 dígitos']" 
+                                    hint="Será utilizada para lançamento da lista de presença. Se você não preencher, será gerada automaticamente"
                                 ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -136,6 +147,7 @@
                 { text: '#', value: 'id'},
                 { text: 'Nome', value: 'nome'},
                 { text: 'Telefone', value: 'telefone'},
+                { text: 'Chave de Acesso', value: 'access_key'},
                 { text: 'Ações', value: 'action'},
             ],
 
@@ -152,10 +164,12 @@
             selectedItem: {
                 nome: null,
                 telefone: null,
+                access_key: null
             },
             defaultItem: {
                 nome: null,
                 telefone: null,
+                access_key: null
             },
             searchWord: null,
             }),
@@ -224,7 +238,8 @@
                 axios
                     .post(this.api, {
                         'nome'      : vm.selectedItem.nome,
-                        'telefone'  : vm.selectedItem.telefone
+                        'telefone'  : vm.selectedItem.telefone,
+                        'access_key': vm.selectedItem.access_key
                     })
                     .then(function(response){
                         if(response.data.error) {

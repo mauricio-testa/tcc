@@ -48,4 +48,7 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
+Route::any('chamada/{viagem}', 'External\ChamadaController@index')->where('viagem', '[0-9]+');
+Route::post('chamada/authenticate/{viagem}', 'External\ChamadaController@authenticate')->where('viagem', '[0-9]+');
+
 Auth::routes();

@@ -14,7 +14,6 @@ use App\ViewViagem;
 use App\Motorista;
 use App\Municipio;
 use App\Veiculo;
-use App\Http\Controllers\Helpers\Log;
 
 class ReportController extends Controller
 {
@@ -22,11 +21,13 @@ class ReportController extends Controller
     {
         $lista   = ViewLista::where('id_viagem', $request->viagem)->get();
         $viagem  = Viagem::getViagem(null, [['id', '=', $request->viagem]], true);
+        $status  = Viagem::where('id', $request->viagem)->first()->status;
         $unidade = $this->getUnidadeInfos();
 
         $viagem->data_formated = $this->formatDate($viagem->data_viagem);
-
-        Log::add('viagem', $request->viagem, Log::$levelInfo, Log::$actionExport, 'Lista Exportada');
+        if ($status != 'CONCLUIDA') {
+            Viagem::where('id', $request->viagem)->update(['status' => 'EXPORTADA']);
+        }
 
         return view('report.lista', [
             'lista'     => $lista, 

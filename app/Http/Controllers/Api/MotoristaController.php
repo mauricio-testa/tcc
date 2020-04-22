@@ -39,6 +39,7 @@ class MotoristaController extends Controller
     {
         try {
             $motorista = $request->all();
+            $motorista['access_key'] = $this->validateAccessKey($motorista['access_key']);
             $motorista['id_unidade'] = Auth::user()->id_unidade;
             Motorista::create($motorista);
         } catch (\Throwable $th) {
@@ -52,6 +53,7 @@ class MotoristaController extends Controller
     {
         try {
             $motorista = Motorista::findOrFail($id);
+            $motorista->access_key = $this->validateAccessKey($motorista->access_key);
             $motorista->update($request->all());
         } catch (\Throwable $th) {
             return response()->json([
@@ -70,5 +72,10 @@ class MotoristaController extends Controller
                 'error' => ErrorInterpreter::getMessage($th, ['23000' => ['1451' => 'Você não pode deletar este motorista pois existem viagens cadastradas para ele']])
             ]);
         }
+    }
+
+    // deve ter pelo menos 4 caracteres
+    private function validateAccessKey ($ak) {
+        return $ak > 1000 ? $ak : rand(1000, 9999);
     }
 }

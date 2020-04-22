@@ -22,6 +22,7 @@ class CreateViagemsTable extends Migration
             $table->date('data_viagem')->nullable(false);
             $table->time('hora_saida')->nullable();
             $table->string('observacao', 240)->nullable();
+            $table->enum('status', ['NOVA', 'EXPORTADA', 'CONCLUIDA'])->default('NOVA');
 
             $table->foreign('id_unidade')->references('id')->on('unidades');
             $table->foreign('cod_destino')->references('codigo')->on('municipios');

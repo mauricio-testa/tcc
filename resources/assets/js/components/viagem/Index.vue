@@ -48,8 +48,9 @@
             <template v-slot:item.action="{ item }">
                 <v-icon @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
                 <v-icon @click="deleteItem(item, false)" class="mr-2">mdi-delete</v-icon>
-                <v-icon @click="listPassageiros(item)" class="mr-2" >mdi-view-list</v-icon>
-                <v-icon @click="$openPopup('./relatorios/lista/'+item.id, 'Lista')">mdi-printer-pos</v-icon>
+                <v-icon @click="listPassageiros(item)" class="mr-2" title="Editar passageiros">mdi-view-list</v-icon>
+                <v-icon @click="$openPopup('./relatorios/lista/'+item.id, 'Lista')" class="mr-2" title="Exportar lista de viagem">mdi-printer-pos</v-icon>
+                <v-icon @click="$openPopup('./chamada/'+item.id, 'Chamada')" title="Preencher chamada">mdi-format-list-checks</v-icon>
             </template>
         </v-data-table>
 
@@ -113,6 +114,7 @@
                 { text: 'Destino', value: 'municipio_nome'},
                 { text: 'Veículo', value: 'veiculo'},
                 { text: 'Motorista', value: 'motorista_nome'},
+                { text: 'Status', value: 'status'},
                 { text: 'Ações', value: 'action'},
             ],
 
