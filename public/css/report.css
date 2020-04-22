@@ -80,8 +80,9 @@ body .wrapper .content .header div {
 }
 
 body .wrapper .content .header div img {
-  width: 100px;
-  opacity: .4;
+  width: auto;
+  opacity: .6;
+  max-height: 100px;
 }
 
 body .wrapper .content .infos {

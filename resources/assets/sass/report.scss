@@ -57,8 +57,9 @@ body {
                     align-items: center;
                     justify-content: center;
                     img {
-                        width: 100px;
-                        opacity: .4;
+                        width: auto;
+                        opacity: .6;
+                        max-height: 100px;
                     }
                 }
             }
