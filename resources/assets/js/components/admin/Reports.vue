@@ -207,7 +207,7 @@ export default {
             params+= '&destino='    +this.sanitize(this.get.destino)
             params+= '&order='      +this.get.order
 
-            this.$openPopup('/relatorios/viagens/?qs='+encodeURIComponent(params))
+            this.$openPopup('/relatorios/viagens/'+encodeURIComponent(params))
         },
 
         sanitize (val) {

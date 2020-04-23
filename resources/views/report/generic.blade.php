@@ -1,22 +1,10 @@
 @extends('layouts.report')
 
+@section('title', $title)
+
 @section('content')
 
 <div class="report">
-
-    <div class="header">
-        <div>
-            <img src="{{url('/images/unidades/'.$unidade->id.'.png')}}" alt="Logo da Unidade">
-        </div>
-        <div>
-            <h1>{{ $title }}</h1>
-            <h2>{{ $unidade->descricao }}</h2>
-            <h2>{{ $unidade->nome}} - {{ $unidade->uf}}</h2>
-        </div>
-        <div>
-        <img src="{{url('/images/unidades/'.$unidade->id.'.png')}}" alt="Logo da Unidade">
-        </div>
-    </div>
 
     <div class="infos">
         <ul>

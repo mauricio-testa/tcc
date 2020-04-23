@@ -12,6 +12,19 @@
 <body>
     <div class="wrapper">
         <div class="content">
+            <div class="header">
+                <div>
+                    <img src="{{$unidade->avatar}}" alt="Logo da Unidade">
+                </div>
+                <div>
+                    <h1>@yield('title')</h1>
+                    <h2>{{ $unidade->descricao }}</h2>
+                    <h2>{{ $unidade->nome}} - {{ $unidade->uf}}</h2>
+                </div>
+                <div>
+                    <img src="{{$unidade->avatar}}" alt="Logo da Unidade">
+                </div>
+            </div>
 
             @yield('content')
 

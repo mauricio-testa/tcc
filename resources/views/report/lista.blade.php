@@ -1,21 +1,10 @@
 @extends('layouts.report')
 
+@section('title', "LISTA DE VIAGEM #  $viagem->id")
+
 @section('content')
 
 <div class="report report__lista">
-    <div class="header">
-        <div>
-            <img src="{{url('/images/unidades/'.$unidade->id.'.png')}}" alt="Logo da Unidade">
-        </div>
-        <div>
-            <h1>LISTA DE VIAGEM #{{ $viagem->id }}</h1>
-            <h2>{{ $unidade->descricao }}</h2>
-            <h2>{{ $unidade->nome}} - {{ $unidade->uf}}</h2>
-        </div>
-        <div>
-        <img src="{{url('/images/unidades/'.$unidade->id.'.png')}}" alt="Logo da Unidade">
-        </div>
-    </div>
 
     <div class="infos">
         <ul>
@@ -26,6 +15,7 @@
             <li><span>Veículo: </span>{{ $viagem->veiculo }}</li>
             <li><span>Passageiros: </span>{{ sizeof($lista)}} ({{ $viagem->lotacao }} lugares)</li>
         </ul>
+        {!! QrCode::size(100)->generate($chamada); !!}
     </div>
 
     <table border="1" width="100%" cellspacing=0 cellpadding=8>
