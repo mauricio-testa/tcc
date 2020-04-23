@@ -44,6 +44,11 @@
             no-data-text="Nenhum dado encontrado."
             loading-text="Buscando dados..."
         >
+            <template v-slot:item.status="{ item }" @click="expandChip = !expandChip">
+                <v-chip small dark v-if="item.status == 'NOVA'" class="deep-orange" title="A viagem ainda não foi exportada">A Exportar</v-chip>
+                <v-chip small dark v-if="item.status == 'EXPORTADA'" class="light-blue" title="A viagem foi exportada e aguarda preenchimento da chamada">Exportada</v-chip>
+                <v-chip small dark v-if="item.status == 'CONCLUIDA'" class="teal" title="A chamada foi preenchida">Concluída</v-chip>
+            </template>
             <!-- table actions -->
             <template v-slot:item.action="{ item }">
                 <v-icon @click="editItem(item)" class="mr-2">mdi-pencil</v-icon>
@@ -106,6 +111,7 @@
             },
             formValid: true,
             popupParams: null,
+            expandChip: false,
 
             // table column names
             headers: [
