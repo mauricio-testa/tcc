@@ -63,8 +63,12 @@
                     :loading="loading.list"
                 >
                     <template v-slot:item.acompanhante_nome="{ item }">
-                        <v-icon color="success" text v-if="item.acompanhante_nome != null">mdi-check</v-icon>
-                        <v-icon color="error" text v-else>mdi-close</v-icon>
+                        <span v-text="item.acompanhante_nome != null ? 'SIM' : 'NÃO'"></span>
+                    </template>
+                    <template v-slot:item.compareceu="{ item }">
+                        <v-icon color="success" text v-if="item.compareceu == 'SIM'" title="Sim">mdi-check</v-icon>
+                        <v-icon color="error" text v-else-if="item.compareceu == 'NAO'" title="Não">mdi-close</v-icon>
+                        <v-icon color="warning" text v-else title="Lista de presença ainda não foi preenchida">mdi-clock-outline</v-icon>
                     </template>
                     <!-- table actions -->
                     <template v-slot:item.action="{ item }">
@@ -208,6 +212,7 @@
                 { text: 'Local', value: 'consulta_local'},
                 { text: 'Hora', value: 'consulta_hora'},
                 { text: 'Acompanhante', value: 'acompanhante_nome'},
+                { text: 'Compareceu?', value: 'compareceu'},
                 { text: 'Ações', value: 'action'},
             ],
 

@@ -1,10 +1,10 @@
 <script>
 
-import { Line } from "vue-chartjs";
+import { Bar } from "vue-chartjs";
 
 export default {
 
-    extends: Line,
+    extends: Bar,
 
     props: ["data"],
 
@@ -14,28 +14,49 @@ export default {
 
         datasets: [
             {
-                label: "Pacientes",
+                label: "Compareceu",
                 borderColor: "transparent",
                 data: [40, 39, 10, 40, 39, 80, 40],
                 pointBackgroundColor: "#00796b",
                 backgroundColor: "rgba(0, 121, 107, 0.6)",
-                pointRadius: 0
+                pointRadius: 0,
+                stack: '1',
             },
             {
-                label: "Acompanhantes",
+                label: "Não compareceu",
                 borderColor: "transparent",
                 pointBackgroundColor: "#303f9f",
-                backgroundColor: "rgba(48, 63, 159, .6)",
+                backgroundColor: "#E57373",
                 data: [20, 19, 16, 30, 30, 20, 10],
-                pointRadius: 0
+                pointRadius: 0,
+                stack: '1',
             },
             {
-                label: "Tudo",
+                label: "Não Lançado",
+                borderColor: "transparent",
+                pointBackgroundColor: "#1976d2",
+                data: [60, 69, 30, 70, 133, 90, 70],
+                backgroundColor: "#CFD8DC",
+                pointRadius: 0,
+                stack: '1',
+            },
+            {
+                label: "Pacientes",
                 borderColor: "transparent",
                 pointBackgroundColor: "#1976d2",
                 data: [60, 69, 30, 70, 133, 90, 70],
                 backgroundColor: "rgba(25, 118, 210, 0.6)",
-                pointRadius: 0
+                pointRadius: 0,
+                stack: '2',
+            },
+            {
+                label: "Acompanhantes",
+                borderColor: "transparent",
+                pointBackgroundColor: "#1976d2",
+                data: [60, 69, 30, 70, 133, 90, 70],
+                backgroundColor: "rgba(48, 63, 159, .6)",
+                pointRadius: 0,
+                stack: '2',
             }
         ],
 
@@ -55,21 +76,23 @@ export default {
                     {
                         gridLines: { display: false },
                         ticks: {
-                        fontSize: "14",
-                        fontFamily: "'Roboto', 'sans-serif'"
-                        }
+                            fontSize: "14",
+                            fontFamily: "'Roboto', 'sans-serif'"
+                        },
                     }
                 ],
                 yAxes: [
                     {
                         gridLines: { display: false },
                         ticks: {
-                        fontSize: "14",
-                        fontFamily: "'Roboto', 'sans-serif'"
-                        }
+                            fontSize: "14",
+                            fontFamily: "'Roboto', 'sans-serif'"
+                        },
+                        stacked: true
                     }
             ]
             },
+            /* only line
             tooltips: {
                 //mode: 'index',
                 intersect: false,
@@ -84,15 +107,18 @@ export default {
             hover: {
                 intersect: false
             }
+            */
         }
     }),
 
     mounted() {
 
         this.labels = this.data.labels;
-        this.datasets[0].data = this.data.data.pacientes;
-        this.datasets[1].data = this.data.data.acompanhantes;
-        this.datasets[2].data = this.data.data.passageiros;
+        this.datasets[0].data = this.data.data.compareceu;
+        this.datasets[1].data = this.data.data.nao_compareceu;
+        this.datasets[2].data = this.data.data.pendente;
+        this.datasets[3].data = this.data.data.pacientes;
+        this.datasets[4].data = this.data.data.acompanhantes;
 
         this.renderChart({
             labels: this.labels,

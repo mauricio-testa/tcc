@@ -105,26 +105,38 @@ class Dashboard extends Model
 
     private function getTotalPassageirosPorMes () {
         $results = DB::select(DB::raw("
-            SELECT viagem_mes, SUM(total_pacientes) as total_pacientes, sum(acompanhantes) as total_acompanhantes FROM (
+            SELECT viagem_mes, 
+            SUM(total_pacientes) as total_pacientes, 
+            sum(acompanhantes) as total_acompanhantes, 
+            sum(compareceu) as compareceu, 
+            sum(nao_compareceu) as nao_compareceu, 
+            sum(pendente) as pendente 
+            FROM (
                 SELECT MONTH(vi.data_viagem) as viagem_mes,
                     (SELECT COUNT(*) FROM lista WHERE id_viagem = vi.id) AS total_pacientes,
                     (SELECT COUNT(*) FROM lista WHERE id_viagem = vi.id
-                    AND acompanhante_nome IS NOT NULL AND acompanhante_nome <> '') as acompanhantes
+                    AND acompanhante_nome IS NOT NULL AND acompanhante_nome <> '') as acompanhantes,
+                    (SELECT COUNT(*) FROM lista WHERE id_viagem = vi.id
+                    AND compareceu = 'SIM') AS compareceu,
+                    (SELECT COUNT(*) FROM lista WHERE id_viagem = vi.id
+                    AND compareceu = 'NAO') AS nao_compareceu,
+                    (SELECT COUNT(*) FROM lista WHERE id_viagem = vi.id
+                    AND compareceu = 'PENDENTE') AS pendente
                 FROM viagens AS vi
                 WHERE YEAR(vi.data_viagem) = YEAR(CURDATE())
                 AND vi.id_unidade = $this->unidade
-                UNION SELECT 1, 0, 0
-                UNION SELECT 2, 0, 0
-                UNION SELECT 3, 0, 0
-                UNION SELECT 4, 0, 0
-                UNION SELECT 5, 0, 0
-                UNION SELECT 6, 0, 0
-                UNION SELECT 7, 0,  0
-                UNION SELECT 8, 0, 0
-                UNION SELECT 9, 0, 0
-                UNION SELECT 10, 0, 0
-                UNION SELECT 11, 0, 0
-                UNION SELECT 12, 0, 0
+                UNION SELECT 1, 0, 0, 0, 0, 0
+                UNION SELECT 2, 0, 0, 0, 0, 0
+                UNION SELECT 3, 0, 0, 0, 0, 0
+                UNION SELECT 4, 0, 0, 0, 0, 0
+                UNION SELECT 5, 0, 0, 0, 0, 0
+                UNION SELECT 6, 0, 0, 0, 0, 0
+                UNION SELECT 7, 0, 0, 0, 0, 0
+                UNION SELECT 8, 0, 0, 0, 0, 0
+                UNION SELECT 9, 0, 0, 0, 0, 0
+                UNION SELECT 10, 0, 0, 0, 0, 0
+                UNION SELECT 11, 0, 0, 0, 0, 0
+                UNION SELECT 12, 0, 0, 0, 0, 0
             ) AS sub
             GROUP BY viagem_mes
         "));
@@ -137,6 +149,9 @@ class Dashboard extends Model
             'pacientes'     => [],
             'acompanhantes' => [],
             'passageiros'   => [],
+            'compareceu'    => [],
+            'nao_compareceu'=> [],
+            'pendente'      => [],
         ];
 
         /*
@@ -157,6 +172,9 @@ class Dashboard extends Model
             array_push($labels, $this->monthName($value->viagem_mes));
             array_push($data['pacientes'], $value->total_pacientes);
             array_push($data['acompanhantes'], $value->total_acompanhantes);
+            array_push($data['compareceu'], $value->compareceu);
+            array_push($data['nao_compareceu'], $value->nao_compareceu);
+            array_push($data['pendente'], $value->pendente);
             array_push($data['passageiros'], $value->total_pacientes + $value->total_acompanhantes);
         }
 
