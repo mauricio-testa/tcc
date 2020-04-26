@@ -115,6 +115,34 @@
                     </v-card-text>
                 </v-card>
 
+                <v-card v-show="currentReport == 4">
+                    <v-card-title>Absenteísmo (Faltas)</v-card-title>
+                    <v-card-text>
+                        <v-select
+                            :items="absenteismo.options.year"
+                            v-model="absenteismo.year"
+                            label="Ano"
+                            prepend-icon="mdi-calendar-range"
+                        ></v-select>
+
+                        <v-select
+                            :items="absenteismo.options.month"
+                            v-model="absenteismo.month"
+                            label="Mês"
+                            prepend-icon="mdi-calendar-range"
+                        ></v-select>
+                        
+                        <v-select
+                            :items="absenteismo.options.order"
+                            v-model="absenteismo.order"
+                            label="Ordenar por:"
+                            prepend-icon="mdi-sort-ascending"
+                        ></v-select>
+
+                        <v-btn block color="secondary" @click="gerarRelatorioFaltas" dark>Gerar o Relatório</v-btn>
+                    </v-card-text>
+                </v-card>
+
             </v-col>
         </v-row>
 
@@ -137,10 +165,15 @@ export default {
                 text: 'Neste relatório você poderá exportar uma lista de viagens realizadas entre um determinado período, podendo ainda filtrar por motorista, veículo, destino e ordenar o resultado'
             },
             {
+                index: 4,
+                title: 'Absenteísmo (Faltas)',
+                text: 'Extraia uma lista de todos os pacientes que faltaram a alguma viagem. Este relatório inlcui dados do paciente e da viagem também'
+            },
+            {
                 index: 3,
                 title: 'Lista de Viagem',
                 text: 'Este é o relatório contém no seu cabeçalho dados básicos sobre a viagem e a relação de passageiros cadastrados, bem como acompanhantes, observações e campo para poder marcar a chamada dos passageiros'
-            }
+            },
         ],
         currentReport: 1,
 
@@ -161,8 +194,42 @@ export default {
             { text: 'Data', value: 'data_viagem'},
             { text: 'Veículo', value: 'veiculo_nome'},
             { text: 'Motorista', value: 'motorista_nome'},
-            { text: 'Município', value: 'municipio_nome'},
+            { text: 'Destino', value: 'municipio_nome'},
         ],
+
+        absenteismo: {
+            options: {
+                order: [
+                    { text: 'ID', value: 'id'},
+                    { text: 'Data', value: 'data_viagem'},
+                    { text: 'Veículo', value: 'veiculo_nome'},
+                    { text: 'Motorista', value: 'motorista_nome'},
+                    { text: 'Município', value: 'municipio_nome'},
+                    { text: 'Paciente', value: 'municipio_nome'},
+                ],
+                year: [
+                    { text: '2019', value: 2019},
+                    { text: '2020', value: 2020},
+                ],
+                month: [
+                    { text: 'Janeiro', value: 1},
+                    { text: 'Fevereiro', value: 2},
+                    { text: 'Março', value: 3},
+                    { text: 'Abril', value: 4},
+                    { text: 'Maio', value: 5},
+                    { text: 'Junho', value: 6},
+                    { text: 'Julho', value: 7},
+                    { text: 'Agosto', value: 8},
+                    { text: 'Setembro', value: 9},
+                    { text: 'Outubro', value: 10},
+                    { text: 'Novembro', value: 11},
+                    { text: 'Dezembro', value: 12},
+                ]
+            },
+            order: 'id',
+            year: 2020,
+            month: 1
+        },
 
         searchPacientes: null,
         timeoutId: null,
@@ -208,6 +275,17 @@ export default {
             params+= '&order='      +this.get.order
 
             this.$openPopup('/relatorios/viagens/'+encodeURIComponent(params))
+        },
+
+        // relatório absenteísmo
+        gerarRelatorioFaltas () {
+            let params = '';
+
+            params+= '&month='  +this.sanitize(this.absenteismo.month)
+            params+= '&year='   +this.sanitize(this.absenteismo.year)
+            params+= '&order='  +this.absenteismo.order
+
+            this.$openPopup('/relatorios/faltas/'+encodeURIComponent(params))
         },
 
         sanitize (val) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Report;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\ViewLista;
 use App\Viagem;
 use App\Unidade;
@@ -109,7 +110,7 @@ class ReportController extends Controller
 
         $title      = 'RELATÓRIO DE VIAGENS POR PACIENTE';
         $unidade    = $this->getUnidadeInfos();
-        $headers    = ['#','Data', 'Local', 'Veículo', 'Local da Consulta', 'Observação', 'Hora'];
+        $headers    = ['#','Data', 'Local', 'Veículo', 'Local da Consulta', 'Observação', 'Hora', 'Compareceu?'];
         $infos      = [];
         $data       = [];
 
@@ -120,7 +121,8 @@ class ReportController extends Controller
                 'vw_viagem.data_formated',
                 'lista.consulta_local', 
                 'lista.consulta_observacao',
-                'lista.consulta_hora'
+                'lista.consulta_hora',
+                'lista.compareceu'
             )
             ->leftJoin('pacientes', 'lista.id_paciente','=','pacientes.id')
             ->leftJoin('vw_viagem', 'vw_viagem.id', '=', 'lista.id_viagem')
@@ -148,6 +150,67 @@ class ReportController extends Controller
                 $value->consulta_local,
                 $value->consulta_observacao,
                 $value->consulta_hora,
+                $value->compareceu
+            ]);
+        }
+
+        return view('report.generic', [
+            'title'     => $title,
+            'unidade'   => $unidade,
+            'headers'   => $headers,
+            'infos'     => $infos,
+            'data'      => $data
+        ]);
+    }
+
+    public function faltas (Request $request) {
+
+        $title      = 'RELATÓRIO DE FALTAS';
+        $unidade    = $this->getUnidadeInfos();
+        $headers    = ['#','Data', 'Destino', 'Veículo', 'Motorista', 'Local da Consulta', 'Observação', 'Compareceu'];
+        $infos      = [];
+        $data       = [];
+
+        $qs = $request->qs;
+        $output = null;
+        parse_str($qs, $output);
+
+        if (count($output) != 3) {
+            die('Número de parâmetros informado está errado');
+        }
+
+        $query = Lista::select(
+            'vw_viagem.id',
+            'vw_viagem.veiculo_nome',
+            'vw_viagem.motorista_nome',
+            'vw_viagem.municipio_nome', 
+            'vw_viagem.data_formated',
+            'lista.consulta_local', 
+            'lista.consulta_observacao',
+            'lista.compareceu'
+        )
+        ->leftJoin('pacientes', 'lista.id_paciente','=','pacientes.id')
+        ->leftJoin('vw_viagem', 'vw_viagem.id', '=', 'lista.id_viagem')
+        ->where(DB::raw('YEAR(vw_viagem.data_viagem)'), $output['year'])
+        ->where(DB::raw('MONTH(vw_viagem.data_viagem)'), $output['month'])
+        ->where('lista.compareceu', 'NAO')
+        ->orderBy($output['order'])
+        ->get();
+
+        $infos = [
+            ['label' => 'Período', 'value' => $output['month'].'/'.$output['year']],
+        ];
+
+        foreach ($query as $key => $value) {
+            array_push($data, [
+                $value->id, 
+                $value->data_formated, 
+                $value->municipio_nome, 
+                $value->veiculo_nome,
+                $value->motorista_nome,
+                $value->consulta_local,
+                $value->consulta_observacao,
+                $value->compareceu
             ]);
         }
 

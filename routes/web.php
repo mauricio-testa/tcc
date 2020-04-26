@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('lista/{viagem}', 'Report\ReportController@lista')->where('viagem', '[0-9]+');
         Route::get('paciente/{paciente}', 'Report\ReportController@paciente')->where('paciente', '[0-9]+');
         Route::get('viagens/{qs}', 'Report\ReportController@viagens');
+        Route::get('faltas/{qs}', 'Report\ReportController@faltas');
     });
 
     Route::view('admin/unidades', 'admin.unidade')->middleware(Admin::class);
