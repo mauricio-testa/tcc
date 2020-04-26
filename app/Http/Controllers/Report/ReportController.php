@@ -167,7 +167,7 @@ class ReportController extends Controller
 
         $title      = 'RELATÓRIO DE FALTAS';
         $unidade    = $this->getUnidadeInfos();
-        $headers    = ['#','Data', 'Destino', 'Veículo', 'Motorista', 'Local da Consulta', 'Observação', 'Compareceu'];
+        $headers    = ['#','Paciente', 'Data', 'Destino', 'Veículo', 'Motorista', 'Obs'];
         $infos      = [];
         $data       = [];
 
@@ -187,7 +187,8 @@ class ReportController extends Controller
             'vw_viagem.data_formated',
             'lista.consulta_local', 
             'lista.consulta_observacao',
-            'lista.compareceu'
+            'lista.compareceu',
+            'pacientes.nome'
         )
         ->leftJoin('pacientes', 'lista.id_paciente','=','pacientes.id')
         ->leftJoin('vw_viagem', 'vw_viagem.id', '=', 'lista.id_viagem')
@@ -204,13 +205,14 @@ class ReportController extends Controller
         foreach ($query as $key => $value) {
             array_push($data, [
                 $value->id, 
+                $value->nome,
                 $value->data_formated, 
                 $value->municipio_nome, 
                 $value->veiculo_nome,
                 $value->motorista_nome,
-                $value->consulta_local,
+                // $value->consulta_local,
                 $value->consulta_observacao,
-                $value->compareceu
+                // $value->compareceu
             ]);
         }
 
