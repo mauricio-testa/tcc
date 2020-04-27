@@ -10,7 +10,7 @@ class Unidade extends Model
     public $timestamps = false;
     
     protected $fillable = [
-        'descricao', 'id_municipio', 'status', 'avatar'
+        'descricao', 'id_municipio', 'status', 'responsavel'
     ];
 
     public static function UnidadeIsActiveByUserEmail($email) {

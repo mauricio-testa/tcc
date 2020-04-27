@@ -14,7 +14,7 @@
         <div class="content">
             <div class="header">
                 <div>
-                    <img src="{{$unidade->avatar}}" alt="Logo da Unidade">
+                    <img src="{{ asset('images/municipios/'.$unidade->id_municipio.'.png') }}">
                 </div>
                 <div>
                     <h1>@yield('title')</h1>
@@ -22,7 +22,7 @@
                     <h2>{{ $unidade->nome}} - {{ $unidade->uf}}</h2>
                 </div>
                 <div>
-                    <img src="{{$unidade->avatar}}" alt="Logo da Unidade">
+                    <img src="{{ asset('images/municipios/'.$unidade->id_municipio.'.png') }}">
                 </div>
             </div>
 

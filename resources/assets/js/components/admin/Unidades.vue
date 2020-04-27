@@ -74,8 +74,8 @@
                                 :rules="[v => !!v || 'Município é obrigatório']"
                             ></v-autocomplete>
                             <v-text-field 
-                                v-model="selectedItem.avatar" 
-                                label="Avatar" 
+                                v-model="selectedItem.responsavel" 
+                                label="Responsável" 
                             ></v-text-field>
                             <v-switch 
                                 v-model="selectedItem.status"
@@ -211,7 +211,7 @@
                         'descricao'     : vm.selectedItem.descricao,
                         'status'        : vm.selectedItem.status,
                         'id_municipio'  : vm.selectedItem.id_municipio,
-                        'avatar'        : vm.selectedItem.avatar,
+                        'responsavel'   : vm.selectedItem.responsavel,
                     })
                     .then(function(response){
                         if(response.data.error) {

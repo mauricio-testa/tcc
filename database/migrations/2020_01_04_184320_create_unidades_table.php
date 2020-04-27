@@ -18,7 +18,7 @@ class CreateUnidadesTable extends Migration
             $table->integer('id_municipio')->nullable(false);
             $table->string('descricao', 240)->nullable(false);
             $table->integer('status')->nullable(false)->default(1);
-            $table->string('avatar', 240)->nullable();
+            $table->string('responsavel', 240)->nullable();
             $table->timestamp('created_at')->useCurrent();
 
             $table->foreign('id_municipio')->references('codigo')->on('municipios');
