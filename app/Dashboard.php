@@ -18,6 +18,7 @@ class Dashboard extends Model
         try {
             return [
                 'statistics' => $this->getStatistics(), 
+                'absenteismo' => $this->getAbsenteism(),
                 'top_veiculos' => $this->getTopVeiculos(), 
                 'top_destinos' => $this->getTopDestinos(), 
                 'top_motoristas' => $this->getTopMotoristas(), 
@@ -205,7 +206,7 @@ class Dashboard extends Model
             SELECT 
                 * ,
                 (total_pacientes_transportados + total_acompanhantes_transportados) as total_passageiros_transportados,
-                CONCAT(ROUND(COALESCE(total_acompanhantes_transportados * 100 / total_pacientes_transportados, 0), 2), '%') 
+                CONCAT(ROUND(COALESCE(total_acompanhantes_transportados * 100 / total_pacientes_transportados, 0), 0), '%') 
                     as indice_pacientes_precisa_acompanhante,
                 ROUND(COALESCE((total_pacientes_transportados + total_acompanhantes_transportados) / total_viagens, 0), 1) 
                     as media_passageiro_por_viagem
@@ -223,6 +224,43 @@ class Dashboard extends Model
                     AND acompanhante_nome IS NOT NULL AND acompanhante_nome <> ''), 0
                 ) as total_acompanhantes_transportados
             ) sub;
+        "));
+
+        return $results[0];
+    }
+
+    private function getAbsenteism () {
+        $results = DB::select(DB::raw("
+            SELECT 
+                compareceu_ano, faltou_ano, (compareceu_ano + faltou_ano) as total_ano, 
+                CONCAT(ROUND(COALESCE(faltou_ano * 100 / (compareceu_ano + faltou_ano), 0), 0), '%') as absenteismo_ano,
+                compareceu_mes, faltou_mes, (compareceu_mes + faltou_mes) as total_mes, 
+                CONCAT(ROUND(COALESCE(faltou_mes * 100 / (compareceu_mes + faltou_mes), 0), 0), '%') as absenteismo_mes
+            FROM
+                (SELECT count(*) AS compareceu_ano FROM lista 
+                    LEFT JOIN viagens ON viagens.id = lista.id_viagem 
+                    WHERE viagens.id_unidade = $this->unidade
+                    AND viagens.status = 'CONCLUIDA'
+                    AND compareceu = 'SIM'
+                    AND YEAR(viagens.data_viagem) = YEAR(CURDATE())) AS compareceu_ano,
+                (SELECT count(*) AS faltou_ano FROM lista 
+                    LEFT JOIN viagens ON viagens.id = lista.id_viagem 
+                    WHERE viagens.id_unidade = $this->unidade
+                    AND viagens.status = 'CONCLUIDA'
+                    AND compareceu = 'NAO'
+                    AND YEAR(viagens.data_viagem) = YEAR(CURDATE())) AS faltou_ano,
+                (SELECT count(*) AS compareceu_mes FROM lista 
+                    LEFT JOIN viagens ON viagens.id = lista.id_viagem 
+                    WHERE viagens.id_unidade = $this->unidade
+                    AND viagens.status = 'CONCLUIDA'
+                    AND compareceu = 'SIM'
+                    AND MONTH(viagens.data_viagem) = MONTH(CURDATE())) AS compareceu_mes,
+                (SELECT count(*) AS faltou_mes FROM lista 
+                    LEFT JOIN viagens ON viagens.id = lista.id_viagem 
+                    WHERE viagens.id_unidade = $this->unidade
+                    AND viagens.status = 'CONCLUIDA'
+                    AND compareceu = 'NAO'
+                AND MONTH(viagens.data_viagem) = MONTH(CURDATE())) AS faltou_mes;
         "));
 
         return $results[0];

@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-text>
-        <v-simple-table :fixed-header="true" :height="190">
+        <v-simple-table :fixed-header="true" :height="195">
             <template v-slot:default>
             <thead>
                 <tr>

@@ -47,6 +47,7 @@ Vue.component('dashboard-stats',            require('./components/dashboard/Stat
 Vue.component('dashboard-graph-pacientes',  require('./components/dashboard/GraphPacientes.vue'));
 Vue.component('dashboard-graph-viagens',    require('./components/dashboard/GraphViagens.vue'));
 Vue.component('dashboard-next-viagens',     require('./components/dashboard/NextViagens.vue'));
+Vue.component('dashboard-absenteism',       require('./components/dashboard/Absenteism.vue'));
 
 /*
  * Tempo de debounce para autocompletes
