@@ -39,7 +39,7 @@ class Viagem extends Model
         if ($onlyFirst) {
             return $query->first();
         } else {
-            return $query->paginate(config('constants.PAGINATION_SIZE'));
+            return $query->orderBy('data_viagem', 'desc')->paginate(config('constants.PAGINATION_SIZE'));
         }
     }
 

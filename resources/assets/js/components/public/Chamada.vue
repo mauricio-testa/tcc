@@ -16,6 +16,12 @@
                     <v-btn color="primary" class="my-4" small @click="fillAgain">Lançar novamente</v-btn>
                 </v-card-text>
 
+                <!-- já  -->
+                <v-card-text v-if="step == 'NAO_EXPORTADA'" class="d-flex flex-column align-center">
+                    <v-icon color="warning" size="60">mdi-alert-circle-outline</v-icon>
+                    <span class="title mt-2 text-center">Esta lista ainda não foi exportada. Por favor exporte e depois preencha a lista de presença.</span>
+                </v-card-text>
+
                 <!-- a autenticar -->
                 <v-card-text v-else-if="step == 'NAO_AUTENTICADO'">
                     <v-alert type="error" v-if="authError != null" :icon="false" dismissible>
@@ -108,6 +114,11 @@
         if (this.viagem.status == 'CONCLUIDA') {
             this.step = 'LANCADO_ANTERIORMENTE';
         }
+
+        if (this.viagem.status == 'NOVA') {
+            this.step = 'NAO_EXPORTADA';
+        }
+
         // se já está autenticado não pede chave de acesso
         else if (this.authenticated) {
             this.step = 'AUTENTICADO'
